@@ -25,7 +25,7 @@ public class IndexController {
         if (user != null) {
             model.addAttribute("userName", user.getName());
         }
-        return "index";
+        return "main";
     }
 
     // 등록 페이지 이동

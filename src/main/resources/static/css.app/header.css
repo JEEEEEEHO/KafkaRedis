@@ -1,0 +1,49 @@
+@charset "UTF-8";
+
+* {
+    font-family: 'SCoreDream';
+}
+#FarmilyHeader {
+    background-color: #f2ebdd;
+    color: #613d1a;
+}
+#home {
+    font-family: 'Mochiy Pop One', sans-serif;
+    font-size: 25px;
+    padding: 10px;
+    text-decoration: none;
+    color: #528a36;
+}
+#hostSearch {
+    text-decoration: none;
+    color: #613d1a;
+    font-size: 16px;
+}
+#bar {
+    float: right;
+}
+#bar ul {
+    list-style: none;
+    margin-bottom: 0;
+}
+#bar li {
+    padding:10px;
+    font-size:16px;
+    display: inline-block;
+}
+#bar a {
+    cursor: pointer;
+}
+.signBtn {
+    background-color: #f5821f;
+    padding: 8px 12px;
+    border-radius: 11px;
+    text-decoration: none;
+    color: white;
+}
+.mplist a:hover {
+    color: #613d1a;
+}
+.signBtn:hover {
+    color: white;
+}
