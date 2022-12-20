@@ -3,7 +3,8 @@
 <head>
     <title>Farmily</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <link href="/css/header.css" rel="stylesheet">
+        <link href="/css/header.css" rel="stylesheet" type="text/css">
+        <link href="/css/footer.css" rel="stylesheet" type="text/css">
         <!-- Google Font -->
         <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&display=swap" rel="stylesheet">
         <link href="https://webfontworld.github.io/SCoreDream/SCoreDream.css" rel="stylesheet">
@@ -12,4 +13,51 @@
         <!-- bootstrap -->
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 </head>
+<header id="FarmilyHeader">
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <b>
+                <a class="navbar-brand" id="home" href="/">FARMily</a>
+            </b>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <b>
+                            <a class="nav-link active" aria-current="page" href="#" id="hostSearch">호스트 찾기</a>
+                        </b>
+                    </li>
+                </ul>
+                <form class="d-flex">
+                    <div id="bar">
+                        <ul>
+                            <li>
+                                <a><i class="fas fa-heart"></i></a>
+                            </li>
+                            <li>
+                                <a><i class="fas fa-envelope"></i></a>
+                            </li>
+                            <li class="mplist">
+                                <b>
+                                    <a href="/mypage">마이페이지</a>
+                                </b>
+                            </li>
+                            <li>
+                                {{#userName}}
+                                    Logged in as: <span id="user">{{userName}}</span>
+                                    <a href="/logout" class="signBtn" role="button">Logout</a>
+                                {{/userName}}
+                                {{^userName}}
+                                    <a href="/oauth2/authorization/google" class="signBtn" role="button">Google Login</a>
+                                {{/userName}}
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </nav>
+</header>
 <body>

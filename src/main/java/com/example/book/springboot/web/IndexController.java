@@ -28,7 +28,7 @@ public class IndexController {
     }
 
     // 전체 조회 이동
-    @GetMapping("/mypage")
+    @GetMapping("/board")
     public String index(Model model, @LoginUser SessionUser user) {
         model.addAttribute("posts", postsService.findAllDesc());
         if (user != null) {
