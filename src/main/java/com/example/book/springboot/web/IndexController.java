@@ -18,14 +18,23 @@ public class IndexController {
     private final PostsService postsService;
     private final HttpSession httpSession;
 
-    // 전체 조회 이동
     @GetMapping("/")
-    public String index(Model model, @LoginUser SessionUser user) {
+    public String main(Model model, @LoginUser SessionUser user){
         model.addAttribute("posts", postsService.findAllDesc());
         if (user != null) {
             model.addAttribute("userName", user.getName());
         }
         return "main";
+    }
+
+    // 전체 조회 이동
+    @GetMapping("/mypage")
+    public String index(Model model, @LoginUser SessionUser user) {
+        model.addAttribute("posts", postsService.findAllDesc());
+        if (user != null) {
+            model.addAttribute("userName", user.getName());
+        }
+        return "board-view";
     }
 
     // 등록 페이지 이동
