@@ -18,6 +18,7 @@ public class IndexController {
     private final PostsService postsService;
     private final HttpSession httpSession;
 
+    //메인
     @GetMapping("/")
     public String main(Model model, @LoginUser SessionUser user){
         model.addAttribute("posts", postsService.findAllDesc());
@@ -26,8 +27,17 @@ public class IndexController {
         }
         return "main";
     }
+    //호스트 찾기
+    @GetMapping("/hostsearch")
+    public String hostsearch(Model model, @LoginUser SessionUser user){
+        model.addAttribute("posts", postsService.findAllDesc());
+        if (user != null) {
+            model.addAttribute("userName", user.getName());
+        }
+        return "hostsearch";
+    }
 
-    // 전체 조회 이동
+    // 공지사항
     @GetMapping("/board")
     public String index(Model model, @LoginUser SessionUser user) {
         model.addAttribute("posts", postsService.findAllDesc());

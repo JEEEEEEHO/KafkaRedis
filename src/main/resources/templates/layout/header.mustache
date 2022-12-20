@@ -27,7 +27,7 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <b>
-                            <a class="nav-link active" aria-current="page" href="#" id="hostSearch">호스트 찾기</a>
+                            <a class="nav-link active" aria-current="page" href="/hostsearch" id="hostSearch">호스트 찾기</a>
                         </b>
                     </li>
                 </ul>
@@ -48,7 +48,7 @@
                             <li>
                                 {{#userName}}
                                     Logged in as: <span id="user">{{userName}}</span>
-                                    <a href="/logout" class="signBtn" role="button">Logout</a>
+                                    <a href="/" class="signBtn" role="button">Logout</a>
                                 {{/userName}}
                                 {{^userName}}
                                     <a href="/oauth2/authorization/google" class="signBtn" role="button">Google Login</a>
