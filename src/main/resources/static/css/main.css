@@ -1,0 +1,30 @@
+@charset "UTF-8";
+
+.mplist a{
+    text-decoration:none;
+    color:inherit;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    margin: 0;
+    position: relative;
+}
+
+.container {
+    flex: 1;
+
+}
+
+.mainImg {
+    padding: 0px;
+    width: 1300px;
+}
