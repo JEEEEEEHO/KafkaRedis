@@ -3,11 +3,9 @@ package com.example.book.springboot.domain.review;
 import com.example.book.springboot.domain.BaseTimeEntity;
 import com.example.book.springboot.domain.hosts.Hosts;
 import com.example.book.springboot.domain.user.User;
-import com.sun.tools.javac.jvm.Gen;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.apache.catalina.Host;
 
 import javax.persistence.*;
 
