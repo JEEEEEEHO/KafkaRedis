@@ -24,6 +24,11 @@ html, body {
 
 }
 
+.mypage-container{
+    margin-left: 0px;
+    padding-left: 0px;
+}
+
 .mainImg {
     padding: 0px;
     width: 1300px;

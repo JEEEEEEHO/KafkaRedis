@@ -16,6 +16,14 @@ public class IndexControllerTest {
     private TestRestTemplate restTemplate;
 
     @Test
+    public void 마이페이지_로딩(){
+    //when
+        String body = this.restTemplate.getForObject("/mypage", String.class);
+    //THEN
+        assertThat(body).contains("프로필정보");
+    }
+
+    @Test
     public void 메인페이지_로딩(){
         //when
         String body = this.restTemplate.getForObject("/", String.class);

@@ -1,23 +1,22 @@
-package com.example.book.springboot.web.dto;
+package com.example.book.springboot.web.dto.posts;
 
 import com.example.book.springboot.domain.posts.Posts;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
+// 조회 응답용 DTO
 @Getter
-public class PostsListResponseDto {
+public class PostsResponseDto {
     private Long id;
     private String title;
+    private String content;
     private String author;
-    private LocalDateTime modifiedDate;
 
     @Builder
-    public PostsListResponseDto(Posts entity){
+    public PostsResponseDto(Posts entity){
         this.id = entity.getId();
         this.title=entity.getTitle();
+        this.content=entity.getContent();
         this.author=entity.getAuthor();
-        this.modifiedDate=entity.getModifiedDate();
     }
 }

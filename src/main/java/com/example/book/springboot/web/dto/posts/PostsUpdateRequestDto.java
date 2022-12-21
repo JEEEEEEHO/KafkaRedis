@@ -1,4 +1,4 @@
-package com.example.book.springboot.web.dto;
+package com.example.book.springboot.web.dto.posts;
 // 업데이트 요청용 DTO
 
 import lombok.Builder;

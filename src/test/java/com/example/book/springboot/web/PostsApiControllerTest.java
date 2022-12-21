@@ -2,8 +2,8 @@ package com.example.book.springboot.web;
 
 import com.example.book.springboot.domain.posts.Posts;
 import com.example.book.springboot.domain.posts.PostsRepository;
-import com.example.book.springboot.web.dto.PostsSaveRequestDto;
-import com.example.book.springboot.web.dto.PostsUpdateRequestDto;
+import com.example.book.springboot.web.dto.posts.PostsSaveRequestDto;
+import com.example.book.springboot.web.dto.posts.PostsUpdateRequestDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Before;

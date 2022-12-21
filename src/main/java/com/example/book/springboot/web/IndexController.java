@@ -3,7 +3,7 @@ package com.example.book.springboot.web;
 import com.example.book.springboot.config.auth.LoginUser;
 import com.example.book.springboot.config.auth.dto.SessionUser;
 import com.example.book.springboot.service.posts.PostsService;
-import com.example.book.springboot.web.dto.PostsResponseDto;
+import com.example.book.springboot.web.dto.posts.PostsResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,6 +35,26 @@ public class IndexController {
             model.addAttribute("userName", user.getName());
         }
         return "hostsearch";
+    }
+
+    //마이페이지
+    @GetMapping("/mypage")
+    public String mypage(Model model, @LoginUser SessionUser user){
+        model.addAttribute("posts", postsService.findAllDesc());
+        if (user != null) {
+            model.addAttribute("userName", user.getName());
+        }
+        return "profile";
+    }
+
+    //호스트 등록화면
+    @GetMapping("/hosts/save")
+    public String hostsSave(Model model, @LoginUser SessionUser user){
+        model.addAttribute("posts", postsService.findAllDesc());
+        if (user != null) {
+            model.addAttribute("userName", user.getName());
+        }
+        return "hosts-save";
     }
 
     // 공지사항
