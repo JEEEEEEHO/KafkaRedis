@@ -1,7 +1,11 @@
 package com.example.book.springboot.web;
 
+import com.example.book.springboot.domain.hosts.HostsRepository;
 import com.example.book.springboot.domain.posts.Posts;
 import com.example.book.springboot.domain.posts.PostsRepository;
+import com.example.book.springboot.domain.review.ReviewRepository;
+import com.example.book.springboot.domain.wishlist.Wishlist;
+import com.example.book.springboot.domain.wishlist.WishlistRepository;
 import com.example.book.springboot.web.dto.posts.PostsSaveRequestDto;
 import com.example.book.springboot.web.dto.posts.PostsUpdateRequestDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,6 +48,15 @@ public class PostsApiControllerTest {
     private PostsRepository postsRepository;
 
     @Autowired
+    private WishlistRepository wishlistRepository;
+
+    @Autowired
+    private HostsRepository hostsRepository;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
+
+    @Autowired
     private WebApplicationContext context;
 
     private MockMvc mvc;
@@ -58,6 +71,7 @@ public class PostsApiControllerTest {
 
     @After
     public void tearDown() throws Exception {
+
         postsRepository.deleteAll();
     }
 
