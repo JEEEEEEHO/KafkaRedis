@@ -1,4 +1,6 @@
 package com.example.book.springboot.domain.review;
 
-public interface ReviewRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ReviewRepository extends JpaRepository<Review, Integer> {
 }
