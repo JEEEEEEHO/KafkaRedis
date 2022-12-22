@@ -1,4 +1,12 @@
-var map = new naver.maps.Map("map", {
+var mapOptions = {
+    center: new naver.maps.LatLng(37.3595704, 127.105399),
+    zoom: 10
+};
+
+var map = new naver.maps.Map('map', mapOptions);
+
+
+/*var map = new naver.maps.Map("map", {
                                         zoom: 6,
                                         maxZoom: 13,
                                         center: new naver.maps.LatLng(36.2253017, 127.6460516),
@@ -8,7 +16,7 @@ var map = new naver.maps.Map("map", {
                                             style: naver.maps.ZoomControlStyle.SMALL
                                         }
                                     }
-                                );
+                                );*/
 /*function api(){
                 return data1= fetch('http://localhost:8988/restApi/hostList')
                                 .then(res => res.json())
