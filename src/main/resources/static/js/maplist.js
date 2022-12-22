@@ -9,7 +9,7 @@ var map = new naver.maps.Map("map", {
                                         }
                                     }
                                 );
-function api(){
+/*function api(){
                 return data1= fetch('http://localhost:8988/restApi/hostList')
                                 .then(res => res.json())
                                 .then(json => json.maps);
@@ -102,5 +102,5 @@ const getData=()=>{
                                                 console.log(markers);
                                             });
                     };
-getData();
+getData();*/
 map.init();
