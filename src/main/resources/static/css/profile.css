@@ -1,0 +1,38 @@
+@charset "UTF-8";
+
+h3{
+    padding-left: 40px;
+}
+
+.list{
+    padding-bottom: 40px;
+}
+
+.list a{
+    line-height:3;
+    text-decoration:none;
+    color:inherit;
+}
+
+.list:hover{
+    font-weight:bold;
+}
+
+img{
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+}
+
+#nav{
+    list-style: none;
+}
+
+#container{
+    width: 250px;
+    height: 674px;
+    float: left;
+    display: block;
+    padding-top: 46px;
+    background-color: #C8FAC8;
+}
