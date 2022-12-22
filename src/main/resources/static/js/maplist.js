@@ -103,4 +103,3 @@ const getData=()=>{
                                             });
                     };
 getData();*/
-map.init();
