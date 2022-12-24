@@ -17,7 +17,7 @@
             {{#posts}}
                 <tr>
                     <td>{{id}}</td>
-                    <td><a href="/api/v1/posts/{{id}}">{{title}}</a></td>
+                    <td><a href="/posts/update/{{id}}">{{title}}</a></td>
                     <td>{{author}}</td>
                     <td>{{modifiedDate}}</td>
                 </tr>
@@ -26,9 +26,10 @@
         </table>
         <div class="row">
             <div class="col-md-6">
-                <a href="/api/v1/posts" role="button" class="btn btn-primary">글 등록</a>
+                <a href="/posts/save" role="button" class="btn btn-primary">글 등록</a>
             </div>
         </div>
     </div>
+
 </div>
 {{>layout/footer}}
