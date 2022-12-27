@@ -21,9 +21,6 @@ html, body {
 
 .container {
     flex: 1;
-    max-width: 100%;
-    margin-right: 0;
-    margin-left: 0;
 
 }
 
@@ -35,5 +32,5 @@ html, body {
 .mainImg {
     padding: 0px;
     width: 1300px;
-    height: auto;
+    height: 560px;
 }
