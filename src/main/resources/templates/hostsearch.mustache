@@ -1,38 +1,36 @@
-    <div class="wrapper">
-        {{>layout/header}}
-            <div class="container-app" >
-                <form class="row gy-2 gx-3 align-items-center" action="">
-                    <div class="col-auto">
-                        <div class="input-group">
-                            <input type="date" class="form-control" placeholder="시작일" aria-label="Username" aria-describedby="basic-addon1" name="startdate" id="startdate">
-                            <input type="date" class="form-control" placeholder="종료일" aria-label="Username" aria-describedby="basic-addon1" name="enddate" id="enddate">
-                        </div>
+    {{>layout/header}}
+        <div class="container" >
+            <form class="row gy-2 gx-3 align-items-center" action="">
+                <div class="col-auto">
+                    <div class="input-group">
+                        <input type="date" class="form-control" placeholder="시작일" aria-label="Username" aria-describedby="basic-addon1" name="startdate" id="startdate">
+                        <input type="date" class="form-control" placeholder="종료일" aria-label="Username" aria-describedby="basic-addon1" name="enddate" id="enddate">
                     </div>
-                    <div class="col-auto">
-                        <div class="input-group">
-                            <div class="input-group-text">인원</div>
-                            <select class="form-select" name="people" id="people">
-                                <option selected="selected" value="one">1</option>
-                                <option value="two">2</option>
-                                <option value="three">3</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button type="button" class="btn btn-light" onclick="addoption();">조건추가</button>
-                    <div class="col-auto">
-                        <button type="submit" class="btn btn-primary">검색</button>
-                    </div>
-                </form>
-                <div class="search">
-                    <section class="list_wrap">
-                        <ul class="clearfix">
-                        </ul>
-                    </section>
                 </div>
-                <div class="map_wrap">
-                    <div id="map"  style="width:100%;height:100%;"></div>
-                    <script type="text/javascript" src="/js/maplist.js"></script>
+                <div class="col-auto">
+                    <div class="input-group">
+                        <div class="input-group-text">인원</div>
+                        <select class="form-select" name="people" id="people">
+                            <option selected="selected" value="one">1</option>
+                            <option value="two">2</option>
+                            <option value="three">3</option>
+                        </select>
+                    </div>
                 </div>
+                <button type="button" class="btn btn-light" onclick="addoption();">조건추가</button>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">검색</button>
+                </div>
+            </form>
+            <div class="search">
+                <section class="list_wrap">
+                    <ul class="clearfix">
+                    </ul>
+                </section>
+            </div>
+            <div class="map_wrap">
+                <div id="map"  style="width:100%;height:100%;"></div>
+                <script type="text/javascript" src="/js/maplist.js"></script>
             </div>
         </div>
-        {{>layout/footer}}
+    {{>layout/footer}}

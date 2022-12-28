@@ -1,11 +1,6 @@
 @charset "UTF-8";
 
 
-.container-app {
-    display: flex;
-    height: 100%;
-}
-
 .search{
     float: left;
     width: 50%;
