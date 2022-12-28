@@ -21,13 +21,6 @@
     display: flex;
 }
 
-#map{
-    height: 100%;
-    position: fixed;
-    background: green;
-    width: 50%;
-}
-
 .input-group mb-3{
     float: left;
 }

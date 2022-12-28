@@ -1,7 +1,7 @@
     <div class="wrapper">
         {{>layout/header}}
         <div class="container-app" >
-            <div class="search">
+            <div class="row row-cols-lg-auto g-3 align-items-center"  style="width: 60%;margin-left: 10px;" >
                 <form class="row gy-2 gx-3 align-items-center" action="">
                     <div class="col-auto">
                         <div class="input-group">
@@ -24,10 +24,12 @@
                         <button type="submit" class="btn btn-primary">검색</button>
                     </div>
                 </form>
-                <section class="list_wrap">
-                    <ul class="clearfix">
-                    </ul>
-                </section>
+                <div class="search">
+                    <section class="list_wrap">
+                        <ul class="clearfix">
+                        </ul>
+                    </section>
+                </div>
             </div>
             <div class="map_wrap">
                 <div id="map"  style="width:100%;height:100%;"></div>
