@@ -22,7 +22,6 @@
 
 #map{
     height: 100%;
-    position: fixed;
     background: green;
     width: 50%;
 }
