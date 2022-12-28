@@ -2,7 +2,6 @@
 
 
 .container-app {
-    display: flex;
 }
 
 .search{
@@ -17,15 +16,15 @@
     right: 0;
     top: 0;
     bottom: 58px;
-    width: 50%;
+    width: 40%;
     display: flex;
 }
 
-#map{
+
+#maps{
     height: 100%;
-    position: fixed;
     background: green;
-    width: 50%;
+    width: 100%;
 }
 
 .input-group mb-3{
@@ -63,7 +62,7 @@
     width: 100%;
     /* min-height: 319px; */
     min-height: 346.25px;
-    background-color: unset;
+    background-color: none;
     margin-bottom: 10px;
 }
 
