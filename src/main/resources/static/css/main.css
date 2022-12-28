@@ -12,7 +12,7 @@ html, body {
 }
 
 .wrapper {
-    display: flex;
+    display: grid;
     flex-direction: column;
     min-height: 100%;
     margin: 0;

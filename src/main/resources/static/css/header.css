@@ -6,6 +6,7 @@
 #FarmilyHeader {
     background-color: #f2ebdd;
     color: #613d1a;
+    height: fit-content;
 }
 #home {
     font-family: 'Mochiy Pop One', sans-serif;
