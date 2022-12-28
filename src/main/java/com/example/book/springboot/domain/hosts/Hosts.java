@@ -32,6 +32,9 @@ public class Hosts extends BaseTimeEntity {
     @Column(nullable = false)
     private int farmsts;
 
+    @Column(nullable = false)
+    private String shortintro;
+
     @Column(length = 1000, nullable = false)
     private String intro;
 
@@ -42,22 +45,24 @@ public class Hosts extends BaseTimeEntity {
     private String lng;
 
     @Builder
-    public Hosts(int region, int gender, int age, int farmsts, String intro, String lat, String lng){
+    public Hosts(int region, int gender, int age, int farmsts, String shortintro, String intro, String lat, String lng){
         this.region = region;
         this.gender = gender;
         this.age = age;
         this.farmsts = farmsts;
+        this.shortintro = shortintro;
         this.intro = intro;
         this.lat = lat;
         this.lng = lng;
     }
 
     // 수정용
-    public void hostUpdate(int region, int gender, int age, int farmsts, String intro, String lat, String lng){
+    public void hostUpdate(int region, int gender, int age, int farmsts, String shortintro, String intro, String lat, String lng){
         this.region = region;
         this.gender = gender;
         this.age = age;
         this.farmsts = farmsts;
+        this.shortintro = shortintro;
         this.intro = intro;
         this.lat = lat;
         this.lng = lng;
