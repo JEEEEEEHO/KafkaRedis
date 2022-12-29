@@ -4,8 +4,7 @@
     background-color: #f2ebdd;
     color: #613d1a;
     width: 100%;
-    position: relative;
-    bottom: 0;
+    position: absolute;
     grid-area: ft;
     padding-top: 10px;
 }
