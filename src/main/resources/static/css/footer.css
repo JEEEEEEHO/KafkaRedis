@@ -7,6 +7,7 @@
     position: absolute;
     bottom: 0;
     grid-area: ft;
+    padding-top: 10px;
 }
 
 .contents {

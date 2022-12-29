@@ -10,13 +10,10 @@
 
 .search{
     float: left;
-    width: 50%;
+    width: 100%;
 }
 
 .map_wrap{
-    /*  visibility: hidden!important; */
-    position: fixed;
-    z-index: 900;
     right: 0;
     top: 0;
     bottom: 58px;
