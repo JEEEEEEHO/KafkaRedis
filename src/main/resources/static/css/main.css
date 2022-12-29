@@ -13,6 +13,9 @@ html, body {
 
 .wrapper {
     display: grid;
+    grid-template-areas:
+        "top-nav"
+        "content";
     flex-direction: column;
     min-height: 100%;
     margin: 0;
