@@ -27,6 +27,7 @@ html, body {
 }
 .content{
     grid-area: main;
+    height: fit-content;
 }
 
 .mypage-container{
