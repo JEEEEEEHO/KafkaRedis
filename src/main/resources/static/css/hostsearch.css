@@ -1,8 +1,6 @@
 @charset "UTF-8";
 
-.content{
-    grid-area: main;
-}
+
 .container-app{
     display: flex;
     height: 100%;
