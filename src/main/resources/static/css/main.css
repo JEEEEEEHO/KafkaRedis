@@ -28,14 +28,16 @@ html, body {
 }
 .content{
     grid-area: main;
-    height: fit-content;
 }
 
 .mypage-container{
     width: 20%;
+    margin-right: 20px;
+    padding-top: 30px;
 }
 .host-register-container{
     width: 80%;
+    padding: 20px;
 }
 
 .mainImg {
