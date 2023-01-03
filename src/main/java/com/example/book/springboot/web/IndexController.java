@@ -54,6 +54,11 @@ public class IndexController {
         if (user != null) {
             model.addAttribute("userName", user.getName());
         }
+        if(user.getStatus()!=0){
+            // 호스트 등록 후
+            return "hosts-info";
+        }
+        // 호스트 등록 전
         return "hosts-save";
     }
 
