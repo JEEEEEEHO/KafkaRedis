@@ -26,11 +26,11 @@ public class PostsService {
 
     // 수정
     @Transactional
-    public Long update(Long id, PostsUpdateRequestDto requestDto) {
-        Posts posts = postsRepository.findById(id).orElseThrow(()->
-                new IllegalArgumentException("해당 게시글이 없습니다. id = "+id));
+    public Long update(Long pnum, PostsUpdateRequestDto requestDto) {
+        Posts posts = postsRepository.findById(pnum).orElseThrow(()->
+                new IllegalArgumentException("해당 게시글이 없습니다. pnum = "+pnum));
         posts.update(requestDto.getTitle(), requestDto.getContent());
-        return id;
+        return pnum;
     }
 
     //전체 조회
@@ -43,16 +43,16 @@ public class PostsService {
 
 
     // 상세
-    public PostsResponseDto findById(Long id) {
-        Posts entity = postsRepository.findById(id)
-                .orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다 id = "+id));
+    public PostsResponseDto findById(Long pnum) {
+        Posts entity = postsRepository.findById(pnum)
+                .orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다 id = "+pnum));
         return new PostsResponseDto(entity);
     }
 
     @Transactional
-    public void delete(Long id) {
-        Posts posts = postsRepository.findById(id)
-                .orElseThrow(()->new IllegalArgumentException("해당 게시글이 없습니다 id = "+id)
+    public void delete(Long pnum) {
+        Posts posts = postsRepository.findById(pnum)
+                .orElseThrow(()->new IllegalArgumentException("해당 게시글이 없습니다 id = "+pnum)
                         );
         postsRepository.delete(posts);
     }

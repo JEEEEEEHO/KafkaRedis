@@ -90,7 +90,16 @@
                                 <textarea class="form-control" aria-label="With textarea"></textarea>
                             </div>
                     </div>
-
+                    <div class="row mb-3">
+                        <label for="inputPassword3" class="col-sm-2 col-form-label">주소등록</label>
+                        <div class="input-group">
+                            <input type="text" id="sample6_postcode" placeholder="우편번호">
+                            <input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
+                            <input type="text" id="sample6_address" placeholder="주소"><br>
+                            <input type="text" id="sample6_detailAddress" placeholder="상세주소">
+                            <input type="text" id="sample6_extraAddress" placeholder="참고항목">
+                        </div>
+                    </div>
                     <button type="submit" class="btn btn-primary">등록</button>
                 </form>
             </div>

@@ -33,6 +33,15 @@ public class IndexControllerTest {
 
     @WithMockUser(roles = "USER")
     @Test
+    public void 메인페이지_로딩() throws Exception {
+        //THEN
+        mvc.perform(get("/"))
+                .andExpect(status().isOk());
+    }
+
+
+    @WithMockUser(roles = "USER")
+    @Test
     public void 마이페이지_로딩() throws Exception {
     //Given
         String body = "프로필정보";
@@ -40,6 +49,8 @@ public class IndexControllerTest {
         mvc.perform(get("/mypage"))
                 .andExpect(status().isOk());
     }
+
+    @WithMockUser(roles = "USER")
     @Test
     public void 호스트등록페이지_로딩() throws Exception {
         //THEN

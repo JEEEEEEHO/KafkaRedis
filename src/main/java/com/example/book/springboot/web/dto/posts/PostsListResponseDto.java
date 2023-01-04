@@ -8,14 +8,14 @@ import java.time.LocalDateTime;
 
 @Getter
 public class PostsListResponseDto {
-    private Long id;
+    private Long pnum;
     private String title;
     private String author;
     private LocalDateTime modifiedDate;
 
     @Builder
     public PostsListResponseDto(Posts entity){
-        this.id = entity.getPnum();
+        this.pnum = entity.getPnum();
         this.title=entity.getTitle();
         this.author=entity.getAuthor();
         this.modifiedDate=entity.getModifiedDate();

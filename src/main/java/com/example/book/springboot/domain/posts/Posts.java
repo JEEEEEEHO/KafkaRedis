@@ -5,12 +5,14 @@ import com.example.book.springboot.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
 @Entity
+@DynamicInsert
 public class Posts extends BaseTimeEntity {
 
     @Id
@@ -19,10 +21,6 @@ public class Posts extends BaseTimeEntity {
 
     @Column(length = 500, nullable = false)
     private String title;
-
-    @ManyToOne
-    @Column(name = "id")
-    private User user;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;

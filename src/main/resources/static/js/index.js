@@ -35,10 +35,10 @@ var main = {
             title: $('#title').val(),
             content: $('#content').val()
         };
-        var id = $('#id').val();
+        var pnum = $('#id').val();
         $.ajax({
             type: 'PUT',
-            url: '/api/v1/posts/'+id,
+            url: '/api/v1/posts/'+pnum,
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(data)
@@ -51,11 +51,11 @@ var main = {
     },
 
     delete : function () {
-        var id = $('#id').val();
+        var pnum = $('#id').val();
 
         $.ajax({
             type: 'DELETE',
-            url: '/api/v1/posts/'+id,
+            url: '/api/v1/posts/'+pnum,
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
         }).done(function () {

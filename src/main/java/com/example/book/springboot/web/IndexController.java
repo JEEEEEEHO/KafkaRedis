@@ -50,14 +50,13 @@ public class IndexController {
     //호스트 등록화면
     @GetMapping("/hosts/save")
     public String hostsSave(Model model, @LoginUser SessionUser user){
-        model.addAttribute("posts", postsService.findAllDesc());
         if (user != null) {
             model.addAttribute("userName", user.getName());
         }
-        if(user.getStatus()!=0){
+       /* if(user.getStatus()!=null){
             // 호스트 등록 후
             return "hosts-info";
-        }
+        }*/
         // 호스트 등록 전
         return "hosts-save";
     }
@@ -82,9 +81,9 @@ public class IndexController {
     }
 
     //수정 상세 페이지 이동
-    @GetMapping("/posts/update/{id}")
-    public String postsUpdate(@PathVariable Long id, Model model, @LoginUser SessionUser user) {
-        PostsResponseDto dto = postsService.findById(id);
+    @GetMapping("/posts/detail/{pnum}")
+    public String postsUpdate(@PathVariable Long pnum, Model model, @LoginUser SessionUser user) {
+        PostsResponseDto dto = postsService.findById(pnum);
         model.addAttribute("post", dto);
         if (user != null) {
             model.addAttribute("userName", user.getName());
