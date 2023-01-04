@@ -40,4 +40,11 @@ public class IndexControllerTest {
         mvc.perform(get("/mypage"))
                 .andExpect(status().isOk());
     }
+    @Test
+    public void 호스트등록페이지_로딩() throws Exception {
+        //THEN
+        mvc.perform(get("/hosts/save"))
+                .andExpect(status().isOk());
+    }
+
 }

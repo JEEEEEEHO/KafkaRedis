@@ -15,7 +15,7 @@ public class PostsListResponseDto {
 
     @Builder
     public PostsListResponseDto(Posts entity){
-        this.id = entity.getId();
+        this.id = entity.getPnum();
         this.title=entity.getTitle();
         this.author=entity.getAuthor();
         this.modifiedDate=entity.getModifiedDate();

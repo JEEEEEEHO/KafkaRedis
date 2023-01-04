@@ -1,6 +1,7 @@
 package com.example.book.springboot.domain.posts;
 
 import com.example.book.springboot.domain.BaseTimeEntity;
+import com.example.book.springboot.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,10 +15,14 @@ public class Posts extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long pnum;
 
     @Column(length = 500, nullable = false)
     private String title;
+
+    @ManyToOne
+    @Column(name = "id")
+    private User user;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
@@ -35,4 +40,5 @@ public class Posts extends BaseTimeEntity {
         this.title = title;
         this.content = content;
     }
+
 }
