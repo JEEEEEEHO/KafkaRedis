@@ -31,17 +31,35 @@ function sample6_execDaumPostcode() {
                     extraAddr = ' (' + extraAddr + ')';
                 }
                 // 조합된 참고항목을 해당 필드에 넣는다.
-                document.getElementById("sample6_extraAddress").value = extraAddr;
+                document.getElementById("extraAddress").value = extraAddr;
 
             } else {
-                document.getElementById("sample6_extraAddress").value = '';
+                document.getElementById("extraAddress").value = '';
             }
+            var lat = '';
+            var lng = '';
+
+            // 주소-좌표 변환 객체를 생성합니다
+            // 주소-좌표 변환 객체를 생성합니다
+            var geocoder = new kakao.maps.services.Geocoder();
+            geocoder.addressSearch(addr, function(result, status) {
+
+                // 정상적으로 검색이 완료됐으면
+                if (status === kakao.maps.services.Status.OK) {
+                    // 추출한 좌표를 통해 도로명 주소 추출
+                    lat = result[0].y; // 33
+                    lng = result[0].x; // 127
+                }
+            });
 
             // 우편번호와 주소 정보를 해당 필드에 넣는다.
-            document.getElementById('sample6_postcode').value = data.zonecode;
-            document.getElementById("sample6_address").value = addr;
+            document.getElementById("postcode").value = data.zonecode;
+            document.getElementById("address").value = addr;
             // 커서를 상세주소 필드로 이동한다.
-            document.getElementById("sample6_detailAddress").focus();
+            document.getElementById("detailAddress").focus();
+            document.getElementById("lat").value = lat;
+            document.getElementById("lng").value = lng;
+
         }
     }).open();
 }

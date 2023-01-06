@@ -16,7 +16,6 @@ import javax.servlet.http.HttpSession;
 @RequiredArgsConstructor
 public class IndexController {
     private final PostsService postsService;
-    private final HttpSession httpSession;
 
     //메인
     @GetMapping("/")
@@ -41,24 +40,29 @@ public class IndexController {
     @GetMapping("/mypage")
     public String mypage(Model model, @LoginUser SessionUser user){
         model.addAttribute("posts", postsService.findAllDesc());
+            // 1) 회원일 때
         if (user != null) {
             model.addAttribute("userName", user.getName());
+            return "profile";
+        } else {
+            // 2) 회원이 아닐때
+            model.addAttribute("msg", "회원만이 이용할 수 있습니다.");
+            model.addAttribute("url", "/");
+            return "alertonlymember";
         }
-        return "profile";
     }
 
     //호스트 등록화면
     @GetMapping("/hosts/save")
-    public String hostsSave(Model model, @LoginUser SessionUser user){
-        if (user != null) {
-            model.addAttribute("userName", user.getName());
-        }
-       /* if(user.getStatus()!=null){
-            // 호스트 등록 후
+    public String hostsSave(Model model, @LoginUser SessionUser user) {
+        model.addAttribute("userName", user.getName());
+        if (user.getStatus() != 0) {
+            // 1) 호스트 등록 후
             return "hosts-info";
-        }*/
-        // 호스트 등록 전
-        return "hosts-save";
+        } else {
+            // 2) 호스트 등록 전
+            return "hosts-save";
+        }
     }
 
     // 공지사항
@@ -71,16 +75,22 @@ public class IndexController {
         return "board-view";
     }
 
-    // 등록 페이지 이동
+    // 공지사항 등록 페이지 이동
     @GetMapping("/posts/save")
     public String postsSave(Model model, @LoginUser SessionUser user) {
+            // 1) 회원일 때
         if (user != null) {
             model.addAttribute("userName", user.getName());
+            return "posts-save";
+        }else {
+            // 2) 회원이 아닐때
+            model.addAttribute("msg", "회원만이 이용할 수 있습니다.");
+            model.addAttribute("url", "/");
+            return "alertonlymember";
         }
-        return "posts-save";
     }
 
-    //수정 상세 페이지 이동
+    //공지사항 상세 페이지 이동
     @GetMapping("/posts/detail/{pnum}")
     public String postsUpdate(@PathVariable Long pnum, Model model, @LoginUser SessionUser user) {
         PostsResponseDto dto = postsService.findById(pnum);
