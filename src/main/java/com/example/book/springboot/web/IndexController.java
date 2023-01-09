@@ -20,7 +20,6 @@ public class IndexController {
     //메인
     @GetMapping("/")
     public String main(Model model, @LoginUser SessionUser user){
-        model.addAttribute("posts", postsService.findAllDesc());
         if (user != null) {
             model.addAttribute("userName", user.getName());
         }
@@ -29,7 +28,6 @@ public class IndexController {
     //호스트 찾기
     @GetMapping("/hostsearch")
     public String hostsearch(Model model, @LoginUser SessionUser user){
-        model.addAttribute("posts", postsService.findAllDesc());
         if (user != null) {
             model.addAttribute("userName", user.getName());
         }
@@ -39,7 +37,6 @@ public class IndexController {
     //마이페이지
     @GetMapping("/mypage")
     public String mypage(Model model, @LoginUser SessionUser user){
-        model.addAttribute("posts", postsService.findAllDesc());
             // 1) 회원일 때
         if (user != null) {
             model.addAttribute("userName", user.getName());
@@ -55,8 +52,7 @@ public class IndexController {
     //호스트 등록화면
     @GetMapping("/hosts/save")
     public String hostsSave(Model model, @LoginUser SessionUser user) {
-        model.addAttribute("userName", user.getName());
-        if (user.getStatus() != 0) {
+        if (user != null && user.getStatus() != 0) {
             // 1) 호스트 등록 후
             return "hosts-info";
         } else {
