@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
 </head>
 <body>
+<input type="hidden" class="form-control" id="message" value="{{msg}}">
+<input type="hidden" class="form-control" id="url" value="{{url}}">
 <script type="text/javascript">
-    var message = {{msg}};
-    var url = {{url}};
+    var message = $('#message').val();
+    var url = $('#url').val();;
     alert(message);
     document.location.href = url;
 </script>
