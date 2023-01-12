@@ -1,4 +1,4 @@
-var main = {
+var postsave = {
     init : function () {
         var _this = this;
         $('#btn-save').on('click', function () {
@@ -66,4 +66,4 @@ var main = {
         });
     }
 };
-main.init();
+postsave.init();

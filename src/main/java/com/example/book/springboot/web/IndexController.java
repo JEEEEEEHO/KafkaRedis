@@ -25,6 +25,7 @@ public class IndexController {
         }
         return "main";
     }
+
     //호스트 찾기
     @GetMapping("/hostsearch")
     public String hostsearch(Model model, @LoginUser SessionUser user){
@@ -57,6 +58,7 @@ public class IndexController {
             return "hosts-info";
         } else {
             // 2) 호스트 등록 전
+            model.addAttribute("userid", user.getId());
             return "hosts-save";
         }
     }
@@ -68,7 +70,7 @@ public class IndexController {
         if (user != null) {
             model.addAttribute("userName", user.getName());
         }
-        return "board-view";
+        return "board";
     }
 
     // 공지사항 등록 페이지 이동
@@ -81,7 +83,7 @@ public class IndexController {
         }else {
             // 2) 회원이 아닐때
             model.addAttribute("msg", "회원만이 이용할 수 있습니다.");
-            model.addAttribute("url", "/");
+            model.addAttribute("url", "/board");
             return "alertonlymember";
         }
     }
