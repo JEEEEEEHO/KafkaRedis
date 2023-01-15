@@ -46,6 +46,7 @@ public class Hosts extends BaseTimeEntity {
 
     @Builder
     public Hosts(int region, int gender, int age, int farmsts, String shortintro, String intro, String lat, String lng, User user){
+        this.user = user;
         this.region = region;
         this.gender = gender;
         this.age = age;
@@ -54,7 +55,6 @@ public class Hosts extends BaseTimeEntity {
         this.intro = intro;
         this.lat = lat;
         this.lng = lng;
-        this.user = user;
     }
 
     // 수정용

@@ -1,6 +1,9 @@
 package com.example.book.springboot.web.dto.hosts;
 
+import com.example.book.springboot.domain.hosts.Hosts;
+import com.example.book.springboot.domain.hosts.HostsRepository;
 import com.example.book.springboot.domain.user.User;
+import com.example.book.springboot.domain.user.UserRepository;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +12,7 @@ import javax.persistence.Column;
 @Getter
 @NoArgsConstructor
 public class HostsSaveRequestDto {
-    private int id;
+     private Long id;
 
     private int region;
 
@@ -28,7 +31,7 @@ public class HostsSaveRequestDto {
     private String lng;
 
     @Builder
-    public HostsSaveRequestDto(int id, int region, int gender, int age, int farmsts, String shortintro, String intro, String lat, String lng){
+    public HostsSaveRequestDto(Long id, int region, int gender, int age, int farmsts, String shortintro, String intro, String lat, String lng){
         this.id = id;
         this.region = region;
         this.gender = gender;
@@ -40,6 +43,17 @@ public class HostsSaveRequestDto {
         this.lng = lng;
     }
 
-
-
+    public Hosts toEntity(User user){
+        return Hosts.builder()
+                .user(user)
+                .region(region)
+                .gender(gender)
+                .age(age)
+                .farmsts(farmsts)
+                .shortintro(shortintro)
+                .intro(intro)
+                .lat(lat)
+                .lng(lng)
+                .build();
+    }
 }
