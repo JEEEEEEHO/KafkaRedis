@@ -25,7 +25,7 @@ var postsave = {
             data: JSON.stringify(data)
         }).done(function() {
             alert('글이 등록되었습니다.');
-            window.location.href = '/posts/save';
+            window.location.href = '/board';
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });

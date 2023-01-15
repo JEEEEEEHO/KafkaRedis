@@ -8,15 +8,16 @@ var hostsave ={
     save : function (){
         var data = {
             id : $('#userid').val(),
-            region: $('#region').val(),
-            gender: $('#gender').val(),
-            age: $('#age').val(),
-            farmsts: $('#farmsts').val(),
+            region: $('input:radio[name="region"]:checked').val(),
+            gender: $('input:radio[name="gender"]:checked').val(),
+            age: $('input:radio[name="age"]:checked').val(),
+            farmsts: $('input:radio[name="farmsts"]:checked').val(),
             shortintro: $('#shortintro').val(),
             intro: $('#intro').val(),
             lat: $('#lat').val(),
             lng: $('#lng').val()
         };
+        console.log($('input:radio[name="region"]:checked').val());
 
         $.ajax({
             type: 'POST',

@@ -1,14 +1,11 @@
 package com.example.book.springboot.web.dto.hosts;
 
 import com.example.book.springboot.domain.hosts.Hosts;
-import com.example.book.springboot.domain.hosts.HostsRepository;
 import com.example.book.springboot.domain.user.User;
-import com.example.book.springboot.domain.user.UserRepository;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 @Getter
 @NoArgsConstructor
 public class HostsSaveRequestDto {
