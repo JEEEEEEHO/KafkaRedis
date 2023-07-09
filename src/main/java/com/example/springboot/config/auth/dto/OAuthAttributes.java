@@ -14,7 +14,6 @@ public class OAuthAttributes {
     private String name;
     private String email;
     private String picture;
-
     private int status;
 
     @Builder
@@ -39,8 +38,8 @@ public class OAuthAttributes {
         return OAuthAttributes.builder()
                 .name((String) attributes.get("name"))
                 .email((String) attributes.get("email"))
-                .picture((String) attributes.get("picture"))
-                .status((Integer) attributes.get("status"))
+//                .picture((String) attributes.get("picture"))
+//                .status((Integer) attributes.get("status"))
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
                 .build();

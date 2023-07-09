@@ -13,8 +13,8 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class PostServiceImpl implements PostService{
 
     private final PostRepository postRepository;

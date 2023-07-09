@@ -12,8 +12,8 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class HostServiceImpl implements HostService {
     private  final HostRepository hostRepository;
     private final UserRepository userRepository;

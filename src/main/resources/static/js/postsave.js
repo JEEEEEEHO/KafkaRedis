@@ -44,7 +44,7 @@ var postsave = {
             data: JSON.stringify(data)
         }).done(function () {
             alert('글이 수정되었습니다.');
-            window.location.href = '/';
+            window.location.href = '/post/'+pnum;
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
@@ -60,7 +60,7 @@ var postsave = {
             contentType: 'application/json; charset=utf-8',
         }).done(function () {
             alert('글이 삭제되었습니다.');
-            window.location.href = '/';
+            window.location.href = '/board';
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });

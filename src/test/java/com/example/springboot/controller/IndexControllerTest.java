@@ -18,12 +18,12 @@ import  static org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = IndexApiController.class,
+@WebMvcTest(controllers = IndexController.class,
         excludeFilters = {
                 @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
         }
 )
-public class IndexApiControllerTest {
+public class IndexControllerTest {
     @Autowired
     private MockMvc mvc;
 
