@@ -1,0 +1,48 @@
+
+{{>layout/header}}
+        <div class="content">
+            <div class="container-app" style="display: flex" >
+                <div class="row row-cols-lg-auto g-3 align-items-center"  style="width: 70%;margin-left: 10px;margin-right: auto;" >
+                    <div class="d-flex flex-column flex-grow h-100" style="width: 100%;">
+                        <form class="row gy-2 gx-3 align-items-center" action="/hosts/search">
+                            <div class="col-auto">
+                                <div class="input-group">
+                                    <input type="date" class="form-control" placeholder="시작일" aria-label="Username" aria-describedby="basic-addon1" name="startdate" id="startdate">
+                                    <input type="date" class="form-control" placeholder="종료일" aria-label="Username" aria-describedby="basic-addon1" name="enddate" id="enddate">
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <div class="input-group">
+                                    <div class="input-group-text">인원</div>
+                                    <select class="form-select" name="people" id="people">
+                                        <option selected="selected" value="one">1</option>
+                                        <option value="two">2</option>
+                                        <option value="three">3</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-light" onclick="addoption();">조건추가</button>
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-primary">검색</button>
+                            </div>
+                        </form>
+                        <main class="search">
+                            <div class="list_wrap">
+                                {{#hostList}}
+                                    <ul class="clearfix">
+                                        <li>
+                                            <span><a href="host/{{hnum}}">{{mainImg}}</a></span>
+                                            <span>{{shortintro}}</span>
+                                        </li>
+                                    </ul>
+                                {{/hostList}}
+                            </div>
+                        </main>
+                    </div>
+                </div>
+                <div class="map_wrap">
+                    <div id="map"  style="width:100%;height:100%;"></div>
+                </div>
+            </div>
+        </div>
+    {{>layout/footer}}
