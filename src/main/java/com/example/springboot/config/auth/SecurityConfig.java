@@ -7,22 +7,20 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 
-
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomOAuth2UserService customOAuth2UserService;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    protected void configure(HttpSecurity http) throws Exception{
         http
                 .csrf().disable()
                 .headers().frameOptions().disable()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/**", "/css/**", "/img/**", "/js/**", "/h2-console/**", "/profile").permitAll()
-                .antMatchers("/**").hasRole(Role.USER.name())
+                .antMatchers("/**", "/css/**", "/images/**", "/js/**", "/h2-console/**").permitAll()
+                .antMatchers("/api/**").hasRole(Role.USER.name()) //"/api/v1/** " 주소를 가진 API는 USER 권한만 열람 권한 부여
                 .anyRequest().authenticated()
                 .and()
                 .logout()
@@ -32,4 +30,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService);
     }
+
 }

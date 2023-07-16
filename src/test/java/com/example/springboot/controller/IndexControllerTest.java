@@ -1,6 +1,7 @@
 package com.example.springboot.controller;
 
 import com.example.springboot.config.auth.SecurityConfig;
+import com.example.springboot.service.host.HostServiceImpl;
 import com.example.springboot.service.post.PostServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +18,7 @@ import  static org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 
 
+
 @RunWith(SpringRunner.class)
 @WebMvcTest(controllers = IndexController.class,
         excludeFilters = {
@@ -30,9 +32,12 @@ public class IndexControllerTest {
     @MockBean
     private PostServiceImpl postServiceImpl;
 
+    @MockBean
+    private HostServiceImpl hostService;
+
     @WithMockUser(roles = "USER")
     @Test
-    public void 메인페이지_로딩() throws Exception {
+    public void mainpage() throws Exception {
         //THEN
         mvc.perform(get("/"))
                 .andExpect(status().isOk());

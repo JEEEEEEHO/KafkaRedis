@@ -15,13 +15,13 @@ public class PostApiController {
 
 
     // 저장
-    @PostMapping("/post/save")
+    @PostMapping("/api/post/save")
     public Long save(@RequestBody PostSaveRequestDto requestDto) {
         return postService.save(requestDto);
     }
 
     // 수정
-    @PutMapping("/post/{pnum}")
+    @PutMapping("/api/post/{pnum}")
     public Long update(@PathVariable Long pnum, @RequestBody PostUpdateRequestDto requestDto) {
         return postService.update(pnum, requestDto);
     }
@@ -34,7 +34,7 @@ public class PostApiController {
 
 
     // 삭제
-    @DeleteMapping("/post/{pnum}")
+    @DeleteMapping("/api/post/{pnum}")
     public Long delete(@PathVariable Long pnum) {
         postService.delete(pnum);
         return pnum;

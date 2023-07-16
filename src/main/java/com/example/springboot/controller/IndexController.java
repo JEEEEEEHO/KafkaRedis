@@ -70,7 +70,7 @@ public class IndexController {
         // 1) 회원일 때
         if (user != null) {
             model.addAttribute("userName", user.getName());
-            return "postSave";
+            return "postForm";
         }else {
             // 2) 회원이 아닐때
             model.addAttribute("msg", "회원만이 이용할 수 있습니다.");

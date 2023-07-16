@@ -4,9 +4,7 @@ import com.example.springboot.config.auth.SecurityConfig;
 import com.example.springboot.domain.post.Post;
 import com.example.springboot.domain.post.PostRepository;
 import com.example.springboot.controller.dto.post.PostSaveRequestDto;
-import com.example.springboot.controller.dto.post.PostUpdateRequestDto;
 import com.example.springboot.service.post.PostService;
-import com.example.springboot.service.post.PostServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Before;
@@ -14,9 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
@@ -47,8 +43,8 @@ public class PostApiControllerTest {
     @Autowired
     private MockMvc mvc;
 
-//    @LocalServerPort
-//    private int port;
+    @LocalServerPort
+    private int port;
 
 //    @Autowired
 //    private TestRestTemplate restTemplate;
@@ -92,31 +88,31 @@ public class PostApiControllerTest {
     }
 
 
-//    @Test
-//    @WithMockUser(roles = "USER")
-//    public void Posts_등록된다() throws Exception {
-//        //given
-//        String title = "title";
-//        String content = "content";
-//        PostSaveRequestDto requestDto = PostSaveRequestDto.builder()
-//                .title(title)
-//                .content(content)
-//                .author("author")
-//                .build();
-//
-//        String url = "http://localhost:" + port + "/api/v1/posts";
-//
-//        //when
-//        mvc.perform(post(url)
-//                        .contentType(MediaType.APPLICATION_JSON_UTF8)
-//                        .content(new ObjectMapper().writeValueAsString(requestDto)))
-//                .andExpect(status().isOk());
-//
-//        //then
-//        List<Post> all = postRepository.findAll();
-//        assertThat(all.get(0).getTitle()).isEqualTo(title);
-//        assertThat(all.get(0).getContent()).isEqualTo(content);
-//    }
+    @Test
+    @WithMockUser(roles = "USER")
+    public void register() throws Exception {
+        //given
+        String title = "title";
+        String content = "content";
+        PostSaveRequestDto requestDto = PostSaveRequestDto.builder()
+                .title(title)
+                .content(content)
+                .author("author")
+                .build();
+
+        String url = "http://localhost:" + port + "/api/post/save";
+
+        //when
+        mvc.perform(post(url)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(new ObjectMapper().writeValueAsString(requestDto)))
+                .andExpect(status().isOk());
+
+        //then
+        List<Post> all = postRepository.findAll();
+        assertThat(all.get(0).getTitle()).isEqualTo(title);
+        assertThat(all.get(0).getContent()).isEqualTo(content);
+    }
 //
 //    @Test
 //    @WithMockUser(roles = "USER")

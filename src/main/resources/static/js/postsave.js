@@ -19,7 +19,7 @@ var postsave = {
         };
         $.ajax({
             type: 'POST',
-            url: '/post/save',
+            url: '/api/post/save',
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(data)
@@ -38,7 +38,7 @@ var postsave = {
         var pnum = $('#id').val();
         $.ajax({
             type: 'PUT',
-            url: '/post/'+pnum,
+            url: '/api/post/'+pnum,
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(data)
@@ -55,7 +55,7 @@ var postsave = {
 
         $.ajax({
             type: 'DELETE',
-            url: '/post/'+pnum,
+            url: '/api/post/'+pnum,
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
         }).done(function () {
