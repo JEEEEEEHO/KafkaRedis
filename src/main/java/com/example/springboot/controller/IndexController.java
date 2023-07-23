@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequiredArgsConstructor
 public class IndexController {
-    private final PostService postService;
+
     private final HostService hostService;
 
     //메인
@@ -53,43 +53,6 @@ public class IndexController {
         }
     }
 
-
-    // 공지사항
-    @GetMapping("/board")
-    public String index(Model model, @LoginUser SessionUser user) {
-        model.addAttribute("posts", postService.findAllDesc());
-        if (user != null) {
-            model.addAttribute("userName", user.getName());
-        }
-        return "board";
-    }
-
-    // 공지사항 등록 페이지 이동
-    @GetMapping("/post/form")
-    public String postSave(Model model, @LoginUser SessionUser user) {
-        // 1) 회원일 때
-        if (user != null) {
-            model.addAttribute("userName", user.getName());
-            return "postForm";
-        }else {
-            // 2) 회원이 아닐때
-            model.addAttribute("msg", "회원만이 이용할 수 있습니다.");
-            model.addAttribute("url", "/board");
-            return "/layout/alertonlymember";
-        }
-    }
-
-
-    //공지사항 상세 페이지 이동
-    @GetMapping("/post/{pnum}")
-    public String postUpdate(@PathVariable Long pnum, Model model, @LoginUser SessionUser user) {
-        PostResponseDto dto = postService.findById(pnum);
-        model.addAttribute("post", dto);
-        if (user != null) {
-            model.addAttribute("userName", user.getName());
-        }
-        return "postUpdate";
-    }
 
 }
 
