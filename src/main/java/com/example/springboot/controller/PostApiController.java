@@ -2,7 +2,6 @@ package com.example.springboot.controller;
 
 import com.example.springboot.controller.dto.post.PostListResponseDto;
 import com.example.springboot.controller.dto.post.PostResponseDto;
-import com.example.springboot.domain.post.Post;
 import com.example.springboot.service.post.PostService;
 import com.example.springboot.controller.dto.post.PostSaveRequestDto;
 import com.example.springboot.controller.dto.post.PostUpdateRequestDto;
@@ -20,6 +19,12 @@ public class PostApiController {
     @GetMapping("/api/post/list")
     public List<PostListResponseDto> postList(){
         return postService.findAllDesc();
+    }
+
+    // 상세보기
+    @GetMapping("/api/post/{pnum}")
+    public PostResponseDto postDetail(@PathVariable Long pnum){
+        return postService.findById(pnum);
     }
 
     // 저장

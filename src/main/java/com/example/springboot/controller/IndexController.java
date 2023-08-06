@@ -28,16 +28,6 @@ public class IndexController {
         return "main";
     }
 
-    //호스트 리스트
-    @GetMapping("/hostList")
-    public String hostsearch(Model model, @LoginUser SessionUser user){
-        if (user != null) {
-            model.addAttribute("hostList", hostService.findAllDesc());
-        }
-
-        return "hostList";
-    }
-
     //마이페이지
     @GetMapping("/mypage")
     public String mypage(Model model, @LoginUser SessionUser user){

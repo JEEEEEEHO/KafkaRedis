@@ -27,6 +27,7 @@ public class PostServiceImpl implements PostService{
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     // 상세보기
     public PostResponseDto findById(Long pnum) {
         Post entity = postRepository.findById(pnum)

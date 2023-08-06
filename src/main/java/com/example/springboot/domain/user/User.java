@@ -12,6 +12,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor
@@ -23,19 +24,23 @@ public class User extends BaseTimeEntity {
     private Long id;
 
     @Column(nullable = false)
+    @NotNull
     private String name;
 
-    @Column(nullable = false)
+    @Column(unique = true)
+    @NotNull
     private String email;
 
     @Column
     private String picture;
 
     @Column
+    @NotNull
     private int status;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column
+    @NotNull
     private Role role;
 
     @Builder

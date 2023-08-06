@@ -16,6 +16,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class HostApiController {
     private final HostServiceImpl hostsService;
 
+
+    //호스트 리스트
+
+
+    // 호스트 상세보기
+
+    // 호스트 등록
+
+
+    // 호스트 수정
+
+
+    // 호스트 삭제
+
+
     // 호스트 검색
     @GetMapping("/host/search")
     public void hostSearch(Model model){
