@@ -78,12 +78,9 @@ public class HostApiControllerTest {
         User user = userRepository.save( User.builder()
                 .name("Jeeho Kim")
                 .email("email")
-                .picture("picture")
-                .status(0)
-                .role(role)
                 .build());
 
-        Long userid = user.getId();
+        String userid = user.getId();
 
         HostSaveRequestDto requestDto = HostSaveRequestDto.builder()
                 .id(userid)

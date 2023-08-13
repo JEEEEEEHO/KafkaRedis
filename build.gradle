@@ -24,26 +24,38 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    implementation('org.springframework.boot:spring-boot-starter-web')
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation('com.h2database:h2')
-    implementation('org.springframework.boot:spring-boot-starter-mustache')
-    implementation('org.springframework.boot:spring-boot-starter-oauth2-client')
-    implementation 'org.projectlombok:lombok'
-    implementation('org.springframework.session:spring-session-jdbc')
-    implementation("org.mariadb.jdbc:mariadb-java-client")
-    implementation('mysql:mysql-connector-java')
-    testImplementation('org.springframework.boot:spring-boot-starter-test')
-    testImplementation 'org.projectlombok:lombok'
-    testImplementation('org.springframework.security:spring-security-test')
-    annotationProcessor 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
-
-}
-
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation('org.springframework.boot:spring-boot-starter-web')
+
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:2.3.2'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+
+
+    compileOnly 'org.projectlombok:lombok'
+    //developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    implementation('org.springframework.session:spring-session-jdbc')
+    implementation("org.mariadb.jdbc:mariadb-java-client")
+    implementation('mysql:mysql-connector-java')
+
+    testImplementation('org.springframework.security:spring-security-test')
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    implementation 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    implementation('com.h2database:h2')
+    implementation('org.springframework.boot:spring-boot-starter-mustache')
+
 }

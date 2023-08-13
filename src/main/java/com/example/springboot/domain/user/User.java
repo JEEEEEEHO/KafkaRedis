@@ -1,71 +1,35 @@
 package com.example.springboot.domain.user;
 
 import com.example.springboot.domain.BaseTimeEntity;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
+import javax.persistence.*;
 
-@Getter
-@NoArgsConstructor
+
+
 @Entity
-public class User extends BaseTimeEntity {
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
+public class User extends BaseTimeEntity{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    private String id; // 유저에게 고유하게 부여되는 id.
 
     @Column(nullable = false)
-    @NotNull
-    private String name;
+    private String name; // 유저의 이름
 
-    @Column(unique = true)
-    @NotNull
-    private String email;
+    @Column(nullable = false)
+    private String email; // 유저의 email, 아이디와 같은 기능을 한다.
 
-    @Column
-    private String picture;
+    @Column(nullable = false)
+    private String password; // 패스워드. null이 가능한 이유는 oAuth로 페이스북이나 트위터같은 제3의 어플리케이션을 통해 로그인 할 수 있게 하기 위함이다.
 
-    @Column
-    @NotNull
-    private int status;
 
-    @Enumerated(EnumType.STRING)
-    @Column
-    @NotNull
-    private Role role;
-
-    @Builder
-    public User(String name, String email, String picture, int status, Role role) {
-        this.name = name;
-        this.email = email;
-        this.picture = picture;
-        this.status = status;
-        this.role = role;
-    }
-
-    // 회원정보 변경
-    public User update(String name, String picture) {
-        this.name = name;
-        this.picture = picture;
-        return this;
-    }
-
-    // 호스트 등록 변경
-    public User stsUpdate(int status){
-        this.status = status;
-        return this;
-    }
-
-    public String getRoleKey() {
-        return this.role.getKey();
-    }
 }

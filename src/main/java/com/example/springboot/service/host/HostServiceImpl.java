@@ -24,13 +24,6 @@ public class HostServiceImpl implements HostService {
         return hostRepository.findAllDesc().stream().map(HostListResponseDto::new).collect(Collectors.toList());
     }
 
-    @Transactional
-    public int save(HostSaveRequestDto requestDto) {
-       User user = userRepository.findById(requestDto.getId())
-               .orElseThrow(()->new IllegalArgumentException("회원없음 id->"+requestDto.getId()));
-       user.stsUpdate(1);
-        return hostRepository.save(requestDto.toEntity(user)).getHnum();
-    }
 
 
 }

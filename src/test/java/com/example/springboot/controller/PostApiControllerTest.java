@@ -1,10 +1,10 @@
 package com.example.springboot.controller;
 
-import com.example.springboot.config.auth.SecurityConfig;
 import com.example.springboot.controller.dto.post.PostUpdateRequestDto;
 import com.example.springboot.domain.post.Post;
 import com.example.springboot.domain.post.PostRepository;
 import com.example.springboot.service.post.PostService;
+import org.apache.catalina.security.SecurityConfig;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
