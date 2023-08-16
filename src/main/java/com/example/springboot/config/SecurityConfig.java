@@ -1,9 +1,13 @@
 package com.example.springboot.config;
 
 import com.example.springboot.security.JwtAuthenticationFilter;
+import com.example.springboot.security.OAuthSuccessHandler;
+import com.example.springboot.security.OAuthUserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -15,6 +19,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
+    @Autowired
+    private OAuthUserServiceImpl oauthUserService; // 우리가 만든 OauthUserServiceImpl 추가
+    @Autowired
+    private OAuthSuccessHandler oAuthSuccessHandler;
+
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().mvcMatchers("/image/**", "/css/**", "/js/**");    // /image/** 있는 모든 파일들은 시큐리티 적용을 무시한다.
+        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());    // 정적인 리소스들에 대해서 시큐리티 적용 무시.
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -29,9 +44,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests() // /와 /auth/** 경로는 인증 안해도 됨.
-                .antMatchers("/", "/auth/**", "/api/**").permitAll()
+                .antMatchers("/", "/auth/**", "/api/**", "/oauth2/**").permitAll()
                 .anyRequest() // /와 /auth/**이외의 모든 경로는 인증 해야됨.
-                .authenticated();
+                .authenticated()
+                .and()
+                .logout()
+                .logoutSuccessUrl("/")
+                .and()
+                .oauth2Login()
+                .redirectionEndpoint()
+                .baseUri("/login/oauth2/code/*")
+                .and()
+                .userInfoEndpoint()
+                .userService(oauthUserService)
+                .and()
+                .successHandler(oAuthSuccessHandler);
 
         // filter 등록.
         // 매 리퀘스트마다
