@@ -3,6 +3,7 @@ package com.example.springboot.config;
 import com.example.springboot.security.JwtAuthenticationFilter;
 import com.example.springboot.security.OAuthSuccessHandler;
 import com.example.springboot.security.OAuthUserServiceImpl;
+import com.example.springboot.security.RedirectUrlCookieFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -11,6 +12,8 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationCodeGrantFilter;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.web.filter.CorsFilter;
 
 @EnableWebSecurity
@@ -23,6 +26,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private OAuthUserServiceImpl oauthUserService; // 우리가 만든 OauthUserServiceImpl 추가
     @Autowired
     private OAuthSuccessHandler oAuthSuccessHandler;
+    @Autowired
+    private RedirectUrlCookieFilter redirectUrlCookieFilter;
 
 
     @Override
@@ -51,14 +56,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutSuccessUrl("/")
                 .and()
-                .oauth2Login()
+                .oauth2Login() // 로그인 페이지가 없을 땐 Spring Security 기본 OAuth 로그인 페이지
                 .redirectionEndpoint()
                 .baseUri("/login/oauth2/code/*")
+                .and()
+                .authorizationEndpoint()
+                .baseUri("/auth/authorize") // 흐름 시작
                 .and()
                 .userInfoEndpoint()
                 .userService(oauthUserService)
                 .and()
-                .successHandler(oAuthSuccessHandler);
+                .successHandler(oAuthSuccessHandler)// 성공하면 이 부분 실행
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(new Http403ForbiddenEntryPoint());
 
         // filter 등록.
         // 매 리퀘스트마다
@@ -67,6 +78,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterAfter(
                 jwtAuthenticationFilter,
                 CorsFilter.class
+        );
+
+        http.addFilterBefore(
+                redirectUrlCookieFilter,
+                OAuth2AuthorizationCodeGrantFilter.class
+                // 리다이렉트 되기 전에 필터를 실행해야 한다
         );
     }
 }
