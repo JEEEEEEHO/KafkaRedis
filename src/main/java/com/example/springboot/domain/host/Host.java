@@ -2,15 +2,17 @@ package com.example.springboot.domain.host;
 
 import com.example.springboot.domain.BaseTimeEntity;
 import com.example.springboot.domain.user.User;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.Date;
 
-@Getter
-@NoArgsConstructor
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Host extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,8 +46,15 @@ public class Host extends BaseTimeEntity {
     @Column(nullable = false)
     private String lng;
 
-    @Column(nullable = false)
-    private String mainImg;
+    @Column
+    private int maxPpl;
+
+    @Column
+    private String aprvYn;
+
+    @Column
+    private Date apprv_date;
+
 
     @Builder
     public Host(int region, int gender, int age, int farmsts, String shortintro, String intro, String lat, String lng, User user){

@@ -83,7 +83,6 @@ public class HostApiControllerTest {
         String userid = user.getId();
 
         HostSaveRequestDto requestDto = HostSaveRequestDto.builder()
-                .id(userid)
                 .region(region)
                 .gender(gender)
                 .age(age)

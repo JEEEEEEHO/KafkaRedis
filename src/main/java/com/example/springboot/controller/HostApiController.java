@@ -4,6 +4,7 @@ import com.example.springboot.service.host.HostServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -18,6 +19,7 @@ public class HostApiController {
     // 호스트 상세보기
 
     // 호스트 등록
+    @PostMapping("/api/host/save")
 
 
     // 호스트 수정

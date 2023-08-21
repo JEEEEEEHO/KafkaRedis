@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class HostSaveRequestDto {
-     private String id;
-
     private int region;
 
     private int gender;
@@ -28,8 +26,7 @@ public class HostSaveRequestDto {
     private String lng;
 
     @Builder
-    public HostSaveRequestDto(String id, int region, int gender, int age, int farmsts, String shortintro, String intro, String lat, String lng){
-        this.id = id;
+    public HostSaveRequestDto(int region, int gender, int age, int farmsts, String shortintro, String intro, String lat, String lng){
         this.region = region;
         this.gender = gender;
         this.age = age;
