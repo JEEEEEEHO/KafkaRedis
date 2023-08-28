@@ -19,6 +19,12 @@ public class PostServiceImpl implements PostService{
 
     private final PostRepository postRepository;
 
+    // 저장
+    @Transactional//여러기능을 하나로 묶어 실행해서 하나라도 잘못되면 모두 취소해야한다(데이터 무결성 보장).
+    public long save(PostSaveRequestDto requestDto){
+        return postRepository.save(requestDto.toEntity()).getPnum();
+    }
+
     //전체 조회
     @Transactional
     public List<PostListResponseDto> findAllDesc(){
@@ -33,12 +39,6 @@ public class PostServiceImpl implements PostService{
         Post entity = postRepository.findById(pnum)
                 .orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다 id = "+pnum));
         return new PostResponseDto(entity);
-    }
-
-    // 저장
-    @Transactional//여러기능을 하나로 묶어 실행해서 하나라도 잘못되면 모두 취소해야한다(데이터 무결성 보장).
-    public long save(PostSaveRequestDto requestDto){
-        return postRepository.save(requestDto.toEntity()).getPnum();
     }
 
 

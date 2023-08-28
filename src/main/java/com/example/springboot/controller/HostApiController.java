@@ -1,11 +1,15 @@
 package com.example.springboot.controller;
 
+import com.example.springboot.controller.dto.host.HostSaveRequestDto;
 import com.example.springboot.service.host.HostServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.mail.Multipart;
+import javax.servlet.http.HttpSession;
 
 @RestController
 @RequiredArgsConstructor
@@ -13,28 +17,28 @@ public class HostApiController {
     private final HostServiceImpl hostsService;
 
 
-    //호스트 리스트
+    //호스트 리스트 Response
 
 
-    // 호스트 상세보기
+    // 호스트 상세보기 Response
 
-    // 호스트 등록
+
+    // 호스트 등록 Request
     @PostMapping("/api/host/save")
+    public void save(HostSaveRequestDto saveRequestDto, @RequestPart("files") MultipartFile[] files){
+        hostsService.save(saveRequestDto, files);
+    }
 
-
-    // 호스트 수정
+    // 호스트 수정 Request
 
 
     // 호스트 삭제
 
 
-    // 호스트 검색
+    // 호스트 검색 Response
     @GetMapping("/host/search")
     public void hostSearch(Model model){
 
     }
-
-    //호스트 등록화면
-
 
 }

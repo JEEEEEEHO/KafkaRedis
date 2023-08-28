@@ -16,23 +16,23 @@ import java.util.Date;
 public class Host extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int hnum;
+    private Long hnum;
 
     @OneToOne
     @JoinColumn(name = "id")
     private User user;
 
     @Column(nullable = false)
-    private int region;
+    private String region;
 
     @Column(nullable = false)
-    private int gender;
+    private String gender;
 
     @Column(nullable = false)
-    private int age;
+    private String age;
 
     @Column(nullable = false)
-    private int farmsts;
+    private String farmsts;
 
     @Column(nullable = false)
     private String shortintro;
@@ -46,18 +46,18 @@ public class Host extends BaseTimeEntity {
     @Column(nullable = false)
     private String lng;
 
-    @Column
-    private int maxPpl;
+    @Column(nullable = false)
+    private String maxPpl;
 
     @Column
-    private String aprvYn;
+    private String apprvYn;
 
     @Column
     private Date apprv_date;
 
 
     @Builder
-    public Host(int region, int gender, int age, int farmsts, String shortintro, String intro, String lat, String lng, User user){
+    public Host(String region, String gender, String age, String farmsts, String shortintro, String intro, String lat, String lng, User user){
         this.user = user;
         this.region = region;
         this.gender = gender;
@@ -70,7 +70,7 @@ public class Host extends BaseTimeEntity {
     }
 
     // 수정용
-    public void hostUpdate(int region, int gender, int age, int farmsts, String shortintro, String intro, String lat, String lng){
+    public void hostUpdate(String region, String gender, String age, String farmsts, String shortintro, String intro, String lat, String lng){
         this.region = region;
         this.gender = gender;
         this.age = age;

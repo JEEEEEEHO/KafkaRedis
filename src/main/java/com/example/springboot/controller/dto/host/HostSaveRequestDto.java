@@ -1,21 +1,29 @@
 package com.example.springboot.controller.dto.host;
 
 import com.example.springboot.domain.host.Host;
+import com.example.springboot.domain.host.HostImg;
 import com.example.springboot.domain.user.User;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.Date;
 
 @Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class HostSaveRequestDto {
-    private int region;
+    private User user;
 
-    private int gender;
+    private HostImg hostImg;
 
-    private int age;
+    private String region;
 
-    private int farmsts;
+    private String gender;
+
+    private String age;
+
+    private String farmsts;
 
     private String shortintro;
 
@@ -25,19 +33,14 @@ public class HostSaveRequestDto {
 
     private String lng;
 
-    @Builder
-    public HostSaveRequestDto(int region, int gender, int age, int farmsts, String shortintro, String intro, String lat, String lng){
-        this.region = region;
-        this.gender = gender;
-        this.age = age;
-        this.farmsts = farmsts;
-        this.shortintro = shortintro;
-        this.intro = intro;
-        this.lat = lat;
-        this.lng = lng;
-    }
+    private String maxPpl;
 
-    public Host toEntity(User user){
+    private String apprvYn;
+
+    private Date apprv_date;
+
+
+    public Host toEntity(){
         return Host.builder()
                 .user(user)
                 .region(region)
@@ -48,6 +51,20 @@ public class HostSaveRequestDto {
                 .intro(intro)
                 .lat(lat)
                 .lng(lng)
+                .maxPpl(maxPpl)
+                .apprvYn(apprvYn)
+                .apprv_date(apprv_date)
                 .build();
     }
+    public HostImg toHostImg() {
+        return HostImg.builder()
+                .hnum(hostImg.getHnum())
+                .host(hostImg.getHost())
+                .fileName(hostImg.getFileName())
+                .fileSize(hostImg.getFileSize())
+                .filePath(hostImg.getFilePath())
+                .thumImg(hostImg.getThumImg())
+                .build();
+    }
+
 }
