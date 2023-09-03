@@ -15,8 +15,6 @@ import java.util.Date;
 public class HostSaveRequestDto {
     private User user;
 
-    private HostImg hostImg;
-
     private String region;
 
     private String gender;
@@ -56,15 +54,6 @@ public class HostSaveRequestDto {
                 .apprv_date(apprv_date)
                 .build();
     }
-    public HostImg toHostImg() {
-        return HostImg.builder()
-                .hnum(hostImg.getHnum())
-                .host(hostImg.getHost())
-                .fileName(hostImg.getFileName())
-                .fileSize(hostImg.getFileSize())
-                .filePath(hostImg.getFilePath())
-                .thumImg(hostImg.getThumImg())
-                .build();
-    }
+
 
 }

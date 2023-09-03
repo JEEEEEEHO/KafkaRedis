@@ -102,7 +102,7 @@ public class HostApiControllerTest {
 
         // when
 
-        hostService.save(requestDto, file);
+        hostService.save(requestDto);
 
 //        String url = "http://localhost:" + port + "/api/host/save";
 //

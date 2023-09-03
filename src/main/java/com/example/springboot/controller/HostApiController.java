@@ -22,11 +22,16 @@ public class HostApiController {
 
     // 호스트 상세보기 Response
 
+    // 호스트 이미지 등록
+    @PostMapping("/api/host/saveImgs")
+    public void saveImgs(@RequestPart("files") MultipartFile[] files){
+        hostsService.saveImgs(files);
+    }
 
     // 호스트 등록 Request
     @PostMapping("/api/host/save")
-    public void save(HostSaveRequestDto saveRequestDto, @RequestPart("files") MultipartFile[] files){
-        hostsService.save(saveRequestDto, files);
+    public void save(HostSaveRequestDto saveRequestDto){
+        hostsService.save(saveRequestDto);
     }
 
     // 호스트 수정 Request

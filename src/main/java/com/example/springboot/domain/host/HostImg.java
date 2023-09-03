@@ -1,6 +1,7 @@
 package com.example.springboot.domain.host;
 
 import com.example.springboot.domain.BaseTimeEntity;
+import com.example.springboot.domain.user.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,12 +23,15 @@ public class HostImg extends BaseTimeEntity implements Serializable {
 
     @Id
     @Column(nullable = false)
-    private Long hnum;
+    private String id;
 
-    @OneToOne
+    @ManyToOne
     @MapsId //@Id로 지정한 컬럼에 @OneToOne과 같이 관계를 매핑
-    @JoinColumn(name = "hnum")
-    private Host host;
+    @JoinColumn(referencedColumnName = "id")
+    private User user;
+
+    @Column
+    private long hnum;
 
     @Column
     private String fileName;

@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 
 @Slf4j
 @RestController
@@ -57,12 +60,16 @@ public class UserController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticate(@RequestBody UserDto userDto) {
+    public ResponseEntity<?> authenticate(@RequestBody UserDto userDto, HttpServletRequest request) {
         User user = userService.getByCredentials(
                 userDto.getEmail(),
 
                 userDto.getPassword(),
                 passwordEncoder);
+
+        // 이미지 저장을 위해서 세션에 id값 담기
+        HttpSession session = request.getSession();
+        session.setAttribute("userId", user.getId());
 
         if(user != null) {
             // 토큰 생성
