@@ -11,5 +11,5 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public class HostImpPk implements Serializable {
     private Long hostImg_turn;
-    private String id;
+    private Long hnum;
 }

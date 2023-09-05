@@ -23,15 +23,12 @@ public class HostImg extends BaseTimeEntity implements Serializable {
 
     @Id
     @Column(nullable = false)
-    private String id;
+    private Long hnum;
 
     @ManyToOne
     @MapsId //@Id로 지정한 컬럼에 @OneToOne과 같이 관계를 매핑
-    @JoinColumn(referencedColumnName = "id")
-    private User user;
-
-    @Column
-    private long hnum;
+    @JoinColumn(referencedColumnName = "hnum")
+    private Host host;
 
     @Column
     private String fileName;
@@ -41,9 +38,4 @@ public class HostImg extends BaseTimeEntity implements Serializable {
 
     @Column
     private String filePath;
-
-    // 섬네일 이미지 여부
-    @Column
-    private String thumImg;
-
 }

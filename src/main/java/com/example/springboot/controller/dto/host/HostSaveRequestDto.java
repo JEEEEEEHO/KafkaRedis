@@ -54,6 +54,4 @@ public class HostSaveRequestDto {
                 .apprv_date(apprv_date)
                 .build();
     }
-
-
 }
