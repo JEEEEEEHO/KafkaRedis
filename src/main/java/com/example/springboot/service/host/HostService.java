@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface HostService {
     // 호스트 데이터 저장
-    void save(HostSaveRequestDto dto, MultipartFile file);
+    String save(HostSaveRequestDto dto, MultipartFile file);
     // 호스트 이미지 저장
-    void saveImgs(MultipartFile[] files);
+    void saveImgs(MultipartFile[] files, String hostNum);
 
 }

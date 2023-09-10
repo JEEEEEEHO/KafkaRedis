@@ -52,9 +52,6 @@ public class Host extends BaseTimeEntity {
     private String maxPpl;
 
     @Column
-    private MultipartFile file;
-
-    @Column
     private String apprvYn;
 
     @Column

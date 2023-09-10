@@ -30,15 +30,15 @@ public class HostApiController {
 
 
     // 호스트 등록 Request
-    @PostMapping("/api/host/save")
-    public void save(@RequestPart(value = "file") MultipartFile file, @RequestPart(value = "hostData") HostSaveRequestDto saveRequestDto) throws IOException {
-        hostsService.save(saveRequestDto, file);
+    @PostMapping(value = "/api/host/save", consumes = "multipart/form-data")
+    public String save(@RequestPart(value = "file") MultipartFile file, @RequestPart(value = "hostData") HostSaveRequestDto saveRequestDto) throws IOException {
+        return hostsService.save(saveRequestDto, file);
     }
 
-    // 호스트 이미지 등록
-    @PostMapping("/api/host/saveImgs")
-    public void saveImgs(@RequestPart("files") MultipartFile[] files, String hostNum ){
-        hostsService.saveImgs(files);
+    // 호스트 이미지 등록 Request
+    @PostMapping(value = "/api/host/saveImg", consumes = "multipart/form-data")
+    public void saveImgs(@RequestPart("files") MultipartFile[] files, @RequestPart(value = "hnum") String hostNum ){
+        hostsService.saveImgs(files, hostNum);
     }
 
     // 호스트 수정 Request

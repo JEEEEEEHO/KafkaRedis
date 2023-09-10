@@ -32,9 +32,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().mvcMatchers("/image/**", "/css/**", "/js/**");    // /image/** 있는 모든 파일들은 시큐리티 적용을 무시한다.
-        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());    // 정적인 리소스들에 대해서 시큐리티 적용 무시.
-    }
+        web.ignoring().mvcMatchers("/img/**", "/css/**", "/js/**");    // /image/** 있는 모든 파일들은 시큐리티 적용을 무시한다.
+        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());    /* 정적인 리소스들에 대해서 시큐리티 적용 무시. */}
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
