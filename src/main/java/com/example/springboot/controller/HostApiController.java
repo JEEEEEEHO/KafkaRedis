@@ -23,10 +23,19 @@ public class HostApiController {
     private final HostMainImgRepository hostMainImgRepository;
     private final HostImgRepository hostImgRepository;
 
-    //호스트 리스트 Response
+
+    // 호스트 검색 Response
+    @GetMapping("/host/search")
+    public void hostSearch(Model model){
+
+    }
 
 
-    // 호스트 상세보기 Response
+    // 호스트 검색 상세보기 Response
+
+    // 호스트 등록 내용 보기 Response
+    @GetMapping("/api/host/detail")
+    public
 
 
     // 호스트 등록 Request
@@ -42,15 +51,10 @@ public class HostApiController {
     }
 
     // 호스트 수정 Request
+    //@PutMapping("api/host/update")
 
 
     // 호스트 삭제
 
-
-    // 호스트 검색 Response
-    @GetMapping("/host/search")
-    public void hostSearch(Model model){
-
-    }
 
 }
