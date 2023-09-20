@@ -67,9 +67,9 @@ public class UserController {
                 userDto.getPassword(),
                 passwordEncoder);
 
-//        이미지 저장을 위해서 세션에 id값 담기
-//        HttpSession session = request.getSession();
-//        session.setAttribute("userId", user.getId());
+        //호스트 등록 내용 보기 위해서 세션에 email 값 담기
+        HttpSession session = request.getSession();
+        session.setAttribute("email", user.getEmail());
 
         if(user != null) {
             // 토큰 생성

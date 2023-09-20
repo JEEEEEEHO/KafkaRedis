@@ -42,14 +42,19 @@ public class TokenProvider {
         byte[] keyBytes = SECRET_KEY.getBytes();
         Key key = Keys.hmacShaKeyFor(keyBytes);
 
+        // 호스트 등록시 email을 가져가기 위해서 eamil 정보를 등록
+        Claims claims = Jwts.claims();
+        claims.put("email", user.getEmail());
+
         return Jwts.builder()
-                // header에 들어갈 내용 및 서명을 하기 위한 SECRET_KEY
-                .signWith(SignatureAlgorithm.HS512, key)
                 // payload에 들어갈 내용
-                .setSubject(user.getId()) // sub
-                .setIssuer("demo app") // iss
+                .setClaims(claims)
                 .setIssuedAt(new Date()) // iat
                 .setExpiration(expiryDate) // exp
+                // header에 들어갈 내용 및 서명을 하기 위한 SECRET_KEY
+                .signWith(SignatureAlgorithm.HS512, key)
+                .setSubject(user.getId()) // sub
+                .setIssuer("demo app") // iss
                 .compact();
     }
 
@@ -64,5 +69,11 @@ public class TokenProvider {
                 .getBody();
 
         return claims.getSubject();
+    }
+
+    // 호스트 등록시 이메일로 검증하는 부분
+    public String getMemberEmail(String token) {
+        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token)
+                .getBody().get("email", String.class);
     }
 }

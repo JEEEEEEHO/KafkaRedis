@@ -1,6 +1,8 @@
 package com.example.springboot.service.host;
 
 import com.example.springboot.controller.dto.host.HostSaveRequestDto;
+import com.example.springboot.controller.dto.host.HostSaveResponseDto;
+import com.example.springboot.domain.user.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.Multipart;
@@ -11,5 +13,7 @@ public interface HostService {
     String save(HostSaveRequestDto dto, MultipartFile file);
     // 호스트 이미지 저장
     void saveImgs(MultipartFile[] files, String hostNum);
+    // 호스트 데이터 불러오기
 
+    HostSaveResponseDto findHostInfo(User user);
 }

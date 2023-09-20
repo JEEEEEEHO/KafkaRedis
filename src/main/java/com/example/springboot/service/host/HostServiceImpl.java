@@ -1,7 +1,9 @@
 package com.example.springboot.service.host;
 
 import com.example.springboot.controller.dto.host.HostSaveRequestDto;
+import com.example.springboot.controller.dto.host.HostSaveResponseDto;
 import com.example.springboot.domain.host.*;
+import com.example.springboot.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,9 +21,9 @@ public class HostServiceImpl implements HostService {
     private final HostImgRepository hostImgRepository;
     String filepath = "C:\\Users/rlawl/IdeaProjects/WWOOF-side-project/src/main/resources/static/img/Host/";
 
+    // Host 데이터 등록
     @Override
     public String save(HostSaveRequestDto requestDto, MultipartFile file) {
-        // Host 데이터 등록
         // 처음 등록이기 때문에 (update 시 role 이 admin 인경우에 Y로 변경)
         requestDto.setApprvYn("N");
         Host host = hostRepository.save(requestDto.toEntity());
@@ -39,6 +41,7 @@ public class HostServiceImpl implements HostService {
         final HostMainImg hostMainImg = HostMainImg.builder()
                 .hnum(host.getHnum())
                 .filename(fileName)
+                .fileImgPath(filepath+"/"+fileName)
                 .build();
         hostMainImgRepository.save(hostMainImg);
 
@@ -46,11 +49,12 @@ public class HostServiceImpl implements HostService {
         return String.valueOf(hostNum);
     }
 
+
+    // Host 이미지 등록 (각 파일마다 등록)
     @Override
     public void saveImgs(MultipartFile[] files, String hostNum) {
         Long hnum = Long.parseLong(hostNum);
 
-        // Host 이미지 등록 (각 파일마다 등록)
         for (int i = 0; i < files.length; i++) {
             String fileName = "["+hostNum+"] images "+(i+1);
             File file1 = new File(filepath+fileName);
@@ -63,8 +67,18 @@ public class HostServiceImpl implements HostService {
                     .hostImg_turn(Long.valueOf(i+1))
                     .hnum(hnum)
                     .filename(fileName)
+                    .fileImgPath(filepath+"/"+fileName)
                     .build();
             hostImgRepository.save(img);
         }
     }
+
+    @Override
+    public HostSaveResponseDto findHostInfo(User user) {
+
+        return null;
+    }
+
+    // Host 정보 불러오기
+
 }

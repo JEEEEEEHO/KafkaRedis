@@ -19,6 +19,9 @@ public class HostMainImg {
     @Column(nullable = false, unique = true, length = 250)
     private String filename;
 
+    @Column (nullable = false)
+    private String fileImgPath;
+
 //    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 //    private String created_dt;
 }
