@@ -21,6 +21,8 @@ import javax.mail.Multipart;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.security.Principal;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,7 +35,7 @@ public class HostApiController {
 
 
     // 호스트 검색 Response
-    @GetMapping("/host/search")
+    @GetMapping("/host/list")
     public void hostSearch(Model model){
 
     }
@@ -56,14 +58,18 @@ public class HostApiController {
     }
 
     // 호스트 등록 내용 보기 Response User에 따라 Host를 찾고, 그 num 에 해당하는 이미지 파일들
-    @GetMapping("/api/host/saveInfo")
-    public HostSaveResponseDto hostSaveResponseDto(HttpServletRequest request){
-        HttpSession session = request.getSession();
-        String userEmail = (String) session.getAttribute("email");
-
-        User user = userRepository.findByEmail(userEmail);
-
-        return hostsService.findHostInfo(user);
+    @GetMapping("/api/host/info")
+    public HostSaveResponseDto hostSaveResponseDto(Principal principal){
+        // token 값에 저장되어 있는 userId
+        String userId = principal.getName();
+        Optional<User> user = userRepository.findById(userId);
+        HostSaveResponseDto hostSaveResponseDto = new HostSaveResponseDto();
+        // 값이 있는 경우 여기에 담고 없으면 공값을 보낼 것
+       if(user.isPresent()){
+           // user 를 통해 등록되어 있는 host 정보 가져오기
+           hostsService.findHostInfo(user.get(), hostSaveResponseDto);
+       }
+       return hostSaveResponseDto;
     }
 
     // 호스트 수정 Request

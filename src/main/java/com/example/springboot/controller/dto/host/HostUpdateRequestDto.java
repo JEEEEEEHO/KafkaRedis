@@ -1,7 +1,6 @@
 package com.example.springboot.controller.dto.host;
 
 import com.example.springboot.domain.host.Host;
-import com.example.springboot.domain.host.HostImg;
 import com.example.springboot.domain.user.User;
 import lombok.*;
 
@@ -12,7 +11,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class HostSaveRequestDto {
+public class HostUpdateRequestDto {
     private User user;
 
     private String region;
@@ -36,6 +35,10 @@ public class HostSaveRequestDto {
     private String apprvYn;
 
     private Date apprv_date;
+
+    // 파일 삭제용
+    private String deleteMainImg;
+
 
     public Host toEntity(){
         return Host.builder()

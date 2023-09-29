@@ -14,6 +14,13 @@ public interface HostRepository extends JpaRepository<Host, Long> {
     @Query("SELECT h FROM Host h WHERE h.hnum = ?1")
     Host findByHnum(Long hostNum);
 
+    // UserId로 해당하는 Host count
+    @Query("SELECT COUNT(h) FROM Host h WHERE h.user.id = :#{#userInfo.id}")
+    long findByUidCount(@Param("userInfo")User user);
+
+    // UserId로 해당하는 Host 찾기
     @Query("SELECT h FROM Host h WHERE h.user.id = :#{#userInfo.id}")
-    Host findByUnum(@Param("userInfo")User user);
+    Host findByUid(@Param("userInfo")User user);
+
+
 }

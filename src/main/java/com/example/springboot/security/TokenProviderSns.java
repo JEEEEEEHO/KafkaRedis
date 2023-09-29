@@ -16,7 +16,7 @@ import java.util.Date;
 @Slf4j
 @Service
 public class TokenProviderSns {
-    private static final String SECRET_KEY = "Q4NSl604sgyHJj1qwEkR3ycUeR4uUAt7WJraD7EN3O9DVM4yyYuHxMEbSF4XXyYJkal13eqgB0F7Bq4H";
+    private static final String SECRET_KEY = "Q4NSl604sgyHJj1qwEkR3ycUeR4uUAt7WJraD7EN3O9DVM4yyYuHxMEbSF4XXyYJkal13eqgB0F7Bq4HNn4d1MOVLZg79sfFACTIpCPKqWmpZMZQsbNrXdJJNWkRv50";
 
 
     public String create(final Authentication authentication) {
@@ -47,10 +47,12 @@ public class TokenProviderSns {
 
         return Jwts.builder()
                 // header에 들어갈 내용 및 서명을 하기 위한 SECRET_KEY
-                .setSubject(userPrincipal.getName()) // id
+                .signWith(key, SignatureAlgorithm.HS512)
+                // payload에 들어갈 내용
+                .setSubject(userPrincipal.getName()) //
+                .setIssuer("demo app") // iss
                 .setIssuedAt(new Date()) // iat
                 .setExpiration(expiryDate) // exp
-                .signWith(SignatureAlgorithm.HS512, key)
                 .compact();
     }
 }

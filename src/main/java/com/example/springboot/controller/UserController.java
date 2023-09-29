@@ -67,10 +67,6 @@ public class UserController {
                 userDto.getPassword(),
                 passwordEncoder);
 
-        //호스트 등록 내용 보기 위해서 세션에 email 값 담기
-        HttpSession session = request.getSession();
-        session.setAttribute("email", user.getEmail());
-
         if(user != null) {
             // 토큰 생성
             final String token = tokenProvider.create(user);

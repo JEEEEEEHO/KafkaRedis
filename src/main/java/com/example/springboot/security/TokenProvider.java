@@ -16,7 +16,7 @@ import java.util.Date;
 @Slf4j
 @Service
 public class TokenProvider {
-    private static final String SECRET_KEY = "Q4NSl604sgyHJj1qwEkR3ycUeR4uUAt7WJraD7EN3O9DVM4yyYuHxMEbSF4XXyYJkal13eqgB0F7Bq4H";
+    private static final String SECRET_KEY = "Q4NSl604sgyHJj1qwEkR3ycUeR4uUAt7WJraD7EN3O9DVM4yyYuHxMEbSF4XXyYJkal13eqgB0F7Bq4HNn4d1MOVLZg79sfFACTIpCPKqWmpZMZQsbNrXdJJNWkRv50";
 
 
     public String create(User user) {
@@ -42,19 +42,14 @@ public class TokenProvider {
         byte[] keyBytes = SECRET_KEY.getBytes();
         Key key = Keys.hmacShaKeyFor(keyBytes);
 
-        // 호스트 등록시 email을 가져가기 위해서 eamil 정보를 등록
-        Claims claims = Jwts.claims();
-        claims.put("email", user.getEmail());
-
         return Jwts.builder()
+                // header에 들어갈 내용 및 서명을 하기 위한 SECRET_KEY
+                .signWith(key, SignatureAlgorithm.HS512)
                 // payload에 들어갈 내용
-                .setClaims(claims)
+                .setSubject(user.getId()) // userId 값
+                .setIssuer("demo app") // iss
                 .setIssuedAt(new Date()) // iat
                 .setExpiration(expiryDate) // exp
-                // header에 들어갈 내용 및 서명을 하기 위한 SECRET_KEY
-                .signWith(SignatureAlgorithm.HS512, key)
-                .setSubject(user.getId()) // sub
-                .setIssuer("demo app") // iss
                 .compact();
     }
 
@@ -64,16 +59,10 @@ public class TokenProvider {
         // 위조되지 않았다면 페이로드(Claims) 리턴
         // 그 중 우리는 userId가 필요하므로 getBody를 부른다.
         Claims claims = Jwts.parser()
-                .setSigningKey(SECRET_KEY)
+                .setSigningKey(SECRET_KEY.getBytes())
                 .parseClaimsJws(token)
                 .getBody();
 
         return claims.getSubject();
-    }
-
-    // 호스트 등록시 이메일로 검증하는 부분
-    public String getMemberEmail(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token)
-                .getBody().get("email", String.class);
     }
 }

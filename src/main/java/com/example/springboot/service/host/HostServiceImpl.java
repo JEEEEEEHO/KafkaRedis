@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -73,12 +74,25 @@ public class HostServiceImpl implements HostService {
         }
     }
 
-    @Override
-    public HostSaveResponseDto findHostInfo(User user) {
-
-        return null;
-    }
-
     // Host 정보 불러오기
+    @Override
+    public HostSaveResponseDto findHostInfo(User user,  HostSaveResponseDto hostSaveResponseDto) {
 
+        long count = hostRepository.findByUidCount(user);
+        // userid로 host 정보를 찾음
+        if(count>0){
+            // Host 정보가 있다면
+            Host host = hostRepository.findByUid(user);
+            // Host 메인 이미지
+            HostMainImg hostMainImg = hostMainImgRepository.findMainImg(host.getHnum());
+            // Host 이미지 들
+            List<HostImg> hostImgList = hostImgRepository.findAllImgs(host.getHnum());
+            // DTO에 담는 부분
+//            hostSaveResponseDto.builder()
+//                    .
+
+        }
+        return hostSaveResponseDto;
+
+    }
 }

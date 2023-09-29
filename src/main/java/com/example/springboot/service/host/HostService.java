@@ -15,5 +15,5 @@ public interface HostService {
     void saveImgs(MultipartFile[] files, String hostNum);
     // 호스트 데이터 불러오기
 
-    HostSaveResponseDto findHostInfo(User user);
+    HostSaveResponseDto findHostInfo(User user,  HostSaveResponseDto hostSaveResponseDto);
 }
