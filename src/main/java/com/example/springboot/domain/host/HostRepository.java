@@ -8,9 +8,11 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface HostRepository extends JpaRepository<Host, Long> {
+    // Host 리스트
     @Query("SELECT h FROM Host h ORDER BY h.hnum")
     List<Host> findAllDesc();
 
+    // Host번호로 해당하는 Host 찾기
     @Query("SELECT h FROM Host h WHERE h.hnum = ?1")
     Host findByHnum(Long hostNum);
 

@@ -25,18 +25,31 @@ public class HostServiceImpl implements HostService {
     @Override
     public HostSaveResponseDto findHostInfo(User user,  HostSaveResponseDto hostSaveResponseDto) {
 
-        long count = hostRepository.findByUidCount(user);
         // userid로 host 정보를 찾음
+        long count = hostRepository.findByUidCount(user);
+        // Host 정보가 있다면
         if(count>0){
-            // Host 정보가 있다면
             Host host = hostRepository.findByUid(user);
             // Host 메인 이미지
             HostMainImg hostMainImg = hostMainImgRepository.findMainImg(host.getHnum());
             // Host 이미지 들
             List<HostImg> hostImgList = hostImgRepository.findAllImgs(host.getHnum());
             // DTO에 담는 부분
-//            hostSaveResponseDto.builder()
-//                    .
+            hostSaveResponseDto.builder()
+                    .user(user)
+                    .hostMainImg(hostMainImg)
+                    .hostImg(hostImgList)
+                    .region(host.getRegion())
+                    .gender(host.getGender())
+                    .age(host.getAge())
+                    .farmsts(host.getFarmsts())
+                    .shortintro(host.getShortintro())
+                    .intro(host.getIntro())
+                    .lat(host.getLat())
+                    .lng(host.getLng())
+                    .maxPpl(host.getMaxPpl())
+                    .apprvYn(host.getApprvYn())
+                    .build();
         }
         return hostSaveResponseDto;
     }

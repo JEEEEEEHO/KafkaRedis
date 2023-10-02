@@ -5,6 +5,8 @@ import com.example.springboot.domain.host.HostMainImg;
 import com.example.springboot.domain.user.User;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,9 +15,9 @@ import lombok.*;
 public class HostSaveResponseDto {
     private User user;
 
-    private HostImg hostImg;
-
     private HostMainImg hostMainImg;
+
+    private List<HostImg> hostImg;
 
     private String region;
 

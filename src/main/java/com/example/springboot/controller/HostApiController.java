@@ -61,7 +61,14 @@ public class HostApiController {
 
     // 호스트 등록(정보+메인이미지) Request
     @PostMapping(value = "/api/host/save", consumes = "multipart/form-data")
-    public String save(@RequestPart(value = "file") MultipartFile file, @RequestPart(value = "hostData") HostSaveRequestDto saveRequestDto) throws IOException {
+    public String save(Principal principal, @RequestPart(value = "file") MultipartFile file, @RequestPart(value = "hostData") HostSaveRequestDto saveRequestDto) throws IOException {
+        // token 값에 저장되어 있는 userId
+        String userId = principal.getName();
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isPresent()){
+            // user 를 통해 등록되어 있는 host 정보 가져오기
+            saveRequestDto.setUser(user.get());
+        }
         return hostsService.save(saveRequestDto, file);
     }
 
