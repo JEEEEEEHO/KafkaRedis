@@ -44,19 +44,6 @@ public class HostApiController {
     // 호스트 검색 상세보기 Response
 
 
-
-    // 호스트 등록 Request
-    @PostMapping(value = "/api/host/save", consumes = "multipart/form-data")
-    public String save(@RequestPart(value = "file") MultipartFile file, @RequestPart(value = "hostData") HostSaveRequestDto saveRequestDto) throws IOException {
-        return hostsService.save(saveRequestDto, file);
-    }
-
-    // 호스트 이미지 등록 Request
-    @PostMapping(value = "/api/host/saveImg", consumes = "multipart/form-data")
-    public void saveImgs(@RequestPart("files") MultipartFile[] files, @RequestPart(value = "hnum") String hostNum ){
-        hostsService.saveImgs(files, hostNum);
-    }
-
     // 호스트 등록 내용 보기 Response User에 따라 Host를 찾고, 그 num 에 해당하는 이미지 파일들
     @GetMapping("/api/host/info")
     public HostSaveResponseDto hostSaveResponseDto(Principal principal){
@@ -70,6 +57,18 @@ public class HostApiController {
            hostsService.findHostInfo(user.get(), hostSaveResponseDto);
        }
        return hostSaveResponseDto;
+    }
+
+    // 호스트 등록(정보+메인이미지) Request
+    @PostMapping(value = "/api/host/save", consumes = "multipart/form-data")
+    public String save(@RequestPart(value = "file") MultipartFile file, @RequestPart(value = "hostData") HostSaveRequestDto saveRequestDto) throws IOException {
+        return hostsService.save(saveRequestDto, file);
+    }
+
+    // 호스트 이미지 등록 Request
+    @PostMapping(value = "/api/host/saveImg", consumes = "multipart/form-data")
+    public void saveImgs(@RequestPart("files") MultipartFile[] files, @RequestPart(value = "hnum") String hostNum ){
+        hostsService.saveImgs(files, hostNum);
     }
 
     // 호스트 수정 Request

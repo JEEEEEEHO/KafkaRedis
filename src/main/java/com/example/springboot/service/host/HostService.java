@@ -9,11 +9,10 @@ import javax.mail.Multipart;
 import java.util.List;
 
 public interface HostService {
+    // 호스트 데이터 불러오기
+    HostSaveResponseDto findHostInfo(User user,  HostSaveResponseDto hostSaveResponseDto);
     // 호스트 데이터 저장
     String save(HostSaveRequestDto dto, MultipartFile file);
     // 호스트 이미지 저장
     void saveImgs(MultipartFile[] files, String hostNum);
-    // 호스트 데이터 불러오기
-
-    HostSaveResponseDto findHostInfo(User user,  HostSaveResponseDto hostSaveResponseDto);
 }
