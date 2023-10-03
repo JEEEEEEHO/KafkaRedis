@@ -66,7 +66,7 @@ public class HostApiController {
         String userId = principal.getName();
         Optional<User> user = userRepository.findById(userId);
         if(user.isPresent()){
-            // user 를 통해 등록되어 있는 host 정보 가져오기
+            // user 정보 Dto 에 담기
             saveRequestDto.setUser(user.get());
         }
         return hostsService.save(saveRequestDto, file);

@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface HostMainImgRepository extends JpaRepository<HostMainImg, Long> {
     // Host Main Img 찾기
-    @Query("SELECT h FROM Host h WHERE h.hnum = ?1")
+    @Query("SELECT h FROM HostMainImg h WHERE h.hnum = ?1")
     HostMainImg findMainImg(Long hostNum);
 }

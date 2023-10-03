@@ -3,10 +3,7 @@ package com.example.springboot.domain.host;
 import com.example.springboot.domain.BaseTimeEntity;
 import com.example.springboot.domain.user.User;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
-
 import javax.persistence.*;
-import java.io.File;
 import java.util.Date;
 
 @Entity

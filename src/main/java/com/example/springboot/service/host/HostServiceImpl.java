@@ -35,21 +35,24 @@ public class HostServiceImpl implements HostService {
             // Host 이미지 들
             List<HostImg> hostImgList = hostImgRepository.findAllImgs(host.getHnum());
             // DTO에 담는 부분
-            hostSaveResponseDto.builder()
-                    .user(user)
-                    .hostMainImg(hostMainImg)
-                    .hostImg(hostImgList)
-                    .region(host.getRegion())
-                    .gender(host.getGender())
-                    .age(host.getAge())
-                    .farmsts(host.getFarmsts())
-                    .shortintro(host.getShortintro())
-                    .intro(host.getIntro())
-                    .lat(host.getLat())
-                    .lng(host.getLng())
-                    .maxPpl(host.getMaxPpl())
-                    .apprvYn(host.getApprvYn())
-                    .build();
+
+
+
+//            hostSaveResponseDto.builder()
+//                    .user(user)
+//                    .hostMainImg(hostMainImg)
+//                    .hostImg(hostImgList)
+//                    .region(host.getRegion())
+//                    .gender(host.getGender())
+//                    .age(host.getAge())
+//                    .farmsts(host.getFarmsts())
+//                    .shortintro(host.getShortintro())
+//                    .intro(host.getIntro())
+//                    .lat(host.getLat())
+//                    .lng(host.getLng())
+//                    .maxPpl(host.getMaxPpl())
+//                    .apprvYn(host.getApprvYn())
+//                    .build();
         }
         return hostSaveResponseDto;
     }
