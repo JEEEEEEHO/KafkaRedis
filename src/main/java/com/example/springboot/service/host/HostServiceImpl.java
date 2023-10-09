@@ -35,9 +35,19 @@ public class HostServiceImpl implements HostService {
             // Host 이미지 들
             List<HostImg> hostImgList = hostImgRepository.findAllImgs(host.getHnum());
             // DTO에 담는 부분
-
-
-
+            hostSaveResponseDto.setUser(user);
+            hostSaveResponseDto.setHostMainImg(hostMainImg);
+            hostSaveResponseDto.setHostImg(hostImgList);
+            hostSaveResponseDto.setRegion(host.getRegion());
+            hostSaveResponseDto.setGender(host.getGender());
+            hostSaveResponseDto.setAge(host.getAge());
+            hostSaveResponseDto.setFarmsts(host.getFarmsts());
+            hostSaveResponseDto.setShortintro(host.getShortintro());
+            hostSaveResponseDto.setIntro(host.getIntro());
+            hostSaveResponseDto.setLat(host.getLat());
+            hostSaveResponseDto.setLng(host.getLng());
+            hostSaveResponseDto.setMaxPpl(host.getMaxPpl());
+            hostSaveResponseDto.setApprvYn(host.getApprvYn());
 //            hostSaveResponseDto.builder()
 //                    .user(user)
 //                    .hostMainImg(hostMainImg)
@@ -77,7 +87,7 @@ public class HostServiceImpl implements HostService {
         final HostMainImg hostMainImg = HostMainImg.builder()
                 .hnum(host.getHnum())
                 .filename(fileName)
-                .fileImgPath(filepath+"/"+fileName)
+                .fileImgPath(filepath+fileName)
                 .build();
         hostMainImgRepository.save(hostMainImg);
 
@@ -102,7 +112,7 @@ public class HostServiceImpl implements HostService {
                     .hostImg_turn(Long.valueOf(i+1))
                     .hnum(hnum)
                     .filename(fileName)
-                    .fileImgPath(filepath+"/"+fileName)
+                    .fileImgPath(filepath+fileName)
                     .build();
             hostImgRepository.save(img);
         }

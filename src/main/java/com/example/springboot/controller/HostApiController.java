@@ -28,10 +28,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class HostApiController {
     private final UserRepository userRepository;
-    private final HostRepository hostRepository;
     private final HostService hostsService;
-    private final HostMainImgRepository hostMainImgRepository;
-    private final HostImgRepository hostImgRepository;
 
 
     // 호스트 검색 Response
