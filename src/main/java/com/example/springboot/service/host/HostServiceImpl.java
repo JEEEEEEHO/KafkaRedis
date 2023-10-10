@@ -23,8 +23,8 @@ public class HostServiceImpl implements HostService {
     String filepath = "C:\\Users/rlawl/IdeaProjects/WWOOF-side-project/src/main/resources/static/img/Host/";
     // Host 정보 불러오기
     @Override
-    public HostSaveResponseDto findHostInfo(User user,  HostSaveResponseDto hostSaveResponseDto) {
-
+    public HostSaveResponseDto findHostInfo(User user) {
+        HostSaveResponseDto hostSaveResponseDto;
         // userid로 host 정보를 찾음
         long count = hostRepository.findByUidCount(user);
         // Host 정보가 있다면
@@ -35,36 +35,39 @@ public class HostServiceImpl implements HostService {
             // Host 이미지 들
             List<HostImg> hostImgList = hostImgRepository.findAllImgs(host.getHnum());
             // DTO에 담는 부분
-            hostSaveResponseDto.setUser(user);
-            hostSaveResponseDto.setHostMainImg(hostMainImg);
-            hostSaveResponseDto.setHostImg(hostImgList);
-            hostSaveResponseDto.setRegion(host.getRegion());
-            hostSaveResponseDto.setGender(host.getGender());
-            hostSaveResponseDto.setAge(host.getAge());
-            hostSaveResponseDto.setFarmsts(host.getFarmsts());
-            hostSaveResponseDto.setShortintro(host.getShortintro());
-            hostSaveResponseDto.setIntro(host.getIntro());
-            hostSaveResponseDto.setLat(host.getLat());
-            hostSaveResponseDto.setLng(host.getLng());
-            hostSaveResponseDto.setMaxPpl(host.getMaxPpl());
-            hostSaveResponseDto.setApprvYn(host.getApprvYn());
-//            hostSaveResponseDto.builder()
-//                    .user(user)
-//                    .hostMainImg(hostMainImg)
-//                    .hostImg(hostImgList)
-//                    .region(host.getRegion())
-//                    .gender(host.getGender())
-//                    .age(host.getAge())
-//                    .farmsts(host.getFarmsts())
-//                    .shortintro(host.getShortintro())
-//                    .intro(host.getIntro())
-//                    .lat(host.getLat())
-//                    .lng(host.getLng())
-//                    .maxPpl(host.getMaxPpl())
-//                    .apprvYn(host.getApprvYn())
-//                    .build();
+
+            hostSaveResponseDto = HostSaveResponseDto.builder()
+                    .user(user)
+                    .hostMainImg(hostMainImg)
+                    .hostImg(hostImgList)
+                    .region(host.getRegion())
+                    .gender(host.getGender())
+                    .age(host.getAge())
+                    .farmsts(host.getFarmsts())
+                    .shortintro(host.getShortintro())
+                    .intro(host.getIntro())
+                    .lat(host.getLat())
+                    .lng(host.getLng())
+                    .maxPpl(host.getMaxPpl())
+                    .apprvYn(host.getApprvYn())
+                    .build();
+            //            hostSaveResponseDto.setUser(user);
+            //            hostSaveResponseDto.setHostMainImg(hostMainImg);
+            //            hostSaveResponseDto.setHostImg(hostImgList);
+            //            hostSaveResponseDto.setRegion(host.getRegion());
+            //            hostSaveResponseDto.setGender(host.getGender());
+            //            hostSaveResponseDto.setAge(host.getAge());
+            //            hostSaveResponseDto.setFarmsts(host.getFarmsts());
+            //            hostSaveResponseDto.setShortintro(host.getShortintro());
+            //            hostSaveResponseDto.setIntro(host.getIntro());
+            //            hostSaveResponseDto.setLat(host.getLat());
+            //            hostSaveResponseDto.setLng(host.getLng());
+            //            hostSaveResponseDto.setMaxPpl(host.getMaxPpl());
+            //            hostSaveResponseDto.setApprvYn(host.getApprvYn());
+            return hostSaveResponseDto;
         }
-        return hostSaveResponseDto;
+        // 해당하는 것이 없으면 빈 객체를 반환
+        return new HostSaveResponseDto();
     }
 
     // Host 데이터 + 메인이미지 등록

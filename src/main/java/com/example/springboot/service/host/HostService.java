@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface HostService {
     // 호스트 데이터 불러오기
-    HostSaveResponseDto findHostInfo(User user,  HostSaveResponseDto hostSaveResponseDto);
+    HostSaveResponseDto findHostInfo(User user);
     // 호스트 데이터 저장
     String save(HostSaveRequestDto dto, MultipartFile file);
     // 호스트 이미지 저장
