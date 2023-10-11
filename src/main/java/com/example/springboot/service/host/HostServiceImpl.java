@@ -51,19 +51,7 @@ public class HostServiceImpl implements HostService {
                     .maxPpl(host.getMaxPpl())
                     .apprvYn(host.getApprvYn())
                     .build();
-            //            hostSaveResponseDto.setUser(user);
-            //            hostSaveResponseDto.setHostMainImg(hostMainImg);
-            //            hostSaveResponseDto.setHostImg(hostImgList);
-            //            hostSaveResponseDto.setRegion(host.getRegion());
-            //            hostSaveResponseDto.setGender(host.getGender());
-            //            hostSaveResponseDto.setAge(host.getAge());
-            //            hostSaveResponseDto.setFarmsts(host.getFarmsts());
-            //            hostSaveResponseDto.setShortintro(host.getShortintro());
-            //            hostSaveResponseDto.setIntro(host.getIntro());
-            //            hostSaveResponseDto.setLat(host.getLat());
-            //            hostSaveResponseDto.setLng(host.getLng());
-            //            hostSaveResponseDto.setMaxPpl(host.getMaxPpl());
-            //            hostSaveResponseDto.setApprvYn(host.getApprvYn());
+
             return hostSaveResponseDto;
         }
         // 해당하는 것이 없으면 빈 객체를 반환

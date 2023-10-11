@@ -5,26 +5,19 @@ import com.example.springboot.controller.dto.host.HostSaveResponseDto;
 import com.example.springboot.domain.host.*;
 import com.example.springboot.domain.user.User;
 import com.example.springboot.domain.user.UserRepository;
-import com.example.springboot.security.JwtAuthenticationFilter;
-import com.example.springboot.security.TokenProvider;
 import com.example.springboot.service.host.HostService;
-import com.example.springboot.service.host.HostServiceImpl;
-import com.example.springboot.service.user.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.mail.Multipart;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
 import java.security.Principal;
 import java.util.Optional;
 
@@ -41,7 +34,6 @@ public class HostApiController {
     public void hostSearch(Model model){
 
     }
-
 
     // 호스트 검색 상세보기 Response
 
@@ -61,18 +53,33 @@ public class HostApiController {
            throw new Exception("No User Info : forbidden access");
        }
     }
+
     // 호스트 등록 내용 보기 (메인이미지 가져오기)
-    @GetMapping("image")
-    public ResponseEntity<?> returnImage(@RequestParam("image") String imgPid) {
+    @GetMapping(value = "/image/{image}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<?> returnImage(@RequestParam("image") Long imgPid) throws Exception {
         // imgPid의 자료형은? Long으로 보내서, Long으로 받아오면 그대로, 아니면 변형
-        Optional<HostMainImg> hostMainImg = hostMainImgRepository.findById(Long.parseLong(imgPid)); //이미지가 저장된 위치
+        Optional<HostMainImg> hostMainImg = hostMainImgRepository.findById(imgPid); //이미지가 저장된 위치
         if(hostMainImg.isPresent()){
             String path = hostMainImg.get().getFileImgPath();
-            Resource resource = new FileSystemResource(path);
-            return new ResponseEntity<>(resource, HttpStatus.OK);
-        } else{
-            return new ResponseEntity<>(null, HttpStatus.OK);
-        }
+            File file = new File(path);
+            byte[] result=null;//1. data
+            ResponseEntity<byte[]> entity=null;
+
+            try {
+                result = FileCopyUtils.copyToByteArray(file);
+
+                //2. header
+                HttpHeaders header = new HttpHeaders();
+                header.add("Content-type", Files.probeContentType(file.toPath())); //파일의 컨텐츠타입을 직접 구해서 header에 저장
+
+                //3. 응답본문
+                entity = new ResponseEntity<>(result,header,HttpStatus.OK);//데이터, 헤더, 상태값
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return entity;
+        } throw new Exception("No img");
+
     }
 
     // 호스트 등록 내용 보기 (기본이미지 가져오기)
