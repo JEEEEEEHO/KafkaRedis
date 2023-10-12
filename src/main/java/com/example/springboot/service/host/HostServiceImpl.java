@@ -5,11 +5,16 @@ import com.example.springboot.controller.dto.host.HostSaveResponseDto;
 import com.example.springboot.domain.host.*;
 import com.example.springboot.domain.user.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,6 +63,10 @@ public class HostServiceImpl implements HostService {
         return new HostSaveResponseDto();
     }
 
+
+    private final Path UPLOAD_PATH =
+            Paths.get(new ClassPathResource("").getFile().getAbsolutePath() + File.separator + "static"  + File.separator + "image");
+
     // Host 데이터 + 메인이미지 등록
     @Override
     public String save(HostSaveRequestDto requestDto, MultipartFile file) {
@@ -68,8 +77,10 @@ public class HostServiceImpl implements HostService {
 
         // 2. 그 번호를 가지고 이름을 임의로 지정한 후 저장
         String hostNum = String.valueOf(host.getHnum());
-        String fileName = "["+hostNum+"]MainImg";
-        File file1 = new File(filepath+fileName);
+        String originFileName = file.getOriginalFilename();
+        String fileUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/image/").path(originFileName).toUriString();
+        Files.copy(file.getInputStream(), filepath);
+        File file1 = new File(filepath+originFileName);
         try {
             file.transferTo(file1);
         } catch (IOException e) {
@@ -77,8 +88,8 @@ public class HostServiceImpl implements HostService {
         }
         final HostMainImg hostMainImg = HostMainImg.builder()
                 .hnum(host.getHnum())
-                .filename(fileName)
-                .fileImgPath(filepath+fileName)
+                .filename(originFileName)
+                .fileImgPath(filepath+originFileName)
                 .build();
         hostMainImgRepository.save(hostMainImg);
 
@@ -92,8 +103,8 @@ public class HostServiceImpl implements HostService {
         Long hnum = Long.parseLong(hostNum);
 
         for (int i = 0; i < files.length; i++) {
-            String fileName = "["+hostNum+"] images "+(i+1);
-            File file1 = new File(filepath+fileName);
+            String originFileName = files[0].getOriginalFilename();
+            File file1 = new File(filepath+originFileName);
             try {
                 files[i].transferTo(file1);
             } catch (IOException e) {
@@ -102,8 +113,8 @@ public class HostServiceImpl implements HostService {
             final HostImg img = HostImg.builder()
                     .hostImg_turn(Long.valueOf(i+1))
                     .hnum(hnum)
-                    .filename(fileName)
-                    .fileImgPath(filepath+fileName)
+                    .filename(originFileName)
+                    .fileImgPath(filepath+originFileName)
                     .build();
             hostImgRepository.save(img);
         }
