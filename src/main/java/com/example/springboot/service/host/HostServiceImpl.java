@@ -5,6 +5,7 @@ import com.example.springboot.controller.dto.host.HostSaveResponseDto;
 import com.example.springboot.domain.host.*;
 import com.example.springboot.domain.user.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,13 +20,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
-public class HostServiceImpl implements HostService {
+public class HostServiceImpl implements HostService  {
+    public HostServiceImpl() throws IOException{};
 
-    private final HostRepository hostRepository;
-    private final HostMainImgRepository hostMainImgRepository;
-    private final HostImgRepository hostImgRepository;
-    String filepath = "C:\\Users/rlawl/IdeaProjects/WWOOF-side-project/src/main/resources/static/img/Host/";
+    @Autowired
+    private HostRepository hostRepository;
+    @Autowired
+    private HostMainImgRepository hostMainImgRepository;
+    @Autowired
+    private HostImgRepository hostImgRepository;
     // Host 정보 불러오기
     @Override
     public HostSaveResponseDto findHostInfo(User user) {
@@ -69,7 +72,7 @@ public class HostServiceImpl implements HostService {
 
     // Host 데이터 + 메인이미지 등록
     @Override
-    public String save(HostSaveRequestDto requestDto, MultipartFile file) {
+    public String save(HostSaveRequestDto requestDto, MultipartFile file) throws IOException {
         // 처음 등록이기 때문에 (update 시 role 이 admin 인경우에 Y로 변경)
         requestDto.setApprvYn("N");
         // 1. 호스트 정보에 대해서 등록한 후
@@ -77,19 +80,32 @@ public class HostServiceImpl implements HostService {
 
         // 2. 그 번호를 가지고 이름을 임의로 지정한 후 저장
         String hostNum = String.valueOf(host.getHnum());
-        String originFileName = file.getOriginalFilename();
-        String fileUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/image/").path(originFileName).toUriString();
-        Files.copy(file.getInputStream(), filepath);
-        File file1 = new File(filepath+originFileName);
-        try {
-            file.transferTo(file1);
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        if(!Files.exists(UPLOAD_PATH)){
+            // 경로가 존재하지 않는다면
+            Files.createDirectories(UPLOAD_PATH);
         }
+
+        String originFileName = file.getOriginalFilename();
+            // 파일의 이름을 정함
+
+        Path filepath = UPLOAD_PATH.resolve(originFileName);
+        Files.copy(file.getInputStream(), filepath);
+        // 파일에 있는 내용들을 출력하여 파일 path에 이름 하에 복사함
+
+        String fileUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/image/").path(originFileName).toUriString();
+
+//        File file1 = new File(filepath+originFileName);
+//        try {
+//            file.transferTo(file1);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         final HostMainImg hostMainImg = HostMainImg.builder()
                 .hnum(host.getHnum())
                 .filename(originFileName)
-                .fileImgPath(filepath+originFileName)
+                .fileUri(fileUri)
+                .filepath(String.valueOf(filepath))
                 .build();
         hostMainImgRepository.save(hostMainImg);
 
@@ -99,22 +115,26 @@ public class HostServiceImpl implements HostService {
 
     // Host 이미지 등록 (각 파일마다 등록)
     @Override
-    public void saveImgs(MultipartFile[] files, String hostNum) {
+    public void saveImgs(MultipartFile[] files, String hostNum) throws IOException {
         Long hnum = Long.parseLong(hostNum);
 
         for (int i = 0; i < files.length; i++) {
-            String originFileName = files[0].getOriginalFilename();
-            File file1 = new File(filepath+originFileName);
-            try {
-                files[i].transferTo(file1);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
+            String originFileName = files[i].getOriginalFilename();
+            // 파일의 이름을 정함
+
+            Path filepath = UPLOAD_PATH.resolve(originFileName);
+            Files.copy(files[i].getInputStream(), filepath);
+            // 파일에 있는 내용들을 출력하여 파일 path에 이름 하에 복사함
+
+            String fileUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/image/").path(originFileName).toUriString();
+
             final HostImg img = HostImg.builder()
                     .hostImg_turn(Long.valueOf(i+1))
                     .hnum(hnum)
                     .filename(originFileName)
-                    .fileImgPath(filepath+originFileName)
+                    .fileUri(fileUri)
+                    .filepath(String.valueOf(filepath))
                     .build();
             hostImgRepository.save(img);
         }

@@ -20,7 +20,10 @@ public class HostMainImg {
     private String filename;
 
     @Column (nullable = false)
-    private String fileImgPath;
+    private String filepath;
+
+    @Column (nullable = false)
+    private String fileUri;
 
 //    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 //    private String created_dt;

@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().mvcMatchers("/img/**", "/css/**", "/js/**");    // /image/** 있는 모든 파일들은 시큐리티 적용을 무시한다.
+        web.ignoring().mvcMatchers("/image/**", "/img/**", "/css/**", "/js/**");    // /image/** 있는 모든 파일들은 시큐리티 적용을 무시한다.
         web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());    /* 정적인 리소스들에 대해서 시큐리티 적용 무시. */}
 
     @Override
@@ -48,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests() // /와 /auth/** 경로는 인증 안해도 됨.
-                .antMatchers("/", "/auth/**", "/api/**", "/oauth2/**").permitAll()
+                .antMatchers("/", "/auth/**", "/api/**", "/oauth2/**", "/image/**").permitAll()
                 .anyRequest() // /와 /auth/**이외의 모든 경로는 인증 해야됨.
                 .authenticated()
                 .and()

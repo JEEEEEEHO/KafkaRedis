@@ -34,8 +34,9 @@ public class HostImg extends BaseTimeEntity implements Serializable {
     private String filename;
 
     @Column (nullable = false)
-    private String fileImgPath;
+    private String filepath;
 
-//    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-//    private String created_dt;
+    @Column (nullable = false)
+    private String fileUri;
+
 }

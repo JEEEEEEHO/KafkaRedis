@@ -9,4 +9,7 @@ public interface HostImgRepository extends JpaRepository<HostImg, Long> {
     // Host 에 해당하는 모든 이미지 찾기
     @Query("SELECT h FROM HostImg h WHERE h.hnum= ?1")
     List<HostImg> findAllImgs(Long hostNum);
+
+    @Query("SELECT h FROM HostImg h WHERE h.filename = ?1")
+    HostImg findImg(String fileName);
 }

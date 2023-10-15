@@ -7,6 +7,8 @@ import com.example.springboot.domain.user.User;
 import com.example.springboot.domain.user.UserRepository;
 import com.example.springboot.service.host.HostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.Optional;
 
@@ -27,6 +31,7 @@ public class HostApiController {
     private final UserRepository userRepository;
     private final HostService hostsService;
     private final HostMainImgRepository hostMainImgRepository;
+    private final HostImgRepository hostImgRepository;
 
 
     // 호스트 검색 Response
@@ -55,31 +60,33 @@ public class HostApiController {
     }
 
     // 호스트 등록 내용 보기 (메인이미지 가져오기)
-    @GetMapping(value = "/image/{image}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<?> returnImage(@RequestParam("image") Long imgPid) throws Exception {
-        // imgPid의 자료형은? Long으로 보내서, Long으로 받아오면 그대로, 아니면 변형
-        Optional<HostMainImg> hostMainImg = hostMainImgRepository.findById(imgPid); //이미지가 저장된 위치
-        if(hostMainImg.isPresent()){
-            String path = hostMainImg.get().getFileImgPath();
-            File file = new File(path);
-            byte[] result=null;//1. data
-            ResponseEntity<byte[]> entity=null;
-
-            try {
-                result = FileCopyUtils.copyToByteArray(file);
-
-                //2. header
-                HttpHeaders header = new HttpHeaders();
-                header.add("Content-type", Files.probeContentType(file.toPath())); //파일의 컨텐츠타입을 직접 구해서 header에 저장
-
-                //3. 응답본문
-                entity = new ResponseEntity<>(result,header,HttpStatus.OK);//데이터, 헤더, 상태값
-            } catch (IOException e) {
-                e.printStackTrace();
+    @CrossOrigin
+    @GetMapping(value = "/image/{fileName}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<?> returnImage(@PathVariable String fileName) throws Exception {
+        String path = "";
+        HostMainImg hostMainImg = hostMainImgRepository.findMainImg(fileName);
+        if(hostMainImg!=null){
+            path = hostMainImg.getFilepath(); //이미지가 저장된 위치
+            Resource resource = new FileSystemResource(path);
+            HttpHeaders headers = new HttpHeaders();
+            Path filepath = null;
+            filepath = Paths.get(path);
+            headers.add("Content-Type", Files.probeContentType(filepath));
+            return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+        } else{
+            HostImg hostImg = hostImgRepository.findImg(fileName);
+            if(hostImg!=null){
+                path = hostImg.getFilepath();
+                Resource resource = new FileSystemResource(path);
+                HttpHeaders headers = new HttpHeaders();
+                Path filepath = null;
+                filepath = Paths.get(path);
+                headers.add("Content-Type", Files.probeContentType(filepath));
+                return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+            } else{
+                throw new Exception("No img");
             }
-            return entity;
-        } throw new Exception("No img");
-
+        }
     }
 
     // 호스트 등록 내용 보기 (기본이미지 가져오기)
@@ -100,7 +107,7 @@ public class HostApiController {
 
     // 호스트 이미지 등록 Request
     @PostMapping(value = "/api/host/saveImg", consumes = "multipart/form-data")
-    public void saveImgs(@RequestPart("files") MultipartFile[] files, @RequestPart(value = "hnum") String hostNum ){
+    public void saveImgs(@RequestPart("files") MultipartFile[] files, @RequestPart(value = "hnum") String hostNum ) throws IOException {
         hostsService.saveImgs(files, hostNum);
     }
 
