@@ -31,6 +31,8 @@ public class HostSaveResponseDto {
 
     private String intro;
 
+    private String address;
+
     private String lat;
 
     private String lng;

@@ -54,6 +54,7 @@ public class HostServiceImpl implements HostService  {
                     .farmsts(host.getFarmsts())
                     .shortintro(host.getShortintro())
                     .intro(host.getIntro())
+                    .address(host.getAddress())
                     .lat(host.getLat())
                     .lng(host.getLng())
                     .maxPpl(host.getMaxPpl())
@@ -95,12 +96,6 @@ public class HostServiceImpl implements HostService  {
 
         String fileUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/image/").path(originFileName).toUriString();
 
-//        File file1 = new File(filepath+originFileName);
-//        try {
-//            file.transferTo(file1);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
         final HostMainImg hostMainImg = HostMainImg.builder()
                 .hnum(host.getHnum())
                 .filename(originFileName)

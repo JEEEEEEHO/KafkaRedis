@@ -27,6 +27,8 @@ public class HostSaveRequestDto {
 
     private String intro;
 
+    private String address;
+
     private String lat;
 
     private String lng;
@@ -46,6 +48,7 @@ public class HostSaveRequestDto {
                 .farmsts(farmsts)
                 .shortintro(shortintro)
                 .intro(intro)
+                .address(address)
                 .lat(lat)
                 .lng(lng)
                 .maxPpl(maxPpl)

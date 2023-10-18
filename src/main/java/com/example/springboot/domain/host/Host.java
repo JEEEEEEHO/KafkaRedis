@@ -40,6 +40,9 @@ public class Host extends BaseTimeEntity {
     private String intro;
 
     @Column(nullable = false)
+    private String address;
+
+    @Column(nullable = false)
     private String lat;
 
     @Column(nullable = false)
