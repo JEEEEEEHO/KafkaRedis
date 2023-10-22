@@ -24,5 +24,8 @@ public interface HostRepository extends JpaRepository<Host, Long> {
     @Query("SELECT h FROM Host h WHERE h.user.id = :#{#userInfo.id}")
     Host findByUid(@Param("userInfo")User user);
 
+    // 이미 존재하는 Host 정보 수정
+
+
 
 }

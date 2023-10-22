@@ -59,7 +59,7 @@ public class Host extends BaseTimeEntity {
 
 
     @Builder
-    public Host(String region, String gender, String age, String farmsts, String shortintro, String intro, String lat, String lng, User user){
+    public Host(String region, String gender, String age, String farmsts, String shortintro, String intro, String address, String lat, String lng, User user){
         this.user = user;
         this.region = region;
         this.gender = gender;
@@ -67,18 +67,20 @@ public class Host extends BaseTimeEntity {
         this.farmsts = farmsts;
         this.shortintro = shortintro;
         this.intro = intro;
+        this.address = address;
         this.lat = lat;
         this.lng = lng;
     }
 
     // 수정용
-    public void hostUpdate(String region, String gender, String age, String farmsts, String shortintro, String intro, String lat, String lng){
+    public void hostUpdate(String region, String gender, String age, String farmsts, String shortintro, String intro, String address, String lat, String lng){
         this.region = region;
         this.gender = gender;
         this.age = age;
         this.farmsts = farmsts;
         this.shortintro = shortintro;
         this.intro = intro;
+        this.address = address;
         this.lat = lat;
         this.lng = lng;
     }

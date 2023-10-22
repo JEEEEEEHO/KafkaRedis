@@ -39,6 +39,10 @@ public class HostSaveRequestDto {
 
     private Date apprv_date;
 
+    private String hostDeleteMainImg;
+
+    private String hostNum; // 수정
+
     public Host toEntity(){
         return Host.builder()
                 .user(user)

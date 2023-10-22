@@ -135,5 +135,11 @@ public class HostServiceImpl implements HostService  {
         }
     }
 
+    // 호스트 데이터 + 메인이미지 수정
+    @Override
+    public String update(HostSaveRequestDto saveRequestDto, MultipartFile file) {
+        return null;
+    }
+
 
 }

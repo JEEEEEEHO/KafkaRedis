@@ -111,8 +111,13 @@ public class HostApiController {
         hostsService.saveImgs(files, hostNum);
     }
 
-    // 호스트 수정 Request
-    //@PutMapping("api/host/update")
+    // 호스트 수정 Request (hostnum 을 찾아서 엎어치기 )
+    @PutMapping("api/host/update")
+    public String update(@RequestPart(value = "file") MultipartFile file, @RequestPart(value = "hostData") HostSaveRequestDto saveRequestDto){
+        return hostsService.update(saveRequestDto, file);
+    }
+
+    // 호스트 이미지 수정 ( 이 경우엔 이미지 업로드의 개수 한정이 있기 때문에 삭제 - > 입력)
 
 
     // 호스트 삭제
