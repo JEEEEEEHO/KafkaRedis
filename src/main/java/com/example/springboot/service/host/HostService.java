@@ -17,5 +17,5 @@ public interface HostService {
     // 호스트 이미지 저장
     void saveImgs(MultipartFile[] files, String hostNum) throws IOException;
     // 호스트 데이터 수정
-    String update(HostSaveRequestDto saveRequestDto, MultipartFile file);
+    String update(HostSaveRequestDto saveRequestDto, MultipartFile file) throws IOException;
 }

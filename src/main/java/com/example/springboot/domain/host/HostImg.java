@@ -39,4 +39,10 @@ public class HostImg extends BaseTimeEntity implements Serializable {
     @Column (nullable = false)
     private String fileUri;
 
+    public void updateHostImg(String filename, String filepath, String fileUri){
+        this.filename = filename;
+        this.filepath = filepath;
+        this.fileUri = fileUri;
+    }
+
 }

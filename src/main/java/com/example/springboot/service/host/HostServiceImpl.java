@@ -4,20 +4,19 @@ import com.example.springboot.controller.dto.host.HostSaveRequestDto;
 import com.example.springboot.controller.dto.host.HostSaveResponseDto;
 import com.example.springboot.domain.host.*;
 import com.example.springboot.domain.user.User;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class HostServiceImpl implements HostService  {
@@ -44,26 +43,9 @@ public class HostServiceImpl implements HostService  {
             List<HostImg> hostImgList = hostImgRepository.findAllImgs(host.getHnum());
             // DTO에 담는 부분
 
-            hostSaveResponseDto = HostSaveResponseDto.builder()
-                    .user(user)
-                    .hostMainImg(hostMainImg)
-                    .hostImg(hostImgList)
-                    .region(host.getRegion())
-                    .gender(host.getGender())
-                    .age(host.getAge())
-                    .farmsts(host.getFarmsts())
-                    .shortintro(host.getShortintro())
-                    .intro(host.getIntro())
-                    .address(host.getAddress())
-                    .lat(host.getLat())
-                    .lng(host.getLng())
-                    .maxPpl(host.getMaxPpl())
-                    .apprvYn(host.getApprvYn())
-                    .build();
-
-            return hostSaveResponseDto;
+            return new HostSaveResponseDto(user, host, hostMainImg, hostImgList);
         }
-        // 해당하는 것이 없으면 빈 객체를 반환
+        // 해당하는 것이 없으면 빈 객체(생성자) 반환
         return new HostSaveResponseDto();
     }
 
@@ -136,9 +118,28 @@ public class HostServiceImpl implements HostService  {
     }
 
     // 호스트 데이터 + 메인이미지 수정
+    @Transactional
     @Override
-    public String update(HostSaveRequestDto saveRequestDto, MultipartFile file) {
-        return null;
+    public String update(HostSaveRequestDto dto, MultipartFile file) throws IOException {
+        // DTO 에는 호스트 번호도 담고 있음
+        Host host = hostRepository.findByHnum(Long.valueOf(dto.getHostNum()));
+        host.updateHost(dto.getRegion(),dto.getGender(), dto.getAge(), dto.getFarmsts(),
+                dto.getShortintro(), dto.getIntro(),
+                dto.getAddress(), dto.getLat(), dto.getLng());
+
+        String originFileName = file.getOriginalFilename();
+        // 파일의 이름을 정함
+
+        Path filepath = UPLOAD_PATH.resolve(originFileName);
+        Files.copy(file.getInputStream(), filepath);
+        // 파일에 있는 내용들을 출력하여 파일 path에 이름 하에 복사함
+
+        String fileUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/image/").path(originFileName).toUriString();
+
+        HostMainImg hostMainImg = hostMainImgRepository.findMainImg(host.getHnum());
+        hostMainImg.updateHostMainImg();
+
+        return String.valueOf(host.getHnum());
     }
 
 

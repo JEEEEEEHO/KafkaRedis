@@ -73,7 +73,7 @@ public class Host extends BaseTimeEntity {
     }
 
     // 수정용
-    public void hostUpdate(String region, String gender, String age, String farmsts, String shortintro, String intro, String address, String lat, String lng){
+    public void updateHost(String region, String gender, String age, String farmsts, String shortintro, String intro, String address, String lat, String lng){
         this.region = region;
         this.gender = gender;
         this.age = age;

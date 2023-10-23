@@ -3,7 +3,8 @@ package com.example.springboot.domain.host;
 import lombok.*;
 
 import javax.persistence.*;
-@Getter // getter 메소드 생성
+@Getter
+@Setter // getter 메소드 생성
 @Builder // 빌더를 사용할 수 있게 함
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,4 +28,10 @@ public class HostMainImg {
 
 //    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 //    private String created_dt;
+
+    public void updateHostMainImg(String filename, String filepath, String fileUri){
+        this.filename = filename;
+        this.filepath = filepath;
+        this.fileUri = fileUri;
+    }
 }
