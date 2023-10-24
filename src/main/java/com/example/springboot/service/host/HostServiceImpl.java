@@ -32,7 +32,6 @@ public class HostServiceImpl implements HostService  {
     // Host 정보 불러오기
     @Override
     public HostSaveResponseDto findHostInfo(User user) {
-        HostSaveResponseDto hostSaveResponseDto;
         // userid로 host 정보를 찾음
         long count = hostRepository.findByUidCount(user);
         // Host 정보가 있다면
@@ -143,7 +142,7 @@ public class HostServiceImpl implements HostService  {
         // 기존에 존재하는 hostMainImg
         HostMainImg hostMainImg = hostMainImgRepository.findMainImg(host.getHnum());
         hostMainImg.updateHostMainImg(originFileName, String.valueOf(filepath), fileUri);
-        hostMainImgRepository.save(hostMainImg);
+        hostMainImgRepository.save(hostMainImg); // 수정
 
         return String.valueOf(host.getHnum());
     }
@@ -152,10 +151,15 @@ public class HostServiceImpl implements HostService  {
     @Override
     public void updateImgs(MultipartFile[] files, String hostNum, String[] deleteFiles) throws IOException {
 
+        int totalImgsCnt = hostImgRepository.findAllImgs(Long.valueOf(hostNum)).size();
 
-        // turn을 매기려면 기존에 존재하고 있는 파일들 개수 다음으로 해줘야함
+        // 1) fileName으로 값 찾아서 delete
+        for(String fileName : deleteFiles){
+            hostImgRepository.deleteImg(fileName);
+        }
 
 
+        // 2) 새로운 Save
         for (int i = 0; i < files.length; i++) {
 
             String originFileName = files[i].getOriginalFilename();
