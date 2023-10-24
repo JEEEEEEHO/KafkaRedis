@@ -59,7 +59,7 @@ public class HostApiController {
        }
     }
 
-    // 호스트 등록 내용 보기 (메인이미지 가져오기)
+    // 호스트 등록 내용 보기 (이미지 가져오기)
     @CrossOrigin
     @GetMapping(value = "/image/{fileName}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<?> returnImage(@PathVariable String fileName) throws Exception {
@@ -111,14 +111,19 @@ public class HostApiController {
         hostsService.saveImgs(files, hostNum);
     }
 
-    // 호스트 수정 Request (hostnum 을 찾아서 엎어치기 )
+    // 호스트 수정(정보+메인이미지) Request (hostnum 을 찾아서 엎어치기 )
     @PutMapping("api/host/update")
-    public String update(@RequestPart(value = "file") MultipartFile file, @RequestPart(value = "hostData") HostSaveRequestDto saveRequestDto){
+    public String update(@RequestPart(value = "file") MultipartFile file, @RequestPart(value = "hostData") HostSaveRequestDto saveRequestDto) throws IOException {
         return hostsService.update(saveRequestDto, file);
     }
 
     // 호스트 이미지 수정 ( 이 경우엔 이미지 업로드의 개수 한정이 있기 때문에 삭제 - > 입력)
-
+    @PutMapping
+    public void updateImgs(@RequestPart("files") MultipartFile[] files
+            , @RequestPart(value = "hnum") String hostNum
+            , @RequestPart(value = "deleteFiles") String[] deleteFiles){
+        hostsService.updateImgs(files,hostNum,deleteFiles);
+    }
 
     // 호스트 삭제
 

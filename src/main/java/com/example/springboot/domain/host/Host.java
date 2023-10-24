@@ -72,7 +72,7 @@ public class Host extends BaseTimeEntity {
         this.lng = lng;
     }
 
-    // 수정용
+    // 수정용 -> 이 메소드를 이용해서 Entity의 값을 바꾸고 Transactional 처리함 (영속)
     public void updateHost(String region, String gender, String age, String farmsts, String shortintro, String intro, String address, String lat, String lng){
         this.region = region;
         this.gender = gender;

@@ -28,6 +28,7 @@ public class HostServiceImpl implements HostService  {
     private HostMainImgRepository hostMainImgRepository;
     @Autowired
     private HostImgRepository hostImgRepository;
+
     // Host 정보 불러오기
     @Override
     public HostSaveResponseDto findHostInfo(User user) {
@@ -117,29 +118,64 @@ public class HostServiceImpl implements HostService  {
         }
     }
 
-    // 호스트 데이터 + 메인이미지 수정
-    @Transactional
+    // Host 데이터 + 메인이미지 수정
     @Override
     public String update(HostSaveRequestDto dto, MultipartFile file) throws IOException {
-        // DTO 에는 호스트 번호도 담고 있음
+        // DTO 에는 호스트 번호도 담고 있음 - 기존에 존재하는 host
         Host host = hostRepository.findByHnum(Long.valueOf(dto.getHostNum()));
         host.updateHost(dto.getRegion(),dto.getGender(), dto.getAge(), dto.getFarmsts(),
                 dto.getShortintro(), dto.getIntro(),
                 dto.getAddress(), dto.getLat(), dto.getLng());
+        hostRepository.save(host); // 수정
 
         String originFileName = file.getOriginalFilename();
-        // 파일의 이름을 정함
 
         Path filepath = UPLOAD_PATH.resolve(originFileName);
-        Files.copy(file.getInputStream(), filepath);
-        // 파일에 있는 내용들을 출력하여 파일 path에 이름 하에 복사함
+        try{
+            Files.copy(file.getInputStream(), filepath);
+            // 수정시, 파일의 이름이 같은 경우, path가 같은 것으로 잡힘 => 에러날 가능성
+        }catch (Exception e){
+            throw new IOException("수정파일이름 동일 경로"+e);
+        }
 
         String fileUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/image/").path(originFileName).toUriString();
 
+        // 기존에 존재하는 hostMainImg
         HostMainImg hostMainImg = hostMainImgRepository.findMainImg(host.getHnum());
-        hostMainImg.updateHostMainImg();
+        hostMainImg.updateHostMainImg(originFileName, String.valueOf(filepath), fileUri);
+        hostMainImgRepository.save(hostMainImg);
 
         return String.valueOf(host.getHnum());
+    }
+
+    // Host 이미지 수정 (각 파일마다 등록)
+    @Override
+    public void updateImgs(MultipartFile[] files, String hostNum, String[] deleteFiles) throws IOException {
+
+
+        // turn을 매기려면 기존에 존재하고 있는 파일들 개수 다음으로 해줘야함
+
+
+        for (int i = 0; i < files.length; i++) {
+
+            String originFileName = files[i].getOriginalFilename();
+            // 파일의 이름을 정함
+
+            Path filepath = UPLOAD_PATH.resolve(originFileName);
+            Files.copy(files[i].getInputStream(), filepath);
+            // 파일에 있는 내용들을 출력하여 파일 path에 이름 하에 복사함
+
+            String fileUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/image/").path(originFileName).toUriString();
+
+            final HostImg img = HostImg.builder()
+                    .hostImg_turn(Long.valueOf(i+1))
+                    .hnum(hnum)
+                    .filename(originFileName)
+                    .fileUri(fileUri)
+                    .filepath(String.valueOf(filepath))
+                    .build();
+            hostImgRepository.save(img);
+        }
     }
 
 
