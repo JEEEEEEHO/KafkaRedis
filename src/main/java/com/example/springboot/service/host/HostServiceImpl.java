@@ -150,18 +150,19 @@ public class HostServiceImpl implements HostService  {
     // Host 이미지 수정 (각 파일마다 등록)
     @Override
     public void updateImgs(MultipartFile[] files, String hostNum, String[] deleteFiles) throws IOException {
+        Long hnum = Long.valueOf(hostNum);
 
-        int totalImgsCnt = hostImgRepository.findAllImgs(Long.valueOf(hostNum)).size();
-
-        // 1) fileName으로 값 찾아서 delete
+        // 1) fileName을 찾아서 지워줌
         for(String fileName : deleteFiles){
             hostImgRepository.deleteImg(fileName);
         }
 
+        // 2) HostImg 의 가장 큰 turn 값을 찾아야 함 (내림차순 정렬)
+        int maxTurn = (int) hostImgRepository.findLastImgTurn(hnum);
 
-        // 2) 새로운 Save
+
+        // 3) 새로운 Save
         for (int i = 0; i < files.length; i++) {
-
             String originFileName = files[i].getOriginalFilename();
             // 파일의 이름을 정함
 
@@ -172,7 +173,7 @@ public class HostServiceImpl implements HostService  {
             String fileUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/image/").path(originFileName).toUriString();
 
             final HostImg img = HostImg.builder()
-                    .hostImg_turn(Long.valueOf(i+1))
+                    .hostImg_turn(Long.valueOf(i+1+maxTurn))
                     .hnum(hnum)
                     .filename(originFileName)
                     .fileUri(fileUri)

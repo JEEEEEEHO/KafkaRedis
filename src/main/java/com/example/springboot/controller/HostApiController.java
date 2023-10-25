@@ -121,7 +121,7 @@ public class HostApiController {
     @PutMapping
     public void updateImgs(@RequestPart("files") MultipartFile[] files
             , @RequestPart(value = "hnum") String hostNum
-            , @RequestPart(value = "deleteFiles") String[] deleteFiles){
+            , @RequestPart(value = "deleteFiles") String[] deleteFiles) throws IOException {
         hostsService.updateImgs(files,hostNum,deleteFiles);
     }
 

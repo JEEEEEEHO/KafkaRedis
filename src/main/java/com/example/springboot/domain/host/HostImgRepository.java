@@ -18,4 +18,7 @@ public interface HostImgRepository extends JpaRepository<HostImg, Long> {
     @Query("DELETE FROM HostImg h WHERE h.filename = ?1")
     void deleteImg(String fileName);
 
+    // 가장 마지막 turn 값을 찾기
+    @Query("SELECT h.hostImg_turn FROM HostImg h WHERE h.hnum= ?1 ORDER BY h.hostImg_turn DESC")
+    long findLastImgTurn(Long hostNum);
 }
