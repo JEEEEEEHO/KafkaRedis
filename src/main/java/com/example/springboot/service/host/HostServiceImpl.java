@@ -120,30 +120,39 @@ public class HostServiceImpl implements HostService  {
     // Host 데이터 + 메인이미지 수정
     @Override
     public String update(HostSaveRequestDto dto, MultipartFile file) throws IOException {
-        // DTO 에는 호스트 번호도 담고 있음 - 기존에 존재하는 host
+        // 1) DTO 에는 호스트 번호도 담고 있음 - 기존에 존재하는 host 수정
         Host host = hostRepository.findByHnum(Long.valueOf(dto.getHostNum()));
         host.updateHost(dto.getRegion(),dto.getGender(), dto.getAge(), dto.getFarmsts(),
                 dto.getShortintro(), dto.getIntro(),
                 dto.getAddress(), dto.getLat(), dto.getLng());
         hostRepository.save(host); // 수정
 
-        String originFileName = file.getOriginalFilename();
+        // 2) 기존에 존재하는 파일 삭제 (수정이 불가능한 이유 : 파일명 등이 같을 수도 있음 -> 같은 경로에 파일이 생김)
+        if(!dto.getHostDeleteMainImg().isEmpty()){
+            // 해당 값이 존재하는 경우 기존의 값을 삭제
+            hostMainImgRepository.delete(hostMainImgRepository.findMainImg(host.getHnum()));
 
-        Path filepath = UPLOAD_PATH.resolve(originFileName);
-        try{
-            Files.copy(file.getInputStream(), filepath);
-            // 수정시, 파일의 이름이 같은 경우, path가 같은 것으로 잡힘 => 에러날 가능성
-        }catch (Exception e){
-            throw new IOException("수정파일이름 동일 경로"+e);
+            // 새로운 값을 등록
+            String originFileName = file.getOriginalFilename();
+
+            Path filepath = UPLOAD_PATH.resolve(originFileName);
+            try{
+                Files.copy(file.getInputStream(), filepath);
+                // 수정시, 파일의 이름이 같은 경우, path가 같은 것으로 잡힘 => 에러날 가능성
+            }catch (Exception e){
+                throw new IOException("수정파일이름 동일 경로"+e);
+            }
+
+            String fileUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/image/").path(originFileName).toUriString();
+
+            final HostMainImg hostMainImg = HostMainImg.builder()
+                    .hnum(host.getHnum())
+                    .filename(originFileName)
+                    .fileUri(fileUri)
+                    .filepath(String.valueOf(filepath))
+                    .build();
+            hostMainImgRepository.save(hostMainImg);
         }
-
-        String fileUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/image/").path(originFileName).toUriString();
-
-        // 기존에 존재하는 hostMainImg
-        HostMainImg hostMainImg = hostMainImgRepository.findMainImg(host.getHnum());
-        hostMainImg.updateHostMainImg(originFileName, String.valueOf(filepath), fileUri);
-        hostMainImgRepository.save(hostMainImg); // 수정
-
         return String.valueOf(host.getHnum());
     }
 
@@ -152,14 +161,19 @@ public class HostServiceImpl implements HostService  {
     public void updateImgs(MultipartFile[] files, String hostNum, String[] deleteFiles) throws IOException {
         Long hnum = Long.valueOf(hostNum);
 
-        // 1) fileName을 찾아서 지워줌
-        for(String fileName : deleteFiles){
-            hostImgRepository.deleteImg(fileName);
+        // 1) deleteFiles이 있는 경우 지워버림
+        if(!deleteFiles[0].isEmpty()){
+            for(String fileName : deleteFiles){
+                hostImgRepository.deleteImg(fileName);
+            }
         }
 
         // 2) HostImg 의 가장 큰 turn 값을 찾아야 함 (내림차순 정렬)
-        int maxTurn = (int) hostImgRepository.findLastImgTurn(hnum);
-
+        int maxTurn = 0; // 하나도 없는 경우 0에서 시작 (다 지워버렸거나)
+        if(hostImgRepository.findAllImgs(hnum).size()>0){
+            // 하나라도 있는 경우 마지막 순번
+            maxTurn= (int) hostImgRepository.findLastImgTurn(hnum);
+        }
 
         // 3) 새로운 Save
         for (int i = 0; i < files.length; i++) {
