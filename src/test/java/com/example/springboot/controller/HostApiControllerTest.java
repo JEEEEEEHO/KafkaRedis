@@ -11,6 +11,7 @@ import com.example.springboot.service.host.HostService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -102,21 +103,14 @@ public class HostApiControllerTest {
 
         // when
 
-        //hostService.save(requestDto);
-
-//        String url = "http://localhost:" + port + "/api/host/save";
-//
-//
-//
-//        mvc.perform(post(url)
-//                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-//                .content(objectMapper.writeValueAsString(requestDto)))
-//            .andExpect(status().isOk());
-
         // then
         List<Host> all = hostRepository.findAll();
         assertThat(all.get(0).getRegion()).isEqualTo(region);
         assertThat(all.get(0).getIntro()).isEqualTo(intro);
 
    }
+
+   @DisplayName("PUT/호스트 수정 테스트")
+   @Test
+    void update
 }

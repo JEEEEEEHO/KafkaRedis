@@ -46,7 +46,7 @@ public class HostApiController {
     // 호스트 등록 내용 보기 Response
     // User에 따라 Host를 찾고, 그 num 에 해당하는 이미지 파일들을 포함
     @GetMapping("/api/host/info")
-    public HostSaveResponseDto hostSaveResponseDto(Principal principal) throws Exception {
+    public HostSaveResponseDto savedHostInfo(Principal principal) throws Exception {
         // token 값에 저장되어 있는 userId
         String userId = principal.getName();
         Optional<User> user = userRepository.findById(userId);
@@ -94,7 +94,7 @@ public class HostApiController {
 
     // 호스트 등록(정보+메인이미지) Request
     @PostMapping(value = "/api/host/save", consumes = "multipart/form-data")
-    public String save(Principal principal, @RequestPart(value = "file") MultipartFile file, @RequestPart(value = "hostData") HostSaveRequestDto saveRequestDto) throws IOException {
+    public String saveHost(Principal principal, @RequestPart(value = "file") MultipartFile file, @RequestPart(value = "hostData") HostSaveRequestDto saveRequestDto) throws IOException {
         // token 값에 저장되어 있는 userId
         String userId = principal.getName();
         Optional<User> user = userRepository.findById(userId);
@@ -107,19 +107,19 @@ public class HostApiController {
 
     // 호스트 이미지 등록 Request
     @PostMapping(value = "/api/host/saveImg", consumes = "multipart/form-data")
-    public void saveImgs(@RequestPart("files") MultipartFile[] files, @RequestPart(value = "hnum") String hostNum ) throws IOException {
+    public void saveHostImgs(@RequestPart("files") MultipartFile[] files, @RequestPart(value = "hnum") String hostNum ) throws IOException {
         hostsService.saveImgs(files, hostNum);
     }
 
     // 호스트 수정(정보+메인이미지) Request (hostnum 을 찾아서 엎어치기 )
     @PutMapping("api/host/update")
-    public String update(@RequestPart(value = "file") MultipartFile file, @RequestPart(value = "hostData") HostSaveRequestDto saveRequestDto) throws IOException {
+    public String updateHost(@RequestPart(value = "file") MultipartFile file, @RequestPart(value = "hostData") HostSaveRequestDto saveRequestDto) throws IOException {
         return hostsService.update(saveRequestDto, file);
     }
 
     // 호스트 이미지 수정 ( 이 경우엔 이미지 업로드의 개수 한정이 있기 때문에 삭제 - > 입력)
     @PutMapping
-    public void updateImgs(@RequestPart("files") MultipartFile[] files
+    public void updateHostImgs(@RequestPart("files") MultipartFile[] files
             , @RequestPart(value = "hnum") String hostNum
             , @RequestPart(value = "deleteFiles") String[] deleteFiles) throws IOException {
         hostsService.updateImgs(files,hostNum,deleteFiles);
