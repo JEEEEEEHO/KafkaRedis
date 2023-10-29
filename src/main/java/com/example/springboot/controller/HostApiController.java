@@ -2,6 +2,7 @@ package com.example.springboot.controller;
 
 import com.example.springboot.controller.dto.host.HostSaveRequestDto;
 import com.example.springboot.controller.dto.host.HostSaveResponseDto;
+import com.example.springboot.controller.dto.host.HostUpdateRequestDto;
 import com.example.springboot.domain.host.*;
 import com.example.springboot.domain.user.User;
 import com.example.springboot.domain.user.UserRepository;
@@ -113,8 +114,8 @@ public class HostApiController {
 
     // 호스트 수정(정보+메인이미지) Request (hostnum 을 찾아서 엎어치기 )
     @PutMapping("api/host/update")
-    public String updateHost(@RequestPart(value = "file") MultipartFile file, @RequestPart(value = "hostData") HostSaveRequestDto saveRequestDto) throws IOException {
-        return hostsService.update(saveRequestDto, file);
+    public String updateHost(@RequestPart(value = "file") MultipartFile file, @RequestPart(value = "hostData") HostUpdateRequestDto updateRequestDto) throws IOException {
+        return hostsService.update(updateRequestDto, file);
     }
 
     // 호스트 이미지 수정 ( 이 경우엔 이미지 업로드의 개수 한정이 있기 때문에 삭제 - > 입력)

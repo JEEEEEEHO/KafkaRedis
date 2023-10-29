@@ -12,7 +12,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class HostUpdateRequestDto {
-    private User user;
 
     private String region;
 
@@ -26,23 +25,23 @@ public class HostUpdateRequestDto {
 
     private String intro;
 
+    private String address;
+
     private String lat;
 
     private String lng;
 
     private String maxPpl;
 
-    private String apprvYn;
-
     private Date apprv_date;
 
-    // 파일 삭제용
-    private String deleteMainImg;
+    private String hostDeleteMainImg; // 수정
+
+    private String hostNum; // 수정
 
 
     public Host toEntity(){
         return Host.builder()
-                .user(user)
                 .region(region)
                 .gender(gender)
                 .age(age)
@@ -52,7 +51,6 @@ public class HostUpdateRequestDto {
                 .lat(lat)
                 .lng(lng)
                 .maxPpl(maxPpl)
-                .apprvYn(apprvYn)
                 .apprv_date(apprv_date)
                 .build();
     }

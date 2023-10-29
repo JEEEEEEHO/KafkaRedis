@@ -57,21 +57,6 @@ public class Host extends BaseTimeEntity {
     @Column
     private Date apprv_date;
 
-
-    @Builder
-    public Host(String region, String gender, String age, String farmsts, String shortintro, String intro, String address, String lat, String lng, User user){
-        this.user = user;
-        this.region = region;
-        this.gender = gender;
-        this.age = age;
-        this.farmsts = farmsts;
-        this.shortintro = shortintro;
-        this.intro = intro;
-        this.address = address;
-        this.lat = lat;
-        this.lng = lng;
-    }
-
     // 수정용 -> 이 메소드를 이용해서 Entity의 값을 바꾸고 Transactional 처리함 (영속)
     public void updateHost(String region, String gender, String age, String farmsts, String shortintro, String intro, String address, String lat, String lng){
         this.region = region;

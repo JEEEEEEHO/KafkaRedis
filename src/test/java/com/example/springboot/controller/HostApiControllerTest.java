@@ -1,13 +1,16 @@
 package com.example.springboot.controller;
 
 
+import com.example.springboot.controller.dto.host.HostUpdateRequestDto;
 import com.example.springboot.domain.host.Host;
 import com.example.springboot.domain.host.HostImgRepository;
 import com.example.springboot.domain.host.HostRepository;
+import com.example.springboot.domain.user.Role;
 import com.example.springboot.domain.user.User;
 import com.example.springboot.domain.user.UserRepository;
 import com.example.springboot.controller.dto.host.HostSaveRequestDto;
 import com.example.springboot.service.host.HostService;
+import com.example.springboot.service.user.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Test;
@@ -17,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -25,6 +29,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.mail.Multipart;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -49,7 +61,11 @@ public class HostApiControllerTest {
     private HostImgRepository hostImgRepository;
 
     @Autowired
+    UserService userService;
+
+    @Autowired
     HostService hostService;
+
 
     @Autowired
     private WebApplicationContext context;
@@ -112,5 +128,69 @@ public class HostApiControllerTest {
 
    @DisplayName("PUT/호스트 수정 테스트")
    @Test
-    void update
+    void updateHostTest() throws ParseException, IOException {
+       // given
+        // 1) user 정보 저장
+       User user = userService.create(User.builder()
+                       .name("Jeeho Kim")
+                       .email("email")
+                       .password("11")
+                       .id("233230")
+                       .role(Role.USER)
+                       .authProvider("Google")
+                       .build());
+        // 2) host 정보
+       String dateStr = "2021년 06월 19일 21시 05분 07초";
+       SimpleDateFormat formatter = new SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분 ss초");
+       Date date = formatter.parse(dateStr);
+
+       HostSaveRequestDto saveRequestDto = HostSaveRequestDto.builder()
+               .user(user)
+               .region("1")
+               .gender("1")
+               .age("1")
+               .farmsts("1")
+               .shortintro("1")
+               .intro("1")
+               .address("1")
+               .lat("1")
+               .lng("1")
+               .maxPpl("1")
+               .apprv_date(date)
+               .build();
+            // 3) File 정보 - originFileName getInputStream fileUri
+       String originalFilename = "originalFilename";
+       String contentType = "jpg";
+       Path UPLOAD_PATH =
+               Paths.get(new ClassPathResource("").getFile().getAbsolutePath() + File.separator + "static"  + File.separator + "image");
+       Path filepath = UPLOAD_PATH.resolve(originalFilename);
+       FileInputStream fileInputStream = new FileInputStream(String.valueOf(filepath)); //파일경로로 생성한 InputStream
+
+       MockMultipartFile file = new MockMultipartFile("fileName", originalFilename, contentType, fileInputStream);
+            // 4) 저장
+        String hostnum = hostService.save(saveRequestDto, file);
+
+            // 5) host 수정 정보
+       String region = "2";
+       String hostDeleteMainImg = "originalFilename";
+       HostUpdateRequestDto updateRequestDto = HostUpdateRequestDto.builder()
+               .hostNum(hostnum)
+               .region(region)
+               .hostDeleteMainImg(hostDeleteMainImg)
+               .build();
+       // 새로운 파일 내용
+       String udtOriginalFilename = "udtOriginalFilename";
+       String udtContentType2 = "jpg";
+       Path udtFilePath = UPLOAD_PATH.resolve(udtOriginalFilename);
+       FileInputStream udtFileInputStream = new FileInputStream(String.valueOf(udtFilePath)); //파일경로로 생성한 InputStream
+       MockMultipartFile udtFile = new MockMultipartFile("fileName", udtOriginalFilename, udtContentType2, udtFileInputStream);
+
+       String udtHostnum = hostService.update(updateRequestDto, udtFile);
+
+       // when - 꺼냄
+       mvc.perform("/")
+
+       // then
+            // 1) 수정할 떄 반납하는 객체 = 수정해서 keyword로 나온 값이 같은지 확인
+   }
 }

@@ -2,6 +2,7 @@ package com.example.springboot.service.host;
 
 import com.example.springboot.controller.dto.host.HostSaveRequestDto;
 import com.example.springboot.controller.dto.host.HostSaveResponseDto;
+import com.example.springboot.controller.dto.host.HostUpdateRequestDto;
 import com.example.springboot.domain.user.User;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,7 +21,7 @@ public interface HostService {
     void saveImgs(MultipartFile[] files, String hostNum) throws IOException;
 
     // 호스트 데이터 수정
-    String update(HostSaveRequestDto saveRequestDto, MultipartFile file) throws IOException;
+    String update(HostUpdateRequestDto updateRequestDto, MultipartFile file) throws IOException;
 
     void updateImgs(MultipartFile[] files, String hostNum, String[] deleteFiles) throws IOException;
 }

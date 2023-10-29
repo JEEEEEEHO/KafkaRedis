@@ -2,6 +2,7 @@ package com.example.springboot.service.host;
 
 import com.example.springboot.controller.dto.host.HostSaveRequestDto;
 import com.example.springboot.controller.dto.host.HostSaveResponseDto;
+import com.example.springboot.controller.dto.host.HostUpdateRequestDto;
 import com.example.springboot.domain.host.*;
 import com.example.springboot.domain.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,12 +120,18 @@ public class HostServiceImpl implements HostService  {
 
     // Host 데이터 + 메인이미지 수정
     @Override
-    public String update(HostSaveRequestDto dto, MultipartFile file) throws IOException {
+    public String update(HostUpdateRequestDto dto, MultipartFile file) throws IOException {
         // 1) DTO 에는 호스트 번호도 담고 있음 - 기존에 존재하는 host 수정
         Host host = hostRepository.findByHnum(Long.valueOf(dto.getHostNum()));
-        host.updateHost(dto.getRegion(),dto.getGender(), dto.getAge(), dto.getFarmsts(),
-                dto.getShortintro(), dto.getIntro(),
-                dto.getAddress(), dto.getLat(), dto.getLng());
+        host.updateHost(dto.getRegion()
+                ,dto.getGender()
+                ,dto.getAge()
+                ,dto.getFarmsts()
+                ,dto.getShortintro()
+                ,dto.getIntro()
+                ,dto.getAddress()
+                ,dto.getLat()
+                ,dto.getLng());
         hostRepository.save(host); // 수정
 
         // 2) 기존에 존재하는 파일 삭제 (수정이 불가능한 이유 : 파일명 등이 같을 수도 있음 -> 같은 경로에 파일이 생김)
