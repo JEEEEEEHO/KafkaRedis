@@ -123,7 +123,8 @@ public class HostServiceImpl implements HostService  {
     public String update(HostUpdateRequestDto dto, MultipartFile file) throws IOException {
         // 1) DTO 에는 호스트 번호도 담고 있음 - 기존에 존재하는 host 수정
         Host host = hostRepository.findByHnum(Long.valueOf(dto.getHostNum()));
-        host.updateHost(dto.getRegion()
+        host.updateHost(
+                dto.getRegion()
                 ,dto.getGender()
                 ,dto.getAge()
                 ,dto.getFarmsts()

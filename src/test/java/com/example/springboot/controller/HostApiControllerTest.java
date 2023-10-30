@@ -11,22 +11,30 @@ import com.example.springboot.service.host.HostService;
 import com.example.springboot.service.user.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.mail.Multipart;
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -63,6 +71,9 @@ public class HostApiControllerTest {
     private HostMainImgRepository hostMainImgRepository;
 
     @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Autowired
     UserService userService;
 
     @Autowired
@@ -77,6 +88,14 @@ public class HostApiControllerTest {
 
     @Autowired ObjectMapper objectMapper;
 
+    @Mock
+    HttpServletRequest request;
+
+    @Before
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+    }
     @After
     public void tearDown() throws Exception{
         hostImgRepository.deleteAll();
@@ -164,25 +183,31 @@ public class HostApiControllerTest {
        String originalFilename = "originalFilename";
        String contentType = "jpg";
        String filepath = "src/test/resources/testImage/"+originalFilename;
-//       FileInputStream fileInputStream = new FileInputStream(filepath); //파일경로로 생성한 InputStream
 
        MockMultipartFile file = new MockMultipartFile("fileName", originalFilename, contentType, filepath.getBytes());
         // 4) 저장
         String hostnum = hostService.save(saveRequestDto, file);
-
+        Host host = hostRepository.findByHnum(Long.valueOf(hostnum));
         // 5) host 수정 정보
        String region = "2";
        String hostDeleteMainImg = "originalFilename";
        HostUpdateRequestDto updateRequestDto = HostUpdateRequestDto.builder()
                .hostNum(hostnum)
                .region(region)
+               .gender(host.getGender())
+               .age(host.getAge())
+               .farmsts(host.getFarmsts())
+               .shortintro(host.getShortintro())
+               .intro(host.getIntro())
+               .address(host.getAddress())
+               .lat(host.getLat())
+               .lng(host.getLng())
                .hostDeleteMainImg(hostDeleteMainImg)
                .build();
        // 새로운 파일 내용
        String udtOriginalFilename = "udtOriginalFilename";
        String udtContentType2 = "jpg";
        String udtFilePath = "src/test/resources/testImage/"+udtOriginalFilename;
-//       FileInputStream udtFileInputStream = new FileInputStream(String.valueOf(udtFilePath)); //파일경로로 생성한 InputStream
        MockMultipartFile udtFile = new MockMultipartFile("fileName", udtOriginalFilename, udtContentType2, udtFilePath.getBytes());
 
 

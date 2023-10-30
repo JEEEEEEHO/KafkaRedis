@@ -40,18 +40,4 @@ public class HostUpdateRequestDto {
     private String hostNum; // 수정
 
 
-    public Host toEntity(){
-        return Host.builder()
-                .region(region)
-                .gender(gender)
-                .age(age)
-                .farmsts(farmsts)
-                .shortintro(shortintro)
-                .intro(intro)
-                .lat(lat)
-                .lng(lng)
-                .maxPpl(maxPpl)
-                .apprv_date(apprv_date)
-                .build();
-    }
 }
