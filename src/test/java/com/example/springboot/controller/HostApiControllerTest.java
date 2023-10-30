@@ -2,9 +2,7 @@ package com.example.springboot.controller;
 
 
 import com.example.springboot.controller.dto.host.HostUpdateRequestDto;
-import com.example.springboot.domain.host.Host;
-import com.example.springboot.domain.host.HostImgRepository;
-import com.example.springboot.domain.host.HostRepository;
+import com.example.springboot.domain.host.*;
 import com.example.springboot.domain.user.Role;
 import com.example.springboot.domain.user.User;
 import com.example.springboot.domain.user.UserRepository;
@@ -32,6 +30,7 @@ import javax.mail.Multipart;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
@@ -59,6 +58,9 @@ public class HostApiControllerTest {
 
     @Autowired
     private HostImgRepository hostImgRepository;
+
+    @Autowired
+    private HostMainImgRepository hostMainImgRepository;
 
     @Autowired
     UserService userService;
@@ -128,8 +130,8 @@ public class HostApiControllerTest {
 
    @DisplayName("PUT/호스트 수정 테스트")
    @Test
-    void updateHostTest() throws ParseException, IOException {
-       // given
+    public void updateHostTest() throws ParseException, IOException {
+    // given
         // 1) user 정보 저장
        User user = userService.create(User.builder()
                        .name("Jeeho Kim")
@@ -158,19 +160,17 @@ public class HostApiControllerTest {
                .maxPpl("1")
                .apprv_date(date)
                .build();
-            // 3) File 정보 - originFileName getInputStream fileUri
+        // 3) File 정보 - originFileName getInputStream fileUri
        String originalFilename = "originalFilename";
        String contentType = "jpg";
-       Path UPLOAD_PATH =
-               Paths.get(new ClassPathResource("").getFile().getAbsolutePath() + File.separator + "static"  + File.separator + "image");
-       Path filepath = UPLOAD_PATH.resolve(originalFilename);
-       FileInputStream fileInputStream = new FileInputStream(String.valueOf(filepath)); //파일경로로 생성한 InputStream
+       String filepath = "src/test/resources/testImage/"+originalFilename;
+//       FileInputStream fileInputStream = new FileInputStream(filepath); //파일경로로 생성한 InputStream
 
-       MockMultipartFile file = new MockMultipartFile("fileName", originalFilename, contentType, fileInputStream);
-            // 4) 저장
+       MockMultipartFile file = new MockMultipartFile("fileName", originalFilename, contentType, filepath.getBytes());
+        // 4) 저장
         String hostnum = hostService.save(saveRequestDto, file);
 
-            // 5) host 수정 정보
+        // 5) host 수정 정보
        String region = "2";
        String hostDeleteMainImg = "originalFilename";
        HostUpdateRequestDto updateRequestDto = HostUpdateRequestDto.builder()
@@ -181,16 +181,21 @@ public class HostApiControllerTest {
        // 새로운 파일 내용
        String udtOriginalFilename = "udtOriginalFilename";
        String udtContentType2 = "jpg";
-       Path udtFilePath = UPLOAD_PATH.resolve(udtOriginalFilename);
-       FileInputStream udtFileInputStream = new FileInputStream(String.valueOf(udtFilePath)); //파일경로로 생성한 InputStream
-       MockMultipartFile udtFile = new MockMultipartFile("fileName", udtOriginalFilename, udtContentType2, udtFileInputStream);
+       String udtFilePath = "src/test/resources/testImage/"+udtOriginalFilename;
+//       FileInputStream udtFileInputStream = new FileInputStream(String.valueOf(udtFilePath)); //파일경로로 생성한 InputStream
+       MockMultipartFile udtFile = new MockMultipartFile("fileName", udtOriginalFilename, udtContentType2, udtFilePath.getBytes());
 
+
+    // when - 꺼냄
        String udtHostnum = hostService.update(updateRequestDto, udtFile);
+       Host udtHost = hostRepository.findByHnum(Long.valueOf(udtHostnum));
+       HostMainImg udtHostMainImg = hostMainImgRepository.findMainImg(Long.valueOf(udtHostnum));
 
-       // when - 꺼냄
-       mvc.perform("/")
+    // then
+       // 1) 수정할 떄 반납하는 객체 = 수정해서 keyword로 나온 값이 같은지 확인
+       assertThat(udtHost.getRegion()).isEqualTo(region);
+       assertThat(udtHostMainImg.getFilename()).isEqualTo(udtOriginalFilename);
 
-       // then
-            // 1) 수정할 떄 반납하는 객체 = 수정해서 keyword로 나온 값이 같은지 확인
+
    }
 }

@@ -44,8 +44,11 @@ public class HostApiController {
     // 호스트 검색 상세보기 Response
 
 
-    // 호스트 등록 내용 보기 Response
-    // User에 따라 Host를 찾고, 그 num 에 해당하는 이미지 파일들을 포함
+    /**
+     * Response 호스트 내용 보기
+     * @param principal
+     * @return HostSaveResponseDto
+     * */
     @GetMapping("/api/host/info")
     public HostSaveResponseDto savedHostInfo(Principal principal) throws Exception {
         // token 값에 저장되어 있는 userId
@@ -60,7 +63,42 @@ public class HostApiController {
        }
     }
 
-    // 호스트 등록 내용 보기 (이미지 가져오기)
+
+    /**
+     * Request 호스트 등록(정보+메인이미지)
+     * @param principal
+     * @param file
+     * @param saveRequestDto
+     * @return String
+     * */
+    @PostMapping(value = "/api/host/save", consumes = "multipart/form-data")
+    public String saveHost(Principal principal, @RequestPart(value = "file") MultipartFile file, @RequestPart(value = "hostData") HostSaveRequestDto saveRequestDto) throws IOException {
+        // token 값에 저장되어 있는 userId
+        String userId = principal.getName();
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isPresent()){
+            // user 정보 Dto 에 담기
+            saveRequestDto.setUser(user.get());
+        }
+        return hostsService.save(saveRequestDto, file);
+    }
+
+    /**
+     * Request 호스트 등록(정보+메인이미지)
+     * @param files
+     * @param hostNum
+     * @return void
+     * */
+    @PostMapping(value = "/api/host/saveImg", consumes = "multipart/form-data")
+    public void saveHostImgs(@RequestPart("files") MultipartFile[] files, @RequestPart(value = "hnum") String hostNum ) throws IOException {
+        hostsService.saveImgs(files, hostNum);
+    }
+
+    /**
+     * 호스트 수정 (이미지 가져오기)
+     * @param fileName
+     * @return ResponseEntity
+     * */
     @CrossOrigin
     @GetMapping(value = "/image/{fileName}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<?> returnImage(@PathVariable String fileName) throws Exception {
@@ -89,36 +127,24 @@ public class HostApiController {
             }
         }
     }
-
-    // 호스트 등록 내용 보기 (기본이미지 가져오기)
-
-
-    // 호스트 등록(정보+메인이미지) Request
-    @PostMapping(value = "/api/host/save", consumes = "multipart/form-data")
-    public String saveHost(Principal principal, @RequestPart(value = "file") MultipartFile file, @RequestPart(value = "hostData") HostSaveRequestDto saveRequestDto) throws IOException {
-        // token 값에 저장되어 있는 userId
-        String userId = principal.getName();
-        Optional<User> user = userRepository.findById(userId);
-        if(user.isPresent()){
-            // user 정보 Dto 에 담기
-            saveRequestDto.setUser(user.get());
-        }
-        return hostsService.save(saveRequestDto, file);
-    }
-
-    // 호스트 이미지 등록 Request
-    @PostMapping(value = "/api/host/saveImg", consumes = "multipart/form-data")
-    public void saveHostImgs(@RequestPart("files") MultipartFile[] files, @RequestPart(value = "hnum") String hostNum ) throws IOException {
-        hostsService.saveImgs(files, hostNum);
-    }
-
-    // 호스트 수정(정보+메인이미지) Request (hostnum 을 찾아서 엎어치기 )
+    /**
+     * Request 호스트 수정 (정보+메인이미지)
+     * @param file
+     * @param updateRequestDto
+     * @return String
+     * */
     @PutMapping("api/host/update")
     public String updateHost(@RequestPart(value = "file") MultipartFile file, @RequestPart(value = "hostData") HostUpdateRequestDto updateRequestDto) throws IOException {
         return hostsService.update(updateRequestDto, file);
     }
 
-    // 호스트 이미지 수정 ( 이 경우엔 이미지 업로드의 개수 한정이 있기 때문에 삭제 - > 입력)
+    /**
+     * Request 호스트 이미지 수정
+     * @param files
+     * @param hostNum
+     * @param deleteFiles
+     * @return void
+     * */
     @PutMapping
     public void updateHostImgs(@RequestPart("files") MultipartFile[] files
             , @RequestPart(value = "hnum") String hostNum
