@@ -44,7 +44,7 @@ public class HostServiceImpl implements HostService  {
             List<HostImg> hostImgList = hostImgRepository.findAllImgs(host.getHnum());
             // DTO에 담는 부분
 
-            return new HostSaveResponseDto(user, host, hostMainImg, hostImgList);
+            return new HostSaveResponseDto(String.valueOf(host.getHnum()), host, hostMainImg, hostImgList);
         }
         // 해당하는 것이 없으면 빈 객체(생성자) 반환
         return new HostSaveResponseDto();
@@ -136,7 +136,7 @@ public class HostServiceImpl implements HostService  {
         hostRepository.save(host); // 수정
 
         // 2) 기존에 존재하는 파일 삭제 (수정이 불가능한 이유 : 파일명 등이 같을 수도 있음 -> 같은 경로에 파일이 생김)
-        if(!dto.getHostDeleteMainImg().isEmpty()){
+        if(!dto.getDeleteMainImg().isEmpty()){
             // 해당 값이 존재하는 경우 기존의 값을 삭제
             hostMainImgRepository.delete(hostMainImgRepository.findMainImg(host.getHnum()));
 

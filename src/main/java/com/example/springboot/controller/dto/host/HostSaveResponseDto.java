@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class HostSaveResponseDto {
-    private User user;
+    private String hostNum;
 
     private HostMainImg hostMainImg;
 
@@ -42,8 +42,8 @@ public class HostSaveResponseDto {
 
     private String apprvYn;
 
-    public HostSaveResponseDto(User user, Host host, HostMainImg hostMainImg, List<HostImg> hostImgList){
-        this.user = user;
+    public HostSaveResponseDto(String hostNum, Host host, HostMainImg hostMainImg, List<HostImg> hostImgList){
+        this.hostNum = hostNum;
         this.hostMainImg= hostMainImg;
         this.hostImg = hostImgList;
         this.region = host.getRegion();

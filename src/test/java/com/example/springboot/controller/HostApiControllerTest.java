@@ -190,8 +190,8 @@ public class HostApiControllerTest {
         Host host = hostRepository.findByHnum(Long.valueOf(hostnum));
         // 5) host 수정 정보
        String region = "2";
-       String hostDeleteMainImg = "originalFilename";
-       HostUpdateRequestDto updateRequestDto = HostUpdateRequestDto.builder()
+       String deleteMainImg = "originalFilename";
+       HostUpdateRequestDto updateRequestDto = HostUpdateRequestDto.builder() // 프론트엔드에서 기존 값은 value로 해서 가져와야함
                .hostNum(hostnum)
                .region(region)
                .gender(host.getGender())
@@ -202,7 +202,7 @@ public class HostApiControllerTest {
                .address(host.getAddress())
                .lat(host.getLat())
                .lng(host.getLng())
-               .hostDeleteMainImg(hostDeleteMainImg)
+               .deleteMainImg(deleteMainImg)
                .build();
        // 새로운 파일 내용
        String udtOriginalFilename = "udtOriginalFilename";

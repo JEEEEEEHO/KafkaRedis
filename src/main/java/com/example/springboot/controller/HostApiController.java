@@ -133,7 +133,7 @@ public class HostApiController {
      * @param updateRequestDto
      * @return String
      * */
-    @PutMapping("api/host/update")
+    @PutMapping("/api/host/update")
     public String updateHost(@RequestPart(value = "file") MultipartFile file, @RequestPart(value = "hostData") HostUpdateRequestDto updateRequestDto) throws IOException {
         return hostsService.update(updateRequestDto, file);
     }
@@ -145,7 +145,7 @@ public class HostApiController {
      * @param deleteFiles
      * @return void
      * */
-    @PutMapping
+    @PutMapping("/api/host/updateImg")
     public void updateHostImgs(@RequestPart("files") MultipartFile[] files
             , @RequestPart(value = "hnum") String hostNum
             , @RequestPart(value = "deleteFiles") String[] deleteFiles) throws IOException {
