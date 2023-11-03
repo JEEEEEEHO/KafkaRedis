@@ -24,6 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -145,10 +146,10 @@ public class HostApiController {
      * @param deleteFiles
      * @return void
      * */
-    @PutMapping("/api/host/updateImg")
+    @PutMapping(value = "/api/host/updateImg" , consumes = "multipart/form-data")
     public void updateHostImgs(@RequestPart("files") MultipartFile[] files
             , @RequestPart(value = "hnum") String hostNum
-            , @RequestPart(value = "deleteFiles") String[] deleteFiles) throws IOException {
+            , @RequestPart(value = "deleteFiles") List<String> deleteFiles) throws IOException {
         hostsService.updateImgs(files,hostNum,deleteFiles);
     }
 

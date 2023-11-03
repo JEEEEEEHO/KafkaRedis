@@ -166,11 +166,11 @@ public class HostServiceImpl implements HostService  {
 
     // Host 이미지 수정 (각 파일마다 등록)
     @Override
-    public void updateImgs(MultipartFile[] files, String hostNum, String[] deleteFiles) throws IOException {
+    public void updateImgs(MultipartFile[] files, String hostNum, List<String> deleteFiles) throws IOException {
         Long hnum = Long.valueOf(hostNum);
 
         // 1) deleteFiles이 있는 경우 지워버림
-        if(!deleteFiles[0].isEmpty()){
+        if(!deleteFiles.get(0).isEmpty()){
             for(String fileName : deleteFiles){
                 hostImgRepository.deleteImg(fileName);
             }

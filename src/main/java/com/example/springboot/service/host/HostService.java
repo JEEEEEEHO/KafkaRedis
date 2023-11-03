@@ -23,5 +23,5 @@ public interface HostService {
     // 호스트 데이터 수정
     String update(HostUpdateRequestDto updateRequestDto, MultipartFile file) throws IOException;
 
-    void updateImgs(MultipartFile[] files, String hostNum, String[] deleteFiles) throws IOException;
+    void updateImgs(MultipartFile[] files, String hostNum, List<String> deleteFiles) throws IOException;
 }
