@@ -39,5 +39,7 @@ public class HostUpdateRequestDto {
 
     private String hostNum; // 수정
 
+    private String[] deleteFiles; // 수정
+
 
 }

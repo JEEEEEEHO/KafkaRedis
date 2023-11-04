@@ -30,8 +30,8 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 public class HostApiController {
-    private final UserRepository userRepository;
     private final HostService hostsService;
+    private final UserRepository userRepository;
     private final HostMainImgRepository hostMainImgRepository;
     private final HostImgRepository hostImgRepository;
 
@@ -149,8 +149,8 @@ public class HostApiController {
     @PutMapping(value = "/api/host/updateImg" , consumes = "multipart/form-data")
     public void updateHostImgs(@RequestPart("files") MultipartFile[] files
             , @RequestPart(value = "hnum") String hostNum
-            , @RequestPart(value = "deleteFiles") List<String> deleteFiles) throws IOException {
-        hostsService.updateImgs(files,hostNum,deleteFiles);
+            , @ModelAttribute(value = "deleteFiles") HostUpdateRequestDto updateRequestDto) throws IOException {
+        hostsService.updateImgs(files,hostNum,updateRequestDto);
     }
 
     // 호스트 삭제
