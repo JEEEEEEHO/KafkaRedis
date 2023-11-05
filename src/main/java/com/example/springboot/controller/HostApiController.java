@@ -1,5 +1,6 @@
 package com.example.springboot.controller;
 
+import com.example.springboot.controller.dto.host.HostListResponseDto;
 import com.example.springboot.controller.dto.host.HostSaveRequestDto;
 import com.example.springboot.controller.dto.host.HostSaveResponseDto;
 import com.example.springboot.controller.dto.host.HostUpdateRequestDto;
@@ -15,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,13 +36,35 @@ public class HostApiController {
     private final HostImgRepository hostImgRepository;
 
 
-    // 호스트 검색 Response
-    @GetMapping("/host/list")
-    public void hostSearch(Model model){
+    /**
+     * Response 호스트 전체 리스트
+     * @param
+     * @return
+     * */
+    @GetMapping("/api/host/list")
+    public List<HostListResponseDto> viewHostList(){
+        return hostsService.findAllHost();
+    }
+
+    /**
+     * Response 호스트 검색 searchHost
+     * @param
+     * @return
+     * */
+
+
+
+    /**
+     * Response 호스트 상세보기
+     * @param
+     * @return
+     * */
+    @GetMapping("/api/host/{hnum}")
+    public void hostDetail(Model model){
 
     }
 
-    // 호스트 검색 상세보기 Response
+
 
 
     /**
@@ -85,7 +107,7 @@ public class HostApiController {
     }
 
     /**
-     * Request 호스트 등록(정보+메인이미지)
+     * Request 호스트 등록(이미지)
      * @param files
      * @param hostNum
      * @return void
@@ -96,7 +118,7 @@ public class HostApiController {
     }
 
     /**
-     * 호스트 수정 (이미지 가져오기)
+     * 호스트 이미지 가져오기
      * @param fileName
      * @return ResponseEntity
      * */
@@ -143,7 +165,7 @@ public class HostApiController {
      * Request 호스트 이미지 수정
      * @param files
      * @param hostNum
-     * @param deleteFiles
+     * @param updateRequestDto
      * @return void
      * */
     @PutMapping(value = "/api/host/updateImg" , consumes = "multipart/form-data")
@@ -153,7 +175,13 @@ public class HostApiController {
         hostsService.updateImgs(files,hostNum,updateRequestDto);
     }
 
-    // 호스트 삭제
+    /**
+     * Request 호스트 삭제
+     * @param
+     * @param
+     * @param
+     * @return
+     * */
 
 
 }

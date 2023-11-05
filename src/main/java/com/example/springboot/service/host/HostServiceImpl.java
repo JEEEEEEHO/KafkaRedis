@@ -1,5 +1,6 @@
 package com.example.springboot.service.host;
 
+import com.example.springboot.controller.dto.host.HostListResponseDto;
 import com.example.springboot.controller.dto.host.HostSaveRequestDto;
 import com.example.springboot.controller.dto.host.HostSaveResponseDto;
 import com.example.springboot.controller.dto.host.HostUpdateRequestDto;
@@ -30,7 +31,37 @@ public class HostServiceImpl implements HostService  {
     @Autowired
     private HostImgRepository hostImgRepository;
 
-    // Host 정보 불러오기
+
+    /**
+     * Response 호스트 전체 리스트
+     * @param
+     * @return
+     * */
+    @Override
+    public List<HostListResponseDto> findAllHost() {
+        return null;
+    }
+
+
+    /**
+     * Response 호스트 검색
+     * @param
+     * @return
+     * */
+
+
+
+    /**
+     * Response 호스트 상세보기
+     * @param
+     * @return
+     * */
+
+    /**
+     * Response 호스트 내용 보기
+     * @param user
+     * @return HostSaveResponseDto
+     * */
     @Override
     public HostSaveResponseDto findHostInfo(User user) {
         // userid로 host 정보를 찾음
@@ -54,7 +85,12 @@ public class HostServiceImpl implements HostService  {
     private final Path UPLOAD_PATH =
             Paths.get(new ClassPathResource("").getFile().getAbsolutePath() + File.separator + "static"  + File.separator + "image");
 
-    // Host 데이터 + 메인이미지 등록
+    /**
+     * Request 호스트 등록(정보+메인이미지)
+     * @param requestDto
+     * @param file
+     * @return String
+     * */
     @Override
     public String save(HostSaveRequestDto requestDto, MultipartFile file) throws IOException {
         // 처음 등록이기 때문에 (update 시 role 이 admin 인경우에 Y로 변경)
@@ -91,7 +127,12 @@ public class HostServiceImpl implements HostService  {
         return String.valueOf(hostNum);
     }
 
-    // Host 이미지 등록 (각 파일마다 등록)
+    /**
+     * Request 호스트 등록(이미지)
+     * @param files
+     * @param hostNum
+     * @return void
+     * */
     @Override
     public void saveImgs(MultipartFile[] files, String hostNum) throws IOException {
         Long hnum = Long.parseLong(hostNum);
@@ -118,7 +159,12 @@ public class HostServiceImpl implements HostService  {
         }
     }
 
-    // Host 데이터 + 메인이미지 수정
+    /**
+     * Request 호스트 수정 (정보+메인이미지)
+     * @param file
+     * @param dto
+     * @return String
+     * */
     @Override
     public String update(HostUpdateRequestDto dto, MultipartFile file) throws IOException {
         // 1) DTO 에는 호스트 번호도 담고 있음 - 기존에 존재하는 host 수정
@@ -164,7 +210,13 @@ public class HostServiceImpl implements HostService  {
         return String.valueOf(host.getHnum());
     }
 
-    // Host 이미지 수정 (각 파일마다 등록)
+    /**
+     * Request 호스트 이미지 수정
+     * @param files
+     * @param hostNum
+     * @param updateRequestDto
+     * @return void
+     * */
     @Override
     public void updateImgs(MultipartFile[] files, String hostNum, HostUpdateRequestDto updateRequestDto) throws IOException {
         Long hnum = Long.valueOf(hostNum);
@@ -204,6 +256,5 @@ public class HostServiceImpl implements HostService  {
             hostImgRepository.save(img);
         }
     }
-
 
 }
