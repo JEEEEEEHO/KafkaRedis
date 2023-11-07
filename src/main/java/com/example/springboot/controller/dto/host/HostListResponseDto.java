@@ -11,10 +11,12 @@ public class HostListResponseDto {
     private String shortintro;
     private HostMainImg hostMainImg;
 
+
     @Builder
-    public HostListResponseDto(Host host, HostMainImg hostMainImg ){
-        this.hnum = host.getHnum();
-        this.shortintro = host.getShortintro();
+    public HostListResponseDto(Long hnum, String shortintro, HostMainImg hostMainImg) {
+        this.hnum = hnum;
+        this.shortintro = shortintro;
         this.hostMainImg = hostMainImg;
+
     }
 }

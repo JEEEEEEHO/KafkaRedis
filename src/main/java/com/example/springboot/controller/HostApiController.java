@@ -38,8 +38,7 @@ public class HostApiController {
 
     /**
      * Response 호스트 전체 리스트
-     * @param
-     * @return
+     * @return HostListResponseDto
      * */
     @GetMapping("/api/host/list")
     public List<HostListResponseDto> viewHostList(){

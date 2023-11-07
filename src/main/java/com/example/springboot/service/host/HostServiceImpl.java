@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -34,12 +35,18 @@ public class HostServiceImpl implements HostService  {
 
     /**
      * Response 호스트 전체 리스트
-     * @param
-     * @return
+     * @return HostListResponseDto
      * */
     @Override
     public List<HostListResponseDto> findAllHost() {
-        return null;
+        List<HostListResponseDto> list = new LinkedList<>();
+        List<Host> hostList = hostRepository.findAll();
+        for (Host host : hostList){
+            HostMainImg hostMainImg = hostMainImgRepository.findMainImg(host.getHnum());
+            list.add(new HostListResponseDto(host.getHnum(), host.getShortintro(), hostMainImg));
+        }
+
+        return list;
     }
 
 
