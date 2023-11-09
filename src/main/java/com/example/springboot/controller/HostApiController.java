@@ -46,10 +46,11 @@ public class HostApiController {
     }
 
     /**
-     * Response 호스트 검색 searchHost
+     * Response 호스트 검색 searchHost +
      * @param
      * @return
      * */
+    @GetMapping("/api/host/list")
 
 
 
