@@ -1,9 +1,6 @@
 package com.example.springboot.controller;
 
-import com.example.springboot.controller.dto.host.HostListResponseDto;
-import com.example.springboot.controller.dto.host.HostSaveRequestDto;
-import com.example.springboot.controller.dto.host.HostSaveResponseDto;
-import com.example.springboot.controller.dto.host.HostUpdateRequestDto;
+import com.example.springboot.controller.dto.host.*;
 import com.example.springboot.domain.host.*;
 import com.example.springboot.domain.user.User;
 import com.example.springboot.domain.user.UserRepository;
@@ -51,6 +48,9 @@ public class HostApiController {
      * @return
      * */
     @GetMapping("/api/host/list")
+    public List<HostListResponseDto> searchedHostList(HostsearchReqeustDto hostsearchReqeustDto){
+
+    }
 
 
 
