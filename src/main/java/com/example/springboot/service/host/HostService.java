@@ -1,9 +1,6 @@
 package com.example.springboot.service.host;
 
-import com.example.springboot.controller.dto.host.HostListResponseDto;
-import com.example.springboot.controller.dto.host.HostSaveRequestDto;
-import com.example.springboot.controller.dto.host.HostSaveResponseDto;
-import com.example.springboot.controller.dto.host.HostUpdateRequestDto;
+import com.example.springboot.controller.dto.host.*;
 import com.example.springboot.domain.user.User;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,7 +13,10 @@ public interface HostService {
     // 호스트 리스트 조회
     List<HostListResponseDto> findAllHost();
 
-    // 호스트 데이터 불러오기
+    // 호스트 검색 조건 만족 리스트
+    List<HostListResponseDto> searchedHost(HostsearchReqeustDto hostsearchReqeustDto);
+
+    // 호스트 저장 데이터 불러오기
     HostSaveResponseDto findHostInfo(User user);
 
     // 호스트 데이터 저장

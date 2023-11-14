@@ -49,7 +49,7 @@ public class HostApiController {
      * */
     @GetMapping("/api/host/list")
     public List<HostListResponseDto> searchedHostList(HostsearchReqeustDto hostsearchReqeustDto){
-
+        return hostsService.searchedHost(hostsearchReqeustDto);
     }
 
 

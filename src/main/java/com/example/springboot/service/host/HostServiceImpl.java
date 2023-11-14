@@ -1,9 +1,6 @@
 package com.example.springboot.service.host;
 
-import com.example.springboot.controller.dto.host.HostListResponseDto;
-import com.example.springboot.controller.dto.host.HostSaveRequestDto;
-import com.example.springboot.controller.dto.host.HostSaveResponseDto;
-import com.example.springboot.controller.dto.host.HostUpdateRequestDto;
+import com.example.springboot.controller.dto.host.*;
 import com.example.springboot.domain.host.*;
 import com.example.springboot.domain.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +44,18 @@ public class HostServiceImpl implements HostService  {
         }
 
         return list;
+    }
+
+    /**
+     * Response 호스트 검색 searchHost +
+     * @param
+     * @return
+     * */
+    @Override
+    public List<HostListResponseDto> searchedHost(HostsearchReqeustDto hostsearchReqeustDto) {
+
+
+        return null;
     }
 
 
