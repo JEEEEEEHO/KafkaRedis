@@ -52,7 +52,7 @@ public class HostServiceImpl implements HostService  {
      * @return
      * */
     @Override
-    public List<HostListResponseDto> searchedHost(HostsearchReqeustDto hostsearchReqeustDto) {
+    public List<HostListResponseDto> searchHost(HostsearchReqeustDto hostsearchReqeustDto) {
 
 
         return null;

@@ -14,7 +14,7 @@ public interface HostService {
     List<HostListResponseDto> findAllHost();
 
     // 호스트 검색 조건 만족 리스트
-    List<HostListResponseDto> searchedHost(HostsearchReqeustDto hostsearchReqeustDto);
+    List<HostListResponseDto> searchHost(HostsearchReqeustDto hostsearchReqeustDto);
 
     // 호스트 저장 데이터 불러오기
     HostSaveResponseDto findHostInfo(User user);

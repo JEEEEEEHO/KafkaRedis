@@ -48,8 +48,8 @@ public class HostApiController {
      * @return
      * */
     @GetMapping("/api/host/list")
-    public List<HostListResponseDto> searchedHostList(HostsearchReqeustDto hostsearchReqeustDto){
-        return hostsService.searchedHost(hostsearchReqeustDto);
+    public List<HostListResponseDto> searchHostList(HostsearchReqeustDto hostsearchReqeustDto){
+        return hostsService.searchHost(hostsearchReqeustDto);
     }
 
 
