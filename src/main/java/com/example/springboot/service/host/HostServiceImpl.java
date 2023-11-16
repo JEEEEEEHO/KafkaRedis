@@ -53,7 +53,11 @@ public class HostServiceImpl implements HostService  {
      * */
     @Override
     public List<HostListResponseDto> searchHost(HostsearchReqeustDto hostsearchReqeustDto) {
+        // 1. Host Entity 에서 restPpl, gender, farmsts를 비교해서 구하기
 
+        // 2. 가져온 Host에 해당하는 예약 Entity를 찾음
+
+        // 3.
 
         return null;
     }

@@ -53,6 +53,7 @@ public class HostSaveRequestDto {
                 .lat(lat)
                 .lng(lng)
                 .maxPpl(maxPpl)
+                .restPpl(maxPpl)
                 .apprvYn(apprvYn)
                 .apprv_date(apprv_date)
                 .build();
