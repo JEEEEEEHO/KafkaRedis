@@ -52,9 +52,6 @@ public class Host extends BaseTimeEntity {
     private String maxPpl; // 수용가능 인원
 
     @Column
-    private String restPpl; // 남은 인원
-
-    @Column
     private String apprvYn;
 
     @Column

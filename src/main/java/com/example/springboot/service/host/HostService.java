@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.Multipart;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 public interface HostService {
@@ -14,7 +15,7 @@ public interface HostService {
     List<HostListResponseDto> findAllHost();
 
     // 호스트 검색 조건 만족 리스트
-    List<HostListResponseDto> searchHost(HostsearchReqeustDto hostsearchReqeustDto);
+    List<HostListResponseDto> searchHost(HostsearchReqeustDto hostsearchReqeustDto) throws ParseException;
 
     // 호스트 저장 데이터 불러오기
     HostSaveResponseDto findHostInfo(User user);

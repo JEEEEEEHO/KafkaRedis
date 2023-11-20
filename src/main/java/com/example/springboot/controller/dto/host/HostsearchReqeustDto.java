@@ -11,11 +11,13 @@ import java.util.Date;
 @Builder
 public class HostsearchReqeustDto {
     // 검색 조건에 대한 필드
-    private Date startDate;
+    private String startDate;
 
-    private Date endDate;
+    private String endDate;
 
-    private String people;
+    private String region;
+
+    private String reqPpl;
 
     private String gender;
 

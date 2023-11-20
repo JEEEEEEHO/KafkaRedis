@@ -2,6 +2,8 @@ package com.example.springboot.service.host;
 
 import com.example.springboot.controller.dto.host.*;
 import com.example.springboot.domain.host.*;
+import com.example.springboot.domain.resrv.Resrv;
+import com.example.springboot.domain.resrv.ResrvRepository;
 import com.example.springboot.domain.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -9,12 +11,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,6 +32,8 @@ public class HostServiceImpl implements HostService  {
     private HostMainImgRepository hostMainImgRepository;
     @Autowired
     private HostImgRepository hostImgRepository;
+    @Autowired
+    private ResrvRepository resrvRepository;
 
 
     /**
@@ -52,12 +58,50 @@ public class HostServiceImpl implements HostService  {
      * @return
      * */
     @Override
-    public List<HostListResponseDto> searchHost(HostsearchReqeustDto hostsearchReqeustDto) {
-        // 1. Host Entity 에서 restPpl, gender, farmsts를 비교해서 구하기
+    public List<HostListResponseDto> searchHost(HostsearchReqeustDto hostsearchReqeustDto) throws ParseException {
+        int reqPpl = Integer.parseInt(hostsearchReqeustDto.getReqPpl());
+        String reqGndr = hostsearchReqeustDto.getGender();
+        String reqFrmst = hostsearchReqeustDto.getFarmsts();
+        String reqRegion = hostsearchReqeustDto.getRegion();
+        if(reqGndr.isEmpty()){
+            reqGndr = null;
+        }
+        if(reqFrmst.isEmpty()){
+            reqFrmst = null;
+        }
+        if(reqRegion.isEmpty()){
+            reqRegion = null;
+        }
+        // 1. Host Entity 에서 gender, farmsts를 비교해서 구하기 (농장의 상태)
+        List<Host> hosts = hostRepository.searchHostByOptions(reqPpl, reqGndr, reqFrmst, reqRegion, "Y");
 
         // 2. 가져온 Host에 해당하는 예약 Entity를 찾음
+        List<Resrv> resrvList = resrvRepository.findResrvsByHostIn(hosts);
 
-        // 3.
+        // 3. 예약 Entity에서 예약이 승인이고,
+        resrvList = resrvRepository.findResrvByAccptYnIs("Y");
+
+        // 시작-종료일이 시작 종료일과 겹쳐있고, 그때 요청 인원 >(host 수용인원 - 예약인원)
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMDD");
+        String strStartDate = hostsearchReqeustDto.getStartDate();
+        String strEndDate = hostsearchReqeustDto.getEndDate();
+
+        Date startDate = simpleDateFormat.parse(strStartDate);
+        Date endDate = simpleDateFormat.parse(strEndDate);
+
+        List<Host> excludHosts = new LinkedList<>();
+
+        for (Resrv resrv : resrvList){
+            // 해당 호스트당 최대 수용 가능 인원수
+            int maxPpl = Integer.parseInt(resrv.getHost().getMaxPpl());
+            int comparePpl = maxPpl - reqPpl;
+
+        }
+
+        resrvList = resrvRepository.searchResrvByNoBooked("Y", startDate, endDate );
+
+        // 4 겹치는 예약을 제외한 호스트 조회
+
 
         return null;
     }
