@@ -2,8 +2,7 @@ package com.example.springboot.service.host;
 
 import com.example.springboot.controller.dto.host.*;
 import com.example.springboot.domain.host.*;
-import com.example.springboot.domain.resrv.Resrv;
-import com.example.springboot.domain.resrv.ResrvRepository;
+import com.example.springboot.domain.resrv.ResrvHisRepository;
 import com.example.springboot.domain.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -33,7 +32,7 @@ public class HostServiceImpl implements HostService  {
     @Autowired
     private HostImgRepository hostImgRepository;
     @Autowired
-    private ResrvRepository resrvRepository;
+    private ResrvHisRepository resrvHisRepository;
 
 
     /**
@@ -59,9 +58,9 @@ public class HostServiceImpl implements HostService  {
      * */
     @Override
     public List<HostListResponseDto> searchHost(HostsearchReqeustDto hostsearchReqeustDto) throws ParseException {
-        int reqPpl = Integer.parseInt(hostsearchReqeustDto.getReqPpl());
-        String reqGndr = hostsearchReqeustDto.getGender();
+        int reqPpl = Integer.parseInt(hostsearchReqeustDto.getPeople());
         String reqFrmst = hostsearchReqeustDto.getFarmsts();
+        String reqGndr = hostsearchReqeustDto.getGender();
         String reqRegion = hostsearchReqeustDto.getRegion();
         if(reqGndr.isEmpty()){
             reqGndr = null;
@@ -72,14 +71,9 @@ public class HostServiceImpl implements HostService  {
         if(reqRegion.isEmpty()){
             reqRegion = null;
         }
-        // 1. Host Entity 에서 gender, farmsts를 비교해서 구하기 (농장의 상태)
-        List<Host> hosts = hostRepository.searchHostByOptions(reqPpl, reqGndr, reqFrmst, reqRegion, "Y");
 
-        // 2. 가져온 Host에 해당하는 예약 Entity를 찾음
-        List<Resrv> resrvList = resrvRepository.findResrvsByHostIn(hosts);
-
-        // 3. 예약 Entity에서 예약이 승인이고,
-        resrvList = resrvRepository.findResrvByAccptYnIs("Y");
+        // gender, region, status를 만족하는 Hostlist
+        List<Host> basicSearchHosts = hostRepository.searchHostByOptions(reqFrmst,reqGndr,reqRegion,"Y");
 
         // 시작-종료일이 시작 종료일과 겹쳐있고, 그때 요청 인원 >(host 수용인원 - 예약인원)
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMDD");
@@ -91,16 +85,6 @@ public class HostServiceImpl implements HostService  {
 
         List<Host> excludHosts = new LinkedList<>();
 
-        for (Resrv resrv : resrvList){
-            // 해당 호스트당 최대 수용 가능 인원수
-            int maxPpl = Integer.parseInt(resrv.getHost().getMaxPpl());
-            int comparePpl = maxPpl - reqPpl;
-
-        }
-
-        resrvList = resrvRepository.searchResrvByNoBooked("Y", startDate, endDate );
-
-        // 4 겹치는 예약을 제외한 호스트 조회
 
 
         return null;

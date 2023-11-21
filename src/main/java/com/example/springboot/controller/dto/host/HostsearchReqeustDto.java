@@ -17,7 +17,7 @@ public class HostsearchReqeustDto {
 
     private String region;
 
-    private String reqPpl;
+    private String people;
 
     private String gender;
 
