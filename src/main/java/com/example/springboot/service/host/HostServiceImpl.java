@@ -2,6 +2,8 @@ package com.example.springboot.service.host;
 
 import com.example.springboot.controller.dto.host.*;
 import com.example.springboot.domain.host.*;
+import com.example.springboot.domain.resrv.ResrvDscn;
+import com.example.springboot.domain.resrv.ResrvDscnRepository;
 import com.example.springboot.domain.resrv.ResrvHisRepository;
 import com.example.springboot.domain.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +34,7 @@ public class HostServiceImpl implements HostService  {
     @Autowired
     private HostImgRepository hostImgRepository;
     @Autowired
-    private ResrvHisRepository resrvHisRepository;
+    private ResrvDscnRepository resrvDscnRepository;
 
 
     /**
@@ -62,6 +64,7 @@ public class HostServiceImpl implements HostService  {
         String reqFrmst = hostsearchReqeustDto.getFarmsts();
         String reqGndr = hostsearchReqeustDto.getGender();
         String reqRegion = hostsearchReqeustDto.getRegion();
+
         if(reqGndr.isEmpty()){
             reqGndr = null;
         }
@@ -75,7 +78,10 @@ public class HostServiceImpl implements HostService  {
         // gender, region, status를 만족하는 Hostlist
         List<Host> basicSearchHosts = hostRepository.searchHostByOptions(reqFrmst,reqGndr,reqRegion,"Y");
 
-        // 시작-종료일이 시작 종료일과 겹쳐있고, 그때 요청 인원 >(host 수용인원 - 예약인원)
+        // 조건에 만족한 호스트들 중에 예약 확정 테이블에 값이 존재하는 것들을 조회
+        List<ResrvDscn> resrvDscnList = resrvDscnRepository.resrvDscnOfHosts(basicSearchHosts);
+
+        // 해당 예약 확정들 중에서 Date와 수용 인원이 만족하는 값들을 조회함
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMDD");
         String strStartDate = hostsearchReqeustDto.getStartDate();
         String strEndDate = hostsearchReqeustDto.getEndDate();
@@ -83,7 +89,6 @@ public class HostServiceImpl implements HostService  {
         Date startDate = simpleDateFormat.parse(strStartDate);
         Date endDate = simpleDateFormat.parse(strEndDate);
 
-        List<Host> excludHosts = new LinkedList<>();
 
 
 
