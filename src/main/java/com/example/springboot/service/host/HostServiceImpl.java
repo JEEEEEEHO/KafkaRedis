@@ -76,11 +76,9 @@ public class HostServiceImpl implements HostService  {
         }
 
         // 1. gender, region, status를 만족하는 Hostlist
-        List<Host> basicSearchHosts = hostRepository.searchHostByOptions(reqFrmst,reqGndr,reqRegion,"Y");
+        List<Host> srchdHostList = hostRepository.searchHostByOptions(reqFrmst,reqGndr,reqRegion,"Y");
 
         // 2-1. 조건에 만족한 호스트들 중에 예약 확정 테이블에 값이 존재하는 것들을 조회
-        List<ResrvDscn> resrvDscnList = resrvDscnRepository.resrvDscnOfHosts(basicSearchHosts);
-
         // 2-2. 해당 예약 확정들 중에서 찾는 날짜를 포함하고, 요청인원 > 수용인원을 넘어버린 예약확정들을 찾음
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMDD");
         String strStartDate = hostsearchReqeustDto.getStartDate();
@@ -88,6 +86,8 @@ public class HostServiceImpl implements HostService  {
 
         Date srchStartDate = simpleDateFormat.parse(strStartDate);
         Date srchEndDate = simpleDateFormat.parse(strEndDate);
+
+        List<ResrvDscn> unAvailHostList = resrvDscnRepository.unAvailHostList(srchStartDate, srchEndDate, reqPpl,basicSearchHosts);
 
         // 3. 1번 조건 만족 호스트  - 2번 예약확정된 호스트들을 제외시켜준 값 (최종)
 

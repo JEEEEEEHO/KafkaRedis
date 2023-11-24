@@ -1,5 +1,6 @@
 package com.example.springboot.domain.host;
 
+import com.example.springboot.domain.resrv.ResrvDscn;
 import com.example.springboot.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,7 +26,7 @@ public interface HostRepository extends JpaRepository<Host, Long> {
     Host findByUid(@Param("userInfo")User user);
 
     // 검색조건 ( gender, farmsts + 승인된 호스트) 에 해당하는 Host 구하기
-    @Query("SELECT h FROM Host h WHERE (:farmsts is null or h.farmsts = :farmsts) " +
+    @Query("SELECT h.hnum FROM Host h WHERE (:farmsts is null or h.farmsts = :farmsts) " +
             "AND (:gender is null or h.gender = :gender) " +
             "And (:region is null or h.region = :region) " +
             "AND h.apprvYn = :apprvYn")
@@ -35,5 +36,9 @@ public interface HostRepository extends JpaRepository<Host, Long> {
                                     @Param("region") String region,
                                     @Param("apprvYn") String apprvYn);
 
+    // 검색조건에 만족하는 호스트들 중에 - 예약이 불가능한 호스트 번호 = 예약이 가능한 호스트
+    @Query("SELECT h FROM Host h WHERE h.hnum IN :host AND NOT IN (:resrv)")
+    List<Host> availHostList (@Param("host") List<Host> hostList,
+                              @Param("resrv")List<ResrvDscn> resrvDscnList);
 
 }
