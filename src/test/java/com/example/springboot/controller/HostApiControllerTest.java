@@ -3,7 +3,10 @@ package com.example.springboot.controller;
 
 import com.example.springboot.controller.dto.host.HostListResponseDto;
 import com.example.springboot.controller.dto.host.HostUpdateRequestDto;
+import com.example.springboot.controller.dto.host.HostsearchReqeustDto;
 import com.example.springboot.domain.host.*;
+import com.example.springboot.domain.resrv.ResrvDscn;
+import com.example.springboot.domain.resrv.ResrvHis;
 import com.example.springboot.domain.user.Role;
 import com.example.springboot.domain.user.User;
 import com.example.springboot.domain.user.UserRepository;
@@ -270,6 +273,111 @@ public class HostApiControllerTest {
         List<HostListResponseDto> list = hostService.findAllHost();
 
         //then
+        HostListResponseDto hostListResponseDto = list.get(0);
+        assertThat(hostListResponseDto.getShortintro()).isEqualTo(saveRequestDto.getShortintro());
+        assertThat(hostListResponseDto.getHostMainImg().getFilename()).isEqualTo(originalFilename);
+
+
+    }
+
+    @DisplayName("GET/호스트 검색 테스트")
+    @Test
+    public void testHostSearchList() throws IOException, ParseException {
+    //given
+        // 1) user 정보 저장
+        User user = userService.create(User.builder()
+                .name("Jeeho Kim")
+                .email("email")
+                .password("11")
+                .id("233230")
+                .role(Role.USER)
+                .authProvider("Google")
+                .build());
+        // 2) host 정보
+        String dateStr = "2021년 06월 19일 21시 05분 07초";
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분 ss초");
+        Date date = formatter.parse(dateStr);
+
+        HostSaveRequestDto saveRequestDto = HostSaveRequestDto.builder()
+                .user(user)
+                .region("1")
+                .gender("1")
+                .age("1")
+                .farmsts("1")
+                .shortintro("1")
+                .intro("1")
+                .address("1")
+                .lat("1")
+                .lng("1")
+                .maxPpl("3")
+                .apprv_date(date)
+                .build();
+        // 3) File 정보 - originFileName getInputStream fileUri
+        String originalFilename = "originalFilename";
+        String contentType = "jpg";
+        String filepath = "src/test/resources/testImage/"+originalFilename;
+
+        MockMultipartFile file = new MockMultipartFile("fileName", originalFilename, contentType, filepath.getBytes());
+        // 4) 저장
+        String hostnum = hostService.save(saveRequestDto, file);
+
+        // -> Host 가 저장됨
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMDD");
+
+        // 예약 테이블 저장하기
+        ResrvHis resrvHis = ResrvHis.builder()
+                .resrvNum(1L)
+                .host(hostRepository.findByHnum(Long.valueOf(hostnum)))
+                .reqPpl("2")
+                .userid("email")
+                .startDate(simpleDateFormat.parse("20230702"))
+                .endDate(simpleDateFormat.parse("20230709"))
+                .accptYn("Y")
+                .build();
+
+        ResrvDscn resrvDscn = ResrvDscn.builder()
+                .resrvNum(resrvHis.getResrvNum())
+                .resrvHis(resrvHis)
+                .acptdDate(simpleDateFormat.parse("20230605"))
+                .restPpl(1)
+                .build();
+
+    // when
+        // 1) Host 조건을 만족 X
+        HostsearchReqeustDto hostsearchReqeustDto1 = HostsearchReqeustDto.builder()
+                .region("2") // 여기서 만족하지 않음
+                .gender("1")
+                .farmsts("1")
+                .people("1")
+                .startDate("20230801")
+                .endDate("20230810")
+                .build();
+
+        // 2) HostResrv 테이블에 조건 만족 X
+        HostsearchReqeustDto hostsearchReqeustDto2 = HostsearchReqeustDto.builder()
+                .region("1")
+                .gender("1")
+                .farmsts("1")
+                .people("2") // 여기서 만족하지 않음
+                .startDate("20230701") // 여기서 만족하지 않음
+                .endDate("20230705")
+                .build();
+
+
+        // 3) 조건 만족
+        HostsearchReqeustDto hostsearchReqeustDto3 = HostsearchReqeustDto.builder()
+                .region("1") // 여기서 만족하지 않음
+                .gender("1")
+                .farmsts("1")
+                .people("1")
+                .startDate("20230801")
+                .endDate("20230810")
+                .build();
+
+    // then
+        List<HostListResponseDto> list = hostService.searchHost(hostsearchReqeustDto1);
+
         HostListResponseDto hostListResponseDto = list.get(0);
         assertThat(hostListResponseDto.getShortintro()).isEqualTo(saveRequestDto.getShortintro());
         assertThat(hostListResponseDto.getHostMainImg().getFilename()).isEqualTo(originalFilename);

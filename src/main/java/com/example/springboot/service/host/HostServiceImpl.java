@@ -6,6 +6,7 @@ import com.example.springboot.domain.resrv.ResrvDscn;
 import com.example.springboot.domain.resrv.ResrvDscnRepository;
 import com.example.springboot.domain.resrv.ResrvHisRepository;
 import com.example.springboot.domain.user.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+@Slf4j
 @Service
 public class HostServiceImpl implements HostService  {
     public HostServiceImpl() throws IOException{};
@@ -288,13 +290,14 @@ public class HostServiceImpl implements HostService  {
     public void updateImgs(MultipartFile[] files, String hostNum, HostUpdateRequestDto updateRequestDto) throws IOException {
         Long hnum = Long.valueOf(hostNum);
 
-        if(updateRequestDto.getDeleteFiles().length > 0) {
-            // 1개라도 있다면 이 부분
-            for (String fileName : updateRequestDto.getDeleteFiles()) {
-                hostImgRepository.deleteImg(fileName);
+        try {
+            if(0 < updateRequestDto.getDeleteFiles().length ) {
+                // 1개라도 있다면 이 부분
+                for (String fileName : updateRequestDto.getDeleteFiles()) {
+                    hostImgRepository.deleteImg(fileName);
+                }
+
             }
-
-
             // 2) HostImg 의 가장 큰 turn 값을 찾아야 함 (내림차순 정렬)
             int maxTurn = 0; // 하나도 없는 경우 0에서 시작 (다 지워버렸거나)
             if (hostImgRepository.findAllImgs(hnum).size() > 0) {
@@ -322,9 +325,9 @@ public class HostServiceImpl implements HostService  {
                         .build();
                 hostImgRepository.save(img);
             }
-        } else{
+        } catch (NullPointerException e){
+            log.debug("No delete imgs ", e);
             return;
         }
     }
-
 }
