@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.constraints.Null;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -75,25 +76,37 @@ public class HostServiceImpl implements HostService  {
             reqRegion = null;
         }
 
-        // 1. gender, region, status를 만족하는 Hostlist
-        List<Host> srchdHostList = hostRepository.searchHostByOptions(reqFrmst,reqGndr,reqRegion,"Y");
+        List<HostListResponseDto> responseDtoList = new LinkedList<>();
 
-        // 2-1. 조건에 만족한 호스트들 중에 예약 확정 테이블에 값이 존재하는 것들을 조회
-        // 2-2. 해당 예약 확정들 중에서 찾는 날짜를 포함하고, 요청인원 > 수용인원을 넘어버린 예약확정들을 찾음
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMDD");
-        String strStartDate = hostsearchReqeustDto.getStartDate();
-        String strEndDate = hostsearchReqeustDto.getEndDate();
+        try{
+            // 1. gender, region, status를 만족하는 Hostlist
+            List<Host> hostListByOptions = hostRepository.hostListByOptions(reqFrmst,reqGndr,reqRegion,"Y");
 
-        Date srchStartDate = simpleDateFormat.parse(strStartDate);
-        Date srchEndDate = simpleDateFormat.parse(strEndDate);
+            // 2. 조건에 만족한 호스트들 중에 예약 확정 테이블에 값이 존재하는 것들을 조회
+            List<ResrvDscn> resrvDscnHostList = resrvDscnRepository.resrvDscnHostList(hostListByOptions);
 
-        List<ResrvDscn> unAvailHostList = resrvDscnRepository.unAvailHostList(srchStartDate, srchEndDate, reqPpl,basicSearchHosts);
+            // 3. 해당 예약 확정들 중에서 찾는 날짜를 포함하고, 요청인원 > 수용인원을 넘어버린 예약확정들을 찾음
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMDD");
+            String strStartDate = hostsearchReqeustDto.getStartDate();
+            String strEndDate = hostsearchReqeustDto.getEndDate();
 
-        // 3. 1번 조건 만족 호스트  - 2번 예약확정된 호스트들을 제외시켜준 값 (최종)
+            Date srchStartDate = simpleDateFormat.parse(strStartDate);
+            Date srchEndDate = simpleDateFormat.parse(strEndDate);
 
+            List<ResrvDscn> unAvailHostList = resrvDscnRepository.unAvailHostList(srchStartDate, srchEndDate, reqPpl, resrvDscnHostList);
 
+            // 4. 1번 조건 만족 호스트  - 2번 예약확정된 호스트들을 제외시켜준 값 (최종)
+            List<Host> srchdHostList = hostRepository.srchdHostList(hostListByOptions, unAvailHostList);
 
-        return null;
+            for (Host host : srchdHostList){
+                HostMainImg hostMainImg = hostMainImgRepository.findMainImg(host.getHnum());
+                responseDtoList.add(new HostListResponseDto(host.getHnum(), host.getShortintro(), hostMainImg));
+            }
+        } catch (NullPointerException e) {
+            // 검색 조건이 없을 떄
+            responseDtoList.add(new HostListResponseDto(-1L, "", null));
+        }
+        return responseDtoList;
     }
 
 
@@ -236,7 +249,7 @@ public class HostServiceImpl implements HostService  {
         hostRepository.save(host); // 수정
 
         // 2) 기존에 존재하는 파일 삭제 (수정이 불가능한 이유 : 파일명 등이 같을 수도 있음 -> 같은 경로에 파일이 생김)
-        if(!dto.getDeleteMainImg().isEmpty()){
+        if(!dto.getDeleteMainImg().isEmpty() || !file.isEmpty()){
             // 해당 값이 존재하는 경우 기존의 값을 삭제
             hostMainImgRepository.delete(hostMainImgRepository.findMainImg(host.getHnum()));
 
@@ -275,39 +288,42 @@ public class HostServiceImpl implements HostService  {
     public void updateImgs(MultipartFile[] files, String hostNum, HostUpdateRequestDto updateRequestDto) throws IOException {
         Long hnum = Long.valueOf(hostNum);
 
-        if(updateRequestDto.getDeleteFiles().length > 0){
+        if(updateRequestDto.getDeleteFiles().length > 0) {
             // 1개라도 있다면 이 부분
-            for(String fileName : updateRequestDto.getDeleteFiles()){
+            for (String fileName : updateRequestDto.getDeleteFiles()) {
                 hostImgRepository.deleteImg(fileName);
             }
-        }
 
-        // 2) HostImg 의 가장 큰 turn 값을 찾아야 함 (내림차순 정렬)
-        int maxTurn = 0; // 하나도 없는 경우 0에서 시작 (다 지워버렸거나)
-        if(hostImgRepository.findAllImgs(hnum).size()>0){
-            // 하나라도 있는 경우 마지막 순번
-            maxTurn= (int) hostImgRepository.findLastImgTurn(hnum);
-        }
 
-        // 3) 새로운 Save
-        for (int i = 0; i < files.length; i++) {
-            String originFileName = files[i].getOriginalFilename();
-            // 파일의 이름을 정함
+            // 2) HostImg 의 가장 큰 turn 값을 찾아야 함 (내림차순 정렬)
+            int maxTurn = 0; // 하나도 없는 경우 0에서 시작 (다 지워버렸거나)
+            if (hostImgRepository.findAllImgs(hnum).size() > 0) {
+                // 하나라도 있는 경우 마지막 순번
+                maxTurn = (int) hostImgRepository.findLastImgTurn(hnum);
+            }
 
-            Path filepath = UPLOAD_PATH.resolve(originFileName);
-            Files.copy(files[i].getInputStream(), filepath);
-            // 파일에 있는 내용들을 출력하여 파일 path에 이름 하에 복사함
+            // 3) 새로운 Save
+            for (int i = 0; i < files.length; i++) {
+                String originFileName = files[i].getOriginalFilename();
+                // 파일의 이름을 정함
 
-            String fileUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/image/").path(originFileName).toUriString();
+                Path filepath = UPLOAD_PATH.resolve(originFileName);
+                Files.copy(files[i].getInputStream(), filepath);
+                // 파일에 있는 내용들을 출력하여 파일 path에 이름 하에 복사함
 
-            final HostImg img = HostImg.builder()
-                    .hostImg_turn(Long.valueOf(i+1+maxTurn))
-                    .hnum(hnum)
-                    .filename(originFileName)
-                    .fileUri(fileUri)
-                    .filepath(String.valueOf(filepath))
-                    .build();
-            hostImgRepository.save(img);
+                String fileUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/image/").path(originFileName).toUriString();
+
+                final HostImg img = HostImg.builder()
+                        .hostImg_turn(Long.valueOf(i + 1 + maxTurn))
+                        .hnum(hnum)
+                        .filename(originFileName)
+                        .fileUri(fileUri)
+                        .filepath(String.valueOf(filepath))
+                        .build();
+                hostImgRepository.save(img);
+            }
+        } else{
+            return;
         }
     }
 

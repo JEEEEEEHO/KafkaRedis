@@ -18,7 +18,7 @@ apply plugin: 'io.spring.dependency-management'
 
 group 'com.example'
 version '1.0.1-SNAPSHOT'
-sourceCompatibility = 1.8
+sourceCompatibility = 15
 
 repositories {
     mavenCentral()
@@ -61,3 +61,4 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-mustache')
 
 }
+targetCompatibility = JavaVersion.VERSION_15

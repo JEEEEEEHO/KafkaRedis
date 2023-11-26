@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,12 +48,10 @@ public class HostApiController {
      * @param
      * @return
      * */
-    @GetMapping("/api/host/list")
-    public List<HostListResponseDto> searchHostList(HostsearchReqeustDto hostsearchReqeustDto){
+    @GetMapping("/api/host/search")
+    public List<HostListResponseDto> searchHostList(HostsearchReqeustDto hostsearchReqeustDto) throws ParseException {
         return hostsService.searchHost(hostsearchReqeustDto);
     }
-
-
 
     /**
      * Response 호스트 상세보기
@@ -63,9 +62,6 @@ public class HostApiController {
     public void hostDetail(Model model){
 
     }
-
-
-
 
     /**
      * Response 호스트 내용 보기
@@ -85,7 +81,6 @@ public class HostApiController {
            throw new Exception("No User Info : forbidden access");
        }
     }
-
 
     /**
      * Request 호스트 등록(정보+메인이미지)
