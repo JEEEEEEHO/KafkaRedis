@@ -49,10 +49,10 @@ public class Host extends BaseTimeEntity {
     private String lng;
 
     @Column(nullable = false)
-    private String maxPpl; // 수용가능 인원
+    private int maxPpl; // 수용가능 인원
 
     @Column
-    private String apprvYn;
+    private String apprvYn; // 디폴트는 N
 
     @Column
     private Date apprv_date;

@@ -26,19 +26,22 @@ public interface HostRepository extends JpaRepository<Host, Long> {
     Host findByUid(@Param("userInfo")User user);
 
     // 검색조건 ( gender, farmsts + 승인된 호스트) 에 해당하는 Host 구하기
-    @Query("SELECT h.hnum FROM Host h " +
+    @Query("SELECT h " +
+            "FROM Host h " +
             "WHERE (:farmsts is null or h.farmsts = :farmsts) " +
             "AND (:gender is null or h.gender = :gender) " +
-            "And (:region is null or h.region = :region) " +
+            "And (:region is null or h.region = :region)  " +
+            "AND h.maxPpl >= :reqPpl  "+
             "AND h.apprvYn = :apprvYn")
 
     List<Host> hostListByOptions( @Param("farmsts") String farmsts,
                                     @Param("gender") String gender,
                                     @Param("region") String region,
+                                    @Param("reqPpl") int reqPpl,
                                     @Param("apprvYn") String apprvYn);
 
     // 검색조건에 만족하는 호스트들 중에 - 예약이 불가능한 호스트 번호 = 예약이 가능한 호스트
-    @Query(value = "SELECT h FROM Host h WHERE h.hnum IN :host AND NOT IN (:resrvd)", nativeQuery = true)
+    @Query(value = "SELECT h FROM Host h WHERE h.hnum IN :#{#host.hnum} AND NOT IN (:resrvd)", nativeQuery = true)
     List<Host> srchdHostList (@Param("host") List<Host> hostList,
                               @Param("resrvd")List<ResrvDscn> unavailHostList);
 

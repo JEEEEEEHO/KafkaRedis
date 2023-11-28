@@ -52,7 +52,7 @@ public class HostSaveRequestDto {
                 .address(address)
                 .lat(lat)
                 .lng(lng)
-                .maxPpl(maxPpl)
+                .maxPpl(Integer.parseInt(maxPpl))
                 .apprvYn(apprvYn)
                 .apprv_date(apprv_date)
                 .build();

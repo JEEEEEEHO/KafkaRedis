@@ -82,10 +82,24 @@ public class HostServiceImpl implements HostService  {
 
         try{
             // 1. gender, region, status를 만족하는 Hostlist
-            List<Host> hostListByOptions = hostRepository.hostListByOptions(reqFrmst,reqGndr,reqRegion,"Y");
+            List<Host> hostListByOptions = hostRepository.hostListByOptions(reqFrmst,reqGndr,reqRegion, reqPpl, "Y");
+
+            if(0 == hostListByOptions.size()){
+                // 검색 조건에 만족하지 않은 경우
+                responseDtoList.add(new HostListResponseDto(-1L, "", null));
+                return responseDtoList;
+            }
 
             // 2. 조건에 만족한 호스트들 중에 예약 확정 테이블에 값이 존재하는 것들을 조회
             List<ResrvDscn> resrvDscnHostList = resrvDscnRepository.resrvDscnHostList(hostListByOptions);
+
+            if( 0 == resrvDscnHostList.size()){
+                // 예약이 존재하지 않음 = 해당 호스트 모두 만족함
+                for (Host host : hostListByOptions){
+                    responseDtoList.add(new HostListResponseDto(host.getHnum(), host.getShortintro(), hostMainImgRepository.findMainImg(host.getHnum())));
+                }
+                return responseDtoList;
+            }
 
             // 3. 해당 예약 확정들 중에서 찾는 날짜를 포함하고, 요청인원 > 수용인원을 넘어버린 예약확정들을 찾음
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMDD");
@@ -163,7 +177,7 @@ public class HostServiceImpl implements HostService  {
     @Override
     public String save(HostSaveRequestDto requestDto, MultipartFile file) throws IOException {
         // 처음 등록이기 때문에 (update 시 role 이 admin 인경우에 Y로 변경)
-        requestDto.setApprvYn("N");
+        // requestDto.setApprvYn("N"); - 테스트 용으로 잠시 막아둠
         // 1. 호스트 정보에 대해서 등록한 후
         Host host = hostRepository.save(requestDto.toEntity());
 

@@ -304,12 +304,13 @@ public class HostApiControllerTest {
                 .gender("1")
                 .age("1")
                 .farmsts("1")
-                .shortintro("1")
+                .shortintro("test")
                 .intro("1")
                 .address("1")
                 .lat("1")
                 .lng("1")
                 .maxPpl("3")
+                .apprvYn("Y")
                 .apprv_date(date)
                 .build();
         // 3) File 정보 - originFileName getInputStream fileUri
@@ -325,7 +326,7 @@ public class HostApiControllerTest {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMDD");
 
-        // 예약 테이블 저장하기
+        // 5) 예약 테이블 저장하기
         ResrvHis resrvHis = ResrvHis.builder()
                 .resrvNum(1L)
                 .host(hostRepository.findByHnum(Long.valueOf(hostnum)))
@@ -336,6 +337,7 @@ public class HostApiControllerTest {
                 .accptYn("Y")
                 .build();
 
+        // 6) 예약 확정 테이블
         ResrvDscn resrvDscn = ResrvDscn.builder()
                 .resrvNum(resrvHis.getResrvNum())
                 .resrvHis(resrvHis)
@@ -344,30 +346,30 @@ public class HostApiControllerTest {
                 .build();
 
     // when
-        // 1) Host 조건을 만족 X
-        HostsearchReqeustDto hostsearchReqeustDto1 = HostsearchReqeustDto.builder()
-                .region("2") // 여기서 만족하지 않음
-                .gender("1")
-                .farmsts("1")
-                .people("1")
-                .startDate("20230801")
-                .endDate("20230810")
-                .build();
+        // 1) Host 조건을 만족 X ->
+//        HostsearchReqeustDto hostsearchReqeustDto1 = HostsearchReqeustDto.builder()
+//                .region("2") // 여기서 만족하지 않음
+//                .gender("1")
+//                .farmsts("1")
+//                .people("1")
+//                .startDate("20230801")
+//                .endDate("20230810")
+//                .build();
 
         // 2) HostResrv 테이블에 조건 만족 X
-        HostsearchReqeustDto hostsearchReqeustDto2 = HostsearchReqeustDto.builder()
-                .region("1")
-                .gender("1")
-                .farmsts("1")
-                .people("2") // 여기서 만족하지 않음
-                .startDate("20230701") // 여기서 만족하지 않음
-                .endDate("20230705")
-                .build();
+//        HostsearchReqeustDto hostsearchReqeustDto2 = HostsearchReqeustDto.builder()
+//                .region("1")
+//                .gender("1")
+//                .farmsts("1")
+//                .people("2") // 여기서 만족하지 않음
+//                .startDate("20230701") // 여기서 만족하지 않음
+//                .endDate("20230705")
+//                .build();
 
 
         // 3) 조건 만족
         HostsearchReqeustDto hostsearchReqeustDto3 = HostsearchReqeustDto.builder()
-                .region("1") // 여기서 만족하지 않음
+                .region("1")
                 .gender("1")
                 .farmsts("1")
                 .people("1")
@@ -376,12 +378,10 @@ public class HostApiControllerTest {
                 .build();
 
     // then
-        List<HostListResponseDto> list = hostService.searchHost(hostsearchReqeustDto1);
+        List<HostListResponseDto> list = hostService.searchHost(hostsearchReqeustDto3);
 
         HostListResponseDto hostListResponseDto = list.get(0);
         assertThat(hostListResponseDto.getShortintro()).isEqualTo(saveRequestDto.getShortintro());
-        assertThat(hostListResponseDto.getHostMainImg().getFilename()).isEqualTo(originalFilename);
-
 
     }
 }

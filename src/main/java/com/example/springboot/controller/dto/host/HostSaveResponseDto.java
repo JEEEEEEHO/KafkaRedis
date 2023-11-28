@@ -55,7 +55,7 @@ public class HostSaveResponseDto {
         this.lat = host.getLat();
         this.lng = host.getLng();
         this.address = host.getAddress();
-        this.maxPpl = host.getMaxPpl();
+        this.maxPpl = String.valueOf(host.getMaxPpl());
         this.apprvYn = host.getApprvYn();
     }
 }
