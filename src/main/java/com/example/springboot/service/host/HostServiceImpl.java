@@ -21,6 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -91,7 +92,12 @@ public class HostServiceImpl implements HostService  {
             }
 
             // 2. 조건에 만족한 호스트들 중에 예약 확정 테이블에 값이 존재하는 것들을 조회
-            List<ResrvDscn> resrvDscnHostList = resrvDscnRepository.resrvDscnHostList(hostListByOptions);
+            // 조회 쿼리에 맞게 사용하기 위해서 HOST 객체에서 num만을 따로 뽑아냄
+            List<Long> hostListByOptionsToLong = new ArrayList<>();
+            for (Host host : hostListByOptions){
+                hostListByOptionsToLong.add(host.getHnum());
+            }
+            List<Long> resrvDscnHostList = resrvDscnRepository.resrvDscnHostList(hostListByOptionsToLong);
 
             if( 0 == resrvDscnHostList.size()){
                 // 예약이 존재하지 않음 = 해당 호스트 모두 만족함
@@ -109,10 +115,10 @@ public class HostServiceImpl implements HostService  {
             Date srchStartDate = simpleDateFormat.parse(strStartDate);
             Date srchEndDate = simpleDateFormat.parse(strEndDate);
 
-            List<ResrvDscn> unAvailHostList = resrvDscnRepository.unAvailHostList(srchStartDate, srchEndDate, reqPpl, resrvDscnHostList);
+            List<Long> unAvailHostList = resrvDscnRepository.unAvailHostList(srchStartDate, srchEndDate, reqPpl, resrvDscnHostList);
 
             // 4. 1번 조건 만족 호스트  - 2번 예약확정된 호스트들을 제외시켜준 값 (최종)
-            List<Host> srchdHostList = hostRepository.srchdHostList(hostListByOptions, unAvailHostList);
+            List<Host> srchdHostList = hostRepository.srchdHostList(hostListByOptionsToLong, unAvailHostList);
 
             for (Host host : srchdHostList){
                 HostMainImg hostMainImg = hostMainImgRepository.findMainImg(host.getHnum());

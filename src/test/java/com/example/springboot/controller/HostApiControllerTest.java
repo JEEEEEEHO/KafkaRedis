@@ -347,14 +347,14 @@ public class HostApiControllerTest {
 
     // when
         // 1) Host 조건을 만족 X ->
-//        HostsearchReqeustDto hostsearchReqeustDto1 = HostsearchReqeustDto.builder()
-//                .region("2") // 여기서 만족하지 않음
-//                .gender("1")
-//                .farmsts("1")
-//                .people("1")
-//                .startDate("20230801")
-//                .endDate("20230810")
-//                .build();
+        HostsearchReqeustDto hostsearchReqeustDto1 = HostsearchReqeustDto.builder()
+                .region("2") // 여기서 만족하지 않음
+                .gender("1")
+                .farmsts("1")
+                .people("1")
+                .startDate("20230801")
+                .endDate("20230810")
+                .build();
 
         // 2) HostResrv 테이블에 조건 만족 X
 //        HostsearchReqeustDto hostsearchReqeustDto2 = HostsearchReqeustDto.builder()
@@ -368,17 +368,17 @@ public class HostApiControllerTest {
 
 
         // 3) 조건 만족
-        HostsearchReqeustDto hostsearchReqeustDto3 = HostsearchReqeustDto.builder()
-                .region("1")
-                .gender("1")
-                .farmsts("1")
-                .people("1")
-                .startDate("20230801")
-                .endDate("20230810")
-                .build();
+//        HostsearchReqeustDto hostsearchReqeustDto3 = HostsearchReqeustDto.builder()
+//                .region("1")
+//                .gender("1")
+//                .farmsts("1")
+//                .people("1")
+//                .startDate("20230801")
+//                .endDate("20230810")
+//                .build();
 
     // then
-        List<HostListResponseDto> list = hostService.searchHost(hostsearchReqeustDto3);
+        List<HostListResponseDto> list = hostService.searchHost(hostsearchReqeustDto1);
 
         HostListResponseDto hostListResponseDto = list.get(0);
         assertThat(hostListResponseDto.getShortintro()).isEqualTo(saveRequestDto.getShortintro());
