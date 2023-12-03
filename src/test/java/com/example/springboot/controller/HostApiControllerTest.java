@@ -107,6 +107,7 @@ public class HostApiControllerTest {
         userRepository.deleteAll();
     }
 
+    @DisplayName("POST/호스트 저장 테스트")
     @Test
     @WithMockUser(roles = "USER")
     public void Hosts_save() throws Exception{

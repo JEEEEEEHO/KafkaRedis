@@ -183,7 +183,7 @@ public class HostServiceImpl implements HostService  {
     @Override
     public String save(HostSaveRequestDto requestDto, MultipartFile file) throws IOException {
         // 처음 등록이기 때문에 (update 시 role 이 admin 인경우에 Y로 변경)
-        // requestDto.setApprvYn("N"); - 테스트 용으로 잠시 막아둠
+         requestDto.setApprvYn("Y"); //- 테스트 용으로 잠시 Y
         // 1. 호스트 정보에 대해서 등록한 후
         Host host = hostRepository.save(requestDto.toEntity());
 
