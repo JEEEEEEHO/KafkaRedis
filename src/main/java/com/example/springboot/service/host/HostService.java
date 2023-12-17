@@ -17,6 +17,9 @@ public interface HostService {
     // 호스트 검색 조건 만족 리스트
     List<HostListResponseDto> searchHost(HostsearchReqeustDto hostsearchReqeustDto) throws ParseException;
 
+    // 호스트 상세 보기
+    HostDetailResponseDto viewHostDetail(String hnum);
+
     // 호스트 저장 데이터 불러오기
     HostSaveResponseDto findHostInfo(User user);
 

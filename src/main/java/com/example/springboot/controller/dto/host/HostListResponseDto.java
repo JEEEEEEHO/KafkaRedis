@@ -10,13 +10,16 @@ public class HostListResponseDto {
     private Long hnum;
     private String shortintro;
     private HostMainImg hostMainImg;
+    private String lat;
+    private String lng;
 
 
     @Builder
-    public HostListResponseDto(Long hnum, String shortintro, HostMainImg hostMainImg) {
+    public HostListResponseDto(Long hnum, String shortintro, HostMainImg hostMainImg, String lat, String lng) {
         this.hnum = hnum;
         this.shortintro = shortintro;
         this.hostMainImg = hostMainImg;
-
+        this.lat = lat;
+        this.lng = lng;
     }
 }

@@ -59,8 +59,8 @@ public class HostApiController {
      * @return
      * */
     @GetMapping("/api/host/{hnum}")
-    public void hostDetail(Model model){
-
+    public HostDetailResponseDto hostDetail(@PathVariable String hnum, Model model){
+        return hostsService.viewHostDetail(hnum);
     }
 
     /**

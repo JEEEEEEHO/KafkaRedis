@@ -51,7 +51,7 @@ public class HostServiceImpl implements HostService  {
         List<Host> hostList = hostRepository.findAll();
         for (Host host : hostList){
             HostMainImg hostMainImg = hostMainImgRepository.findMainImg(host.getHnum());
-            list.add(new HostListResponseDto(host.getHnum(), host.getShortintro(), hostMainImg));
+            list.add(new HostListResponseDto(host.getHnum(), host.getShortintro(), hostMainImg, host.getLat(), host.getLng()));
         }
 
         return list;
@@ -59,8 +59,8 @@ public class HostServiceImpl implements HostService  {
 
     /**
      * Response 호스트 검색 searchHost +
-     * @param
-     * @return
+     * @param HostsearchReqeustDto
+     * @return List<HostListResponseDto>
      * */
     @Override
     public List<HostListResponseDto> searchHost(HostsearchReqeustDto hostsearchReqeustDto) throws ParseException {
@@ -87,7 +87,7 @@ public class HostServiceImpl implements HostService  {
 
             if(0 == hostListByOptions.size()){
                 // 검색 조건에 만족하지 않은 경우
-                responseDtoList.add(new HostListResponseDto(-1L, "", null));
+                responseDtoList.add(new HostListResponseDto(-1L, "", null, "", ""));
                 return responseDtoList;
             }
 
@@ -102,7 +102,7 @@ public class HostServiceImpl implements HostService  {
             if( 0 == resrvDscnHostList.size()){
                 // 예약이 존재하지 않음 = 해당 호스트 모두 만족함
                 for (Host host : hostListByOptions){
-                    responseDtoList.add(new HostListResponseDto(host.getHnum(), host.getShortintro(), hostMainImgRepository.findMainImg(host.getHnum())));
+                    responseDtoList.add(new HostListResponseDto(host.getHnum(), host.getShortintro(), hostMainImgRepository.findMainImg(host.getHnum()), host.getLat(), host.getLng()));
                 }
                 return responseDtoList;
             }
@@ -122,22 +122,14 @@ public class HostServiceImpl implements HostService  {
 
             for (Host host : srchdHostList){
                 HostMainImg hostMainImg = hostMainImgRepository.findMainImg(host.getHnum());
-                responseDtoList.add(new HostListResponseDto(host.getHnum(), host.getShortintro(), hostMainImg));
+                responseDtoList.add(new HostListResponseDto(host.getHnum(), host.getShortintro(), hostMainImg, host.getLat(), host.getLng()));
             }
         } catch (NullPointerException e) {
             // 검색 조건이 없을 떄
-            responseDtoList.add(new HostListResponseDto(-1L, "", null));
+            responseDtoList.add(new HostListResponseDto(-1L, "", null, "", ""));
         }
         return responseDtoList;
     }
-
-
-    /**
-     * Response 호스트 검색
-     * @param
-     * @return
-     * */
-
 
 
     /**
@@ -145,6 +137,13 @@ public class HostServiceImpl implements HostService  {
      * @param
      * @return
      * */
+
+    @Override
+    public HostDetailResponseDto viewHostDetail(String hnum) {
+
+        return null;
+    }
+
 
     /**
      * Response 호스트 내용 보기
