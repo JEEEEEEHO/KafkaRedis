@@ -140,8 +140,16 @@ public class HostServiceImpl implements HostService  {
 
     @Override
     public HostDetailResponseDto viewHostDetail(String hnum) {
+        Long hostNum = Long.valueOf(hnum);
+        // 호스트 찾기
+        Host host = hostRepository.findByHnum(hostNum);
+        // 메인 이미지 찾기
+        HostMainImg hostMainImg = hostMainImgRepository.findMainImg(hostNum);
+        // 일반 이미지 리스트 찾기
+        List<HostImg> hostImgList = hostImgRepository.findAllImgs(hostNum);
 
-        return null;
+        // DTO 에 담기
+        return new HostDetailResponseDto(hnum, host, hostMainImg, hostImgList);
     }
 
 

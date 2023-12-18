@@ -1,5 +1,6 @@
 package com.example.springboot.controller.dto.host;
 
+import com.example.springboot.domain.host.Host;
 import com.example.springboot.domain.host.HostImg;
 import com.example.springboot.domain.host.HostMainImg;
 import lombok.*;
@@ -33,4 +34,18 @@ public class HostDetailResponseDto {
     private String address;
 
     private String maxPpl;
+
+    public HostDetailResponseDto(String hostNum, Host host, HostMainImg hostMainImg, List<HostImg> hostImgList){
+        this.hostNum = hostNum;
+        this.hostMainImg= hostMainImg;
+        this.hostImg = hostImgList;
+        this.region = host.getRegion();
+        this.gender = host.getGender();
+        this.age = host.getAge();
+        this.farmsts = host.getFarmsts();
+        this.shortintro = host.getShortintro();
+        this.intro = host.getIntro();
+        this.address = host.getAddress();
+        this.maxPpl = String.valueOf(host.getMaxPpl());
+    }
 }

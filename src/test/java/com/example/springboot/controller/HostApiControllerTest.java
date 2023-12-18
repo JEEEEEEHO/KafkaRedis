@@ -1,16 +1,13 @@
 package com.example.springboot.controller;
 
 
-import com.example.springboot.controller.dto.host.HostListResponseDto;
-import com.example.springboot.controller.dto.host.HostUpdateRequestDto;
-import com.example.springboot.controller.dto.host.HostsearchReqeustDto;
+import com.example.springboot.controller.dto.host.*;
 import com.example.springboot.domain.host.*;
 import com.example.springboot.domain.resrv.ResrvDscn;
 import com.example.springboot.domain.resrv.ResrvHis;
 import com.example.springboot.domain.user.Role;
 import com.example.springboot.domain.user.User;
 import com.example.springboot.domain.user.UserRepository;
-import com.example.springboot.controller.dto.host.HostSaveRequestDto;
 import com.example.springboot.service.host.HostService;
 import com.example.springboot.service.user.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -383,6 +380,57 @@ public class HostApiControllerTest {
 
         HostListResponseDto hostListResponseDto = list.get(0);
         assertThat(hostListResponseDto.getShortintro()).isEqualTo(saveRequestDto.getShortintro());
+
+    }
+
+
+    @DisplayName("GET/호스트 상세 테스트")
+    @Test
+    public void viewHostDetailTest() throws ParseException, IOException {
+    //given
+        // 1) user 정보 저장
+        User user = userService.create(User.builder()
+                .name("Jeeho Kim")
+                .email("email")
+                .password("11")
+                .id("233230")
+                .role(Role.USER)
+                .authProvider("Google")
+                .build());
+        // 2) host 정보
+        String dateStr = "2021년 06월 19일 21시 05분 07초";
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분 ss초");
+        Date date = formatter.parse(dateStr);
+
+        HostSaveRequestDto saveRequestDto = HostSaveRequestDto.builder()
+                .user(user)
+                .region("1")
+                .gender("1")
+                .age("1")
+                .farmsts("1")
+                .shortintro("1")
+                .intro("1")
+                .address("1")
+                .lat("1")
+                .lng("1")
+                .maxPpl("1")
+                .apprv_date(date)
+                .build();
+        // 3) File 정보 - originFileName getInputStream fileUri
+        String originalFilename = "originalFilename";
+        String contentType = "jpg";
+        String filepath = "src/test/resources/testImage/"+originalFilename;
+
+        MockMultipartFile file = new MockMultipartFile("fileName", originalFilename, contentType, filepath.getBytes());
+        // 4) 저장
+        String hostnum = hostService.save(saveRequestDto, file);
+
+    // when
+        HostDetailResponseDto hostDto = hostService.viewHostDetail(hostnum);
+
+    // then
+        assertThat(hostDto.getRegion()).isEqualTo(saveRequestDto.getRegion());
+
 
     }
 }
