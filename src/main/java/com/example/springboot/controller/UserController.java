@@ -1,7 +1,6 @@
 package com.example.springboot.controller;
 
 
-import com.example.springboot.controller.dto.ResponseDTO;
 import com.example.springboot.controller.dto.user.UserDto;
 import com.example.springboot.domain.user.User;
 import com.example.springboot.security.TokenProvider;
@@ -18,7 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 
 @Slf4j
