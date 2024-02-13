@@ -2,6 +2,7 @@ package com.example.springboot.domain.wish;
 
 import com.example.springboot.domain.BaseTimeEntity;
 import com.example.springboot.domain.host.Host;
+import com.example.springboot.domain.user.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,7 +18,11 @@ public class WishList extends BaseTimeEntity  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long wishNum;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "hnum")
     private Host host;
+
+    @ManyToOne
+    @JoinColumn(name = "id")
+    private User user;
 }

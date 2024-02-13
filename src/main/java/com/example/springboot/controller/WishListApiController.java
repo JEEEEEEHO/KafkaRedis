@@ -3,10 +3,7 @@ package com.example.springboot.controller;
 import com.example.springboot.controller.dto.host.HostListResponseDto;
 import com.example.springboot.service.wish.WishService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,7 +19,7 @@ public class WishListApiController {
      * @return String (fail false)
      * */
     @PostMapping("/api/wishList/save")
-    public String saveWishList(String hnum){
+    public String saveWishList(@RequestBody String hnum){
         return wishService.saveWish(hnum);
     }
 
@@ -31,7 +28,7 @@ public class WishListApiController {
      * @return String (fail false)
      * */
     @DeleteMapping("/api/wishList/delete")
-    public String deleteWishList(String hnum){
+    public String deleteWishList(@RequestBody String hnum){
         return wishService.deleteWish(hnum);
     }
 
@@ -40,8 +37,8 @@ public class WishListApiController {
      * @return HostListResponseDto
      * */
     @GetMapping("/api/wishList/list")
-    public List<HostListResponseDto> viewWishList(String hnum){
-        return wishService.viewWish(hnum);
+    public List<HostListResponseDto> viewWishList(@RequestBody String id){
+        return wishService.viewWish(id);
     }
 }
 

@@ -2,9 +2,7 @@ package com.example.springboot.service.host;
 
 import com.example.springboot.controller.dto.host.*;
 import com.example.springboot.domain.host.*;
-import com.example.springboot.domain.resrv.ResrvDscn;
 import com.example.springboot.domain.resrv.ResrvDscnRepository;
-import com.example.springboot.domain.resrv.ResrvHisRepository;
 import com.example.springboot.domain.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.validation.constraints.Null;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
