@@ -1,17 +1,22 @@
 package com.example.springboot.controller;
 
 import com.example.springboot.controller.dto.host.HostListResponseDto;
+import com.example.springboot.domain.user.User;
+import com.example.springboot.domain.user.UserRepository;
 import com.example.springboot.service.wish.WishService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
 public class WishListApiController {
 
     private final WishService wishService;
+    private final UserRepository userRepository;
 
 
     /**
@@ -37,8 +42,15 @@ public class WishListApiController {
      * @return HostListResponseDto
      * */
     @GetMapping("/api/wishList/list")
-    public List<HostListResponseDto> viewWishList(@RequestBody String id){
-        return wishService.viewWish(id);
+    public List<HostListResponseDto> viewWishList(Principal principal) {
+        // token 값에 저장되어 있는 userId
+        String userId = principal.getName();
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isPresent()){
+            // user 정보 Dto 에 담기
+            saveRequestDto.setUser(user.get());
+        }
+        return hostsService.save(saveRequestDto, file);
     }
 }
 
