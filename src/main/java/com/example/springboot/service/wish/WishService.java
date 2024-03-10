@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface WishService {
     // INSERT
-    String saveWish(String hnum);
+    boolean saveWish(String userId, String hnum);
 
     // DELETE
     String deleteWish(String hnum);

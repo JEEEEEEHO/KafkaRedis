@@ -1,9 +1,8 @@
 package com.example.springboot.controller.dto.wish;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.example.springboot.domain.host.Host;
+import com.example.springboot.domain.wish.WishList;
+import lombok.*;
 
 import java.util.List;
 
@@ -11,6 +10,15 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class WishListRequestDto {
-    List<Long> wishListHosts;
+    String userId;
+    Host host;
+
+    public WishList toEntity(){
+        return WishList.builder()
+                .userId(userId)
+                .host(host)
+                .build();
+    }
 }

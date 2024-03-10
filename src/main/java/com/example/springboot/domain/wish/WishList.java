@@ -18,11 +18,10 @@ public class WishList extends BaseTimeEntity  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long wishNum;
 
+    private String userId;
+
+    // 1개의 호스트가 여러개의 위시리스트에 있을 수 있으므로
     @ManyToOne
     @JoinColumn(name = "hnum")
     private Host host;
-
-    @ManyToOne
-    @JoinColumn(name = "id")
-    private User user;
 }

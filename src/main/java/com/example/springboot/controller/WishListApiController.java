@@ -24,8 +24,20 @@ public class WishListApiController {
      * @return String (fail false)
      * */
     @PostMapping("/api/wishList/save")
-    public String saveWishList(@RequestBody String hnum){
-        return wishService.saveWish(hnum);
+    public boolean saveWishList(@RequestBody String hnum, Principal principal){
+        boolean result = false;
+        try {
+            // token 값에 저장되어 있는 userId
+            String userId = principal.getName();
+            Optional<User> user = userRepository.findById(userId);
+            if(user.isPresent()){
+                // user id와 호스트 번호 넣기
+               return wishService.saveWish(userId, hnum);
+            }
+        } catch (NullPointerException e){
+            new Exception("No User : {}", e);
+        }
+        return result;
     }
 
     /**
@@ -42,13 +54,17 @@ public class WishListApiController {
      * @return HostListResponseDto
      * */
     @GetMapping("/api/wishList/list")
-    public List<HostListResponseDto> viewWishList(Principal principal) {
-        // token 값에 저장되어 있는 userId
-        String userId = principal.getName();
-        Optional<User> user = userRepository.findById(userId);
-        if(user.isPresent()){
-            // user 정보 Dto 에 담기
-            saveRequestDto.setUser(user.get());
+    public List<HostListResponseDto> viewWishList(Principal principal) throws Exception {
+        try {
+            // token 값에 저장되어 있는 userId
+            String userId = principal.getName();
+            Optional<User> user = userRepository.findById(userId);
+            if(user.isPresent()){
+                // user id 에 해당하는 wishList에 호스트 목록 뽑기
+                saveRequestDto.setUser(user.get());
+            }
+        } catch (NullPointerException e){
+            throw new Exception("No user");
         }
         return hostsService.save(saveRequestDto, file);
     }
