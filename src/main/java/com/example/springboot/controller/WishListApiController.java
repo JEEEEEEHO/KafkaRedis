@@ -45,8 +45,18 @@ public class WishListApiController {
      * @return String (fail false)
      * */
     @DeleteMapping("/api/wishList/delete")
-    public String deleteWishList(@RequestBody String hnum){
-        return wishService.deleteWish(hnum);
+    public void deleteWishList(@RequestBody String hnum , Principal principal){
+        String userId = principal.getName();
+        Optional<User> user = userRepository.findById(userId);
+        try {
+            // token 값에 저장되어 있는 userId
+            if(user.isPresent()){
+                // user id와 호스트 번호 넣기
+                wishService.deleteWish(userId, hnum);
+            }
+        } catch (NullPointerException e){
+            new Exception("No User : {}", e);
+        }
     }
 
     /**

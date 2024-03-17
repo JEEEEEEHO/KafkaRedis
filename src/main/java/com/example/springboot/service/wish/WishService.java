@@ -9,7 +9,7 @@ public interface WishService {
     boolean saveWish(String userId, String hnum);
 
     // DELETE
-    String deleteWish(String hnum);
+    void deleteWish(String userId, String hnum);
 
     // VIEW
     List<HostListResponseDto> viewWish(String hnum);

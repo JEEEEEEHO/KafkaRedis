@@ -20,6 +20,8 @@ public class WishList extends BaseTimeEntity  {
 
     private String userId;
 
+    private Long hostNum;
+
     // 1개의 호스트가 여러개의 위시리스트에 있을 수 있으므로
     @ManyToOne
     @JoinColumn(name = "hnum")

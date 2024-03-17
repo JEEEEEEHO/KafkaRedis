@@ -13,11 +13,13 @@ import java.util.List;
 @Builder
 public class WishListRequestDto {
     String userId;
+    Long hostNum;
     Host host;
 
     public WishList toEntity(){
         return WishList.builder()
                 .userId(userId)
+                .hostNum(hostNum)
                 .host(host)
                 .build();
     }

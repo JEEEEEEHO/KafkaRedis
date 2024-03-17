@@ -7,7 +7,9 @@ import com.example.springboot.domain.host.HostRepository;
 import com.example.springboot.domain.wish.WishRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -19,20 +21,28 @@ public class WishServiceImpl implements WishService{
     // INSERT
     @Override
     public boolean saveWish(java.lang.String userId, java.lang.String hnum) {
+
+        boolean result = false;
+
         Host host = hostRepository.findByHnum(Long.valueOf(hnum));
 
         WishListRequestDto requestDto = WishListRequestDto.builder()
                 .userId(userId)
+                .hostNum(host.getHnum())
                 .host(host)
                 .build();
 
-        return wishRepository.save(requestDto.toEntity());
+        if(!StringUtils.isEmpty(wishRepository.save(requestDto.toEntity()))){
+            result = true;
+        }
+
+        return result;
     }
 
     // DELETE
     @Override
-    public String deleteWish(String hnum) {
-        return null;
+    public void deleteWish(String userId, String hnum) {
+        wishRepository.deleteWishItem(userId,Long.valueOf(hnum));
     }
 
     // VIEW
