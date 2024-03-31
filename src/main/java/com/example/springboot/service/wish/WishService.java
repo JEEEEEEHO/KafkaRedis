@@ -1,12 +1,13 @@
 package com.example.springboot.service.wish;
 
 import com.example.springboot.controller.dto.host.HostListResponseDto;
+import com.example.springboot.controller.dto.wish.WishListResponseDto;
 
 import java.util.List;
 
 public interface WishService {
     // INSERT
-    boolean saveWish(String userId, String hnum);
+    WishListResponseDto saveWish(String userId, String hnum);
 
     // DELETE
     void deleteWish(String userId, String hnum);

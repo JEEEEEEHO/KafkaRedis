@@ -2,6 +2,7 @@ package com.example.springboot.service.wish;
 
 import com.example.springboot.controller.dto.host.HostListResponseDto;
 import com.example.springboot.controller.dto.wish.WishListRequestDto;
+import com.example.springboot.controller.dto.wish.WishListResponseDto;
 import com.example.springboot.domain.host.Host;
 import com.example.springboot.domain.host.HostRepository;
 import com.example.springboot.domain.wish.WishRepository;
@@ -20,12 +21,10 @@ public class WishServiceImpl implements WishService{
 
     // INSERT
     @Override
-    public boolean saveWish(java.lang.String userId, java.lang.String hnum) {
-
-        boolean result = false;
+    public WishListResponseDto saveWish(java.lang.String userId, java.lang.String hnum) {
+        WishListResponseDto wishListResponseDto = new WishListResponseDto();
 
         Host host = hostRepository.findByHnum(Long.valueOf(hnum));
-
         WishListRequestDto requestDto = WishListRequestDto.builder()
                 .userId(userId)
                 .hostNum(host.getHnum())
@@ -33,10 +32,10 @@ public class WishServiceImpl implements WishService{
                 .build();
 
         if(!StringUtils.isEmpty(wishRepository.save(requestDto.toEntity()))){
-            result = true;
+            wishListResponseDto.setHostNum(hnum);
         }
 
-        return result;
+        return wishListResponseDto;
     }
 
     // DELETE
@@ -47,7 +46,7 @@ public class WishServiceImpl implements WishService{
 
     // VIEW
     @Override
-    public List<HostListResponseDto> viewWish(String hnum) {
-        return null;
+    public List<HostListResponseDto> viewWish(String userId) {
+        return wishRepository.viewWish(userId);
     }
 }
