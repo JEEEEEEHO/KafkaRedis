@@ -19,7 +19,6 @@ public class WishListApiController {
     private final WishService wishService;
     private final UserRepository userRepository;
 
-
     /**
      * Request 위시리스트 등록
      * @return String (fail false)
@@ -80,5 +79,14 @@ public class WishListApiController {
         }
         return null;
     }
+
+
+    /**
+     * Response 위시리스트
+     * @return HostListResponseDto
+     * */
+
+
+
 }
 
