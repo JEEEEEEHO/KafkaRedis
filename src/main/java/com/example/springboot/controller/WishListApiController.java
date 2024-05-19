@@ -24,21 +24,19 @@ public class WishListApiController {
      * @return String (fail false)
      * */
     @PostMapping("/api/wishList/save")
-    public WishListResponseDto saveWishList(@RequestBody String hnum, Principal principal){
-        WishListResponseDto wishListResponseDto = new WishListResponseDto();
+    public List<WishListResponseDto> saveWishList(@RequestBody String hnum, Principal principal){
+        String userId = principal.getName();
         try {
             // token 값에 저장되어 있는 userId
-            String userId = principal.getName();
             Optional<User> user = userRepository.findById(userId);
             if(user.isPresent()){
                 // user id와 호스트 번호 넣기
-               wishService.saveWish(userId, hnum);
-               wishListResponseDto.setHostNum(hnum);
+                wishService.saveWish(userId, hnum);
             }
         } catch (NullPointerException e){
             new Exception("No User : {}", e);
         }
-        return wishListResponseDto;
+        return wishService.viewWish(userId);
     }
 
     /**
@@ -46,26 +44,25 @@ public class WishListApiController {
      * @return String (fail false)
      * */
     @DeleteMapping("/api/wishList/delete")
-    public void deleteWishList(@RequestBody String hnum , Principal principal){
+    public void deleteWishList(@RequestBody String hnum , Principal principal) {
         String userId = principal.getName();
-        Optional<User> user = userRepository.findById(userId);
         try {
+            Optional<User> user = userRepository.findById(userId);
             // token 값에 저장되어 있는 userId
-            if(user.isPresent()){
+            if (user.isPresent()) {
                 // user id와 호스트 번호 넣기
                 wishService.deleteWish(userId, hnum);
             }
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             new Exception("No User : {}", e);
         }
     }
-
     /**
      * Response 위시리스트 전체 리스트
      * @return HostListResponseDto
      * */
     @GetMapping("/api/wishList/list")
-    public List<HostListResponseDto> viewWishList(Principal principal) throws Exception {
+    public List<WishListResponseDto> viewWishList(Principal principal) throws Exception {
         try {
             // token 값에 저장되어 있는 userId
             String userId = principal.getName();

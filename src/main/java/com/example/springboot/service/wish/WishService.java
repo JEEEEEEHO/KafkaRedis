@@ -7,12 +7,12 @@ import java.util.List;
 
 public interface WishService {
     // INSERT
-    WishListResponseDto saveWish(String userId, String hnum);
+    void saveWish(String userId, String hnum);
 
     // DELETE
     void deleteWish(String userId, String hnum);
 
     // VIEW
-    List<HostListResponseDto> viewWish(String hnum);
+    List<WishListResponseDto> viewWish(String hnum);
 
 }

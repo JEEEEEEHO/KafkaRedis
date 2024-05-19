@@ -2,8 +2,11 @@ package com.example.springboot.controller.dto.host;
 
 import com.example.springboot.domain.host.Host;
 import com.example.springboot.domain.host.HostMainImg;
+import com.example.springboot.domain.wish.WishList;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 public class HostListResponseDto {

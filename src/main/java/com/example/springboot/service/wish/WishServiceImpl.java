@@ -19,11 +19,10 @@ public class WishServiceImpl implements WishService{
     private final HostRepository hostRepository;
     private final WishRepository wishRepository;
 
+
     // INSERT
     @Override
-    public WishListResponseDto saveWish(java.lang.String userId, java.lang.String hnum) {
-        WishListResponseDto wishListResponseDto = new WishListResponseDto();
-
+    public void saveWish(java.lang.String userId, java.lang.String hnum) {
         Host host = hostRepository.findByHnum(Long.valueOf(hnum));
         WishListRequestDto requestDto = WishListRequestDto.builder()
                 .userId(userId)
@@ -31,11 +30,7 @@ public class WishServiceImpl implements WishService{
                 .host(host)
                 .build();
 
-        if(!StringUtils.isEmpty(wishRepository.save(requestDto.toEntity()))){
-            wishListResponseDto.setHostNum(hnum);
-        }
-
-        return wishListResponseDto;
+        wishRepository.save(requestDto.toEntity());
     }
 
     // DELETE
@@ -46,7 +41,7 @@ public class WishServiceImpl implements WishService{
 
     // VIEW
     @Override
-    public List<HostListResponseDto> viewWish(String userId) {
+    public List<WishListResponseDto> viewWish(String userId) {
         return wishRepository.viewWish(userId);
     }
 }
