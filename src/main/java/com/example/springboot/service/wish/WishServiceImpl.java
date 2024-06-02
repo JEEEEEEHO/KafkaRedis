@@ -1,6 +1,5 @@
 package com.example.springboot.service.wish;
 
-import com.example.springboot.controller.dto.host.HostListResponseDto;
 import com.example.springboot.controller.dto.wish.WishListRequestDto;
 import com.example.springboot.controller.dto.wish.WishListResponseDto;
 import com.example.springboot.domain.host.Host;
@@ -8,10 +7,9 @@ import com.example.springboot.domain.host.HostRepository;
 import com.example.springboot.domain.wish.WishRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +40,8 @@ public class WishServiceImpl implements WishService{
     // VIEW
     @Override
     public List<WishListResponseDto> viewWish(String userId) {
-        return wishRepository.viewWish(userId);
+        return wishRepository.viewWish(userId).stream()
+                .map(WishListResponseDto::new)
+                .collect(Collectors.toList());
     }
 }

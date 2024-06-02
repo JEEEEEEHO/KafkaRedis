@@ -1,6 +1,5 @@
 package com.example.springboot.controller;
 
-import com.example.springboot.controller.dto.host.HostListResponseDto;
 import com.example.springboot.controller.dto.wish.WishListResponseDto;
 import com.example.springboot.domain.user.User;
 import com.example.springboot.domain.user.UserRepository;
