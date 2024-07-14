@@ -7,10 +7,12 @@ import lombok.Getter;
 @Getter
 public class WishListResponseDto {
     private Long wishNum;
+    private Long hostNum;
 
     @Builder
     public WishListResponseDto(WishList wishList) {
         this.wishNum = wishList.getWishNum();
+        this.hostNum = wishList.getHostNum();
     }
 
 }

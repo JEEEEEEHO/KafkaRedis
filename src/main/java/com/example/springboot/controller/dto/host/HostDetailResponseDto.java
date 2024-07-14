@@ -3,6 +3,7 @@ package com.example.springboot.controller.dto.host;
 import com.example.springboot.domain.host.Host;
 import com.example.springboot.domain.host.HostImg;
 import com.example.springboot.domain.host.HostMainImg;
+import com.example.springboot.domain.resrv.ResrvHis;
 import lombok.*;
 
 import java.util.List;
@@ -13,11 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class HostDetailResponseDto {
+    // 호스트 정보
     private String hostNum;
-
-    private HostMainImg hostMainImg;
-
-    private List<HostImg> hostImg;
 
     private String region;
 
@@ -35,7 +33,15 @@ public class HostDetailResponseDto {
 
     private String maxPpl;
 
-    public HostDetailResponseDto(String hostNum, Host host, HostMainImg hostMainImg, List<HostImg> hostImgList){
+    // 호스트 이미지
+    private HostMainImg hostMainImg;
+
+    private List<HostImg> hostImg;
+
+    // 호스트 예약정보
+    private  List<ResrvHis> resrvHisList;
+
+    public HostDetailResponseDto(String hostNum, Host host, HostMainImg hostMainImg, List<HostImg> hostImgList, List<ResrvHis> resrvHisList){
         this.hostNum = hostNum;
         this.hostMainImg= hostMainImg;
         this.hostImg = hostImgList;
@@ -47,5 +53,6 @@ public class HostDetailResponseDto {
         this.intro = host.getIntro();
         this.address = host.getAddress();
         this.maxPpl = String.valueOf(host.getMaxPpl());
+        this.resrvHisList = resrvHisList;
     }
 }

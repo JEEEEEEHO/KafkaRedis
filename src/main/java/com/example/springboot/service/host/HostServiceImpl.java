@@ -2,7 +2,10 @@ package com.example.springboot.service.host;
 
 import com.example.springboot.controller.dto.host.*;
 import com.example.springboot.domain.host.*;
+import com.example.springboot.domain.resrv.ResrvDscn;
 import com.example.springboot.domain.resrv.ResrvDscnRepository;
+import com.example.springboot.domain.resrv.ResrvHis;
+import com.example.springboot.domain.resrv.ResrvHisRepository;
 import com.example.springboot.domain.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +21,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -36,6 +37,9 @@ public class HostServiceImpl implements HostService  {
     private HostImgRepository hostImgRepository;
     @Autowired
     private ResrvDscnRepository resrvDscnRepository;
+    @Autowired
+    private ResrvHisRepository resrvHisRepository;
+
 
 
     /**
@@ -144,9 +148,19 @@ public class HostServiceImpl implements HostService  {
         HostMainImg hostMainImg = hostMainImgRepository.findMainImg(hostNum);
         // 일반 이미지 리스트 찾기
         List<HostImg> hostImgList = hostImgRepository.findAllImgs(hostNum);
+        // 호스트 예약가능 정보
+        List<Long> resrvHist = resrvDscnRepository.findById(hostNum).stream().map(ResrvDscn::getResrvNum).collect(Collectors.toList());
+
+        if(resrvHist.size()>0){
+            // 예약 정보가 있는 경우에 예약 내역들 조회함
+            List<Optional<ResrvHis>> resrvHisList = resrvHist.stream().map(rsrvNum -> resrvHisRepository.findById(rsrvNum)).collect(Collectors.toList());
+            if(!resrvHisList.isEmpty()){
+                List<ResrvHis> list = resrvHisList.
+            }
+        }
 
         // DTO 에 담기
-        return new HostDetailResponseDto(hnum, host, hostMainImg, hostImgList);
+        return new HostDetailResponseDto(hnum, host, hostMainImg, hostImgList, resrvHisList.);
     }
 
 

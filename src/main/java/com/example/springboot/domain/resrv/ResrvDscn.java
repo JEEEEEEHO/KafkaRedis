@@ -18,7 +18,7 @@ public class ResrvDscn implements Serializable {
     private Long resrvNum;
 
     @OneToOne
-    @MapsId
+    @MapsId // mapsId는 칼럼에 있는 값을 @Id에 있는 값에 매핑시킴
     @JoinColumn(name = "resrvNum")
     private ResrvHis resrvHis;
 
