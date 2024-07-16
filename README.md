@@ -1,5 +1,11 @@
 # 등록된 농장 예약가능한 날짜에 사용자 매칭 사이트 (WWOOF KOREA Website)
 
+참고 사이트 
+https://wwoof.fr/en/hosts
+</br>
+개발 정리 페이지 
+https://www.notion.so/4e48c0e35b6445a380656449666a25c1?v=95155cce16bb48f2b2735d783d85fb8b&pvs=4
+
 **1. 개발 환경 Tech Stack**
    - SpringBoot 2.1.7
    - JPA
