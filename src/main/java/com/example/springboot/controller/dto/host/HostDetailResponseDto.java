@@ -41,6 +41,21 @@ public class HostDetailResponseDto {
     // 호스트 예약정보
     private  List<ResrvHis> resrvHisList;
 
+    public HostDetailResponseDto(String hostNum, Host host, HostMainImg hostMainImg, List<HostImg> hostImgList){
+        this.hostNum = hostNum;
+        this.hostMainImg= hostMainImg;
+        this.hostImg = hostImgList;
+        this.region = host.getRegion();
+        this.gender = host.getGender();
+        this.age = host.getAge();
+        this.farmsts = host.getFarmsts();
+        this.shortintro = host.getShortintro();
+        this.intro = host.getIntro();
+        this.address = host.getAddress();
+        this.maxPpl = String.valueOf(host.getMaxPpl());
+    }
+
+    // 예약정보 있는 경우
     public HostDetailResponseDto(String hostNum, Host host, HostMainImg hostMainImg, List<HostImg> hostImgList, List<ResrvHis> resrvHisList){
         this.hostNum = hostNum;
         this.hostMainImg= hostMainImg;

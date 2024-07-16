@@ -149,18 +149,15 @@ public class HostServiceImpl implements HostService  {
         // 일반 이미지 리스트 찾기
         List<HostImg> hostImgList = hostImgRepository.findAllImgs(hostNum);
         // 호스트 예약가능 정보
-        List<Long> resrvHist = resrvDscnRepository.findById(hostNum).stream().map(ResrvDscn::getResrvNum).collect(Collectors.toList());
+        List<Long> resrvDescNums = resrvDscnRepository.findById(hostNum).stream().map(ResrvDscn::getResrvNum).collect(Collectors.toList());
 
-        if(resrvHist.size()>0){
+        if (resrvDescNums.size() > 0) {
             // 예약 정보가 있는 경우에 예약 내역들 조회함
-            List<Optional<ResrvHis>> resrvHisList = resrvHist.stream().map(rsrvNum -> resrvHisRepository.findById(rsrvNum)).collect(Collectors.toList());
-            if(!resrvHisList.isEmpty()){
-                List<ResrvHis> list = resrvHisList.
-            }
+            List<ResrvHis> resrvList = resrvHisRepository.findAllById(resrvDescNums);
+            return new HostDetailResponseDto(hnum, host, hostMainImg, hostImgList, resrvList);
         }
-
         // DTO 에 담기
-        return new HostDetailResponseDto(hnum, host, hostMainImg, hostImgList, resrvHisList.);
+        return new HostDetailResponseDto(hnum, host, hostMainImg, hostImgList);
     }
 
 

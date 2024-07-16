@@ -426,6 +426,10 @@ public class HostApiControllerTest {
         String hostnum = hostService.save(saveRequestDto, file);
 
     // when
+        // 호스트 예약 정보 있을 때
+
+
+        // 호스트 예약 정보 없을 때
         HostDetailResponseDto hostDto = hostService.viewHostDetail(hostnum);
 
     // then
