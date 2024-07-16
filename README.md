@@ -31,10 +31,10 @@ https://www.notion.so/4e48c0e35b6445a380656449666a25c1?v=95155cce16bb48f2b2735d7
    - Oauth (Goole, Kakao)
 
   </br>4-2. JPA 활용
-    - FK를 PK로 활용
-    - 객체에 2개의 PK 활용 (Host Img - @EqualsAndHashCode / @IdClass)
-    - 검색 동적 쿼리 
-    
+   - FK를 PK로 활용
+   - 객체에 2개의 PK 활용 (Host Img - @EqualsAndHashCode / @IdClass)
+   - 검색 동적 쿼리 
+
     
     @Query("SELECT h " +
             "FROM Host h " +
