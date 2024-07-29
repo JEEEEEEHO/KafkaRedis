@@ -12,7 +12,7 @@ https://www.notion.so/4e48c0e35b6445a380656449666a25c1?v=95155cce16bb48f2b2735d7
    - MySQL
      
 #### 2. 서비스 로직 MVC Pattern
-     ![asas](https://github.com/user-attachments/assets/93573b7b-c6db-4b59-a5b3-d882a81c912b)
+![asas](https://github.com/user-attachments/assets/93573b7b-c6db-4b59-a5b3-d882a81c912b)
   - DTO Builder Pattern -> API 결과 값으로 build() 해서 return</br>
     WHY? Original Entity 은닉, DTO의 역할 충실
   - Service Strategy Pattern</br>
