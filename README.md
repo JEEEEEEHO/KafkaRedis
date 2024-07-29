@@ -20,7 +20,7 @@ https://www.notion.so/4e48c0e35b6445a380656449666a25c1?v=95155cce16bb48f2b2735d7
   - Adapter Pattern</br>
     WHY? 해당 모듈에 타 모듈의 인터페이스를 DI로 주입받아서 사용함 
 
-</br></br>####3. 데이터 모델 ERD
+#### 3. 데이터 모델 ERD
 ![20240716_133934](https://github.com/user-attachments/assets/12ec3290-31b2-4f31-9df0-4f57a9499f50)
 
 
