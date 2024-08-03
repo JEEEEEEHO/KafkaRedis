@@ -29,6 +29,7 @@ public interface ResrvDscnRepository extends JpaRepository<ResrvDscn, Long> {
                                       @Param("rdHost") List<Long> resrvDscnHostList);
 
 
+    // 예약확정된 예약번호들을 구함
     List<Long> findResrvDscnByHnum(Long hum);
 
 }

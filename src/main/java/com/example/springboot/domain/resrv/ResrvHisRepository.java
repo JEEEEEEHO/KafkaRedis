@@ -10,6 +10,6 @@ import java.util.Date;
 import java.util.List;
 
 public interface ResrvHisRepository extends JpaRepository<ResrvHis, Long> {
-    // 예약번호에 따른 시작, 종료 일자 조회
+    // 예약번호에 따른 시작, 종료 일자 조회를 위한 hist 목록 조회
     List<ResrvHis> findResrvHisByResrvNumIn(List<Long> resrvDscnResrvNumList);
 }

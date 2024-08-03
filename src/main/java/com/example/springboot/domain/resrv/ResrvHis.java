@@ -42,4 +42,6 @@ public class ResrvHis {
     @Column
     private String reqPpl;
 
+
+
 }
