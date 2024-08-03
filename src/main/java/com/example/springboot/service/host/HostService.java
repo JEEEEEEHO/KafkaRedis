@@ -4,7 +4,6 @@ import com.example.springboot.controller.dto.host.*;
 import com.example.springboot.domain.user.User;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.mail.Multipart;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;

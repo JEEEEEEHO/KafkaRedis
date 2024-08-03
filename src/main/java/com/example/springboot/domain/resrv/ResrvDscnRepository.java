@@ -1,5 +1,6 @@
 package com.example.springboot.domain.resrv;
 
+import com.example.springboot.controller.dto.reserv.ResrvDscnResponseDto;
 import com.example.springboot.domain.host.Host;
 import com.example.springboot.domain.user.User;
 import org.hibernate.sql.Select;
@@ -28,5 +29,6 @@ public interface ResrvDscnRepository extends JpaRepository<ResrvDscn, Long> {
                                       @Param("rdHost") List<Long> resrvDscnHostList);
 
 
+    List<Long> findResrvDscnByHnum(Long hum);
 
 }

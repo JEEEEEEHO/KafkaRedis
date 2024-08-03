@@ -23,6 +23,9 @@ public class ResrvDscn implements Serializable {
     private ResrvHis resrvHis;
 
     @Column
+    private Long hnum;
+
+    @Column
     private int restPpl;
 
     @Column
