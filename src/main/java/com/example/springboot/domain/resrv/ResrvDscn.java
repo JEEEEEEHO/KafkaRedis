@@ -26,7 +26,7 @@ public class ResrvDscn implements Serializable {
     private Long hnum;
 
     @Column
-    private int restPpl;
+    private int restPpl; // 비교를 위해선 int 형으로
 
     @Column
     private Date acptdDate;

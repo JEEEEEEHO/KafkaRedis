@@ -3,6 +3,7 @@ package com.example.springboot.controller;
 
 import com.example.springboot.controller.dto.host.*;
 import com.example.springboot.domain.host.*;
+import com.example.springboot.domain.resrv.AcceptStatus;
 import com.example.springboot.domain.resrv.ResrvDscn;
 import com.example.springboot.domain.resrv.ResrvHis;
 import com.example.springboot.domain.user.Role;
@@ -327,12 +328,12 @@ public class HostApiControllerTest {
         // 5) 예약 테이블 저장하기
         ResrvHis resrvHis = ResrvHis.builder()
                 .resrvNum(1L)
-                .host(hostRepository.findByHnum(Long.valueOf(hostnum)))
+                .hnum(Long.valueOf(hostnum))
                 .reqPpl("2")
                 .userid("email")
                 .startDate(simpleDateFormat.parse("20230702"))
                 .endDate(simpleDateFormat.parse("20230709"))
-                .accptYn("Y")
+                .accptYn(AcceptStatus.DEFAULT.getStatus())
                 .build();
 
         // 6) 예약 확정 테이블

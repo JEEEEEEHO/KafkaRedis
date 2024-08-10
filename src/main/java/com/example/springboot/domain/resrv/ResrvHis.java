@@ -17,9 +17,8 @@ public class ResrvHis {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long resrvNum;
 
-    @OneToOne
-    @JoinColumn(name = "hnum")
-    private Host host;
+    @Column
+    private Long hnum;
 
     @Column
     private String userid;
@@ -30,11 +29,6 @@ public class ResrvHis {
     @Column
     private Date endDate;
 
-    /**
-     * Y : 승락
-     * D : 거절
-     * N : 결정무
-     * */
     @Column
     private String accptYn;
 
@@ -42,6 +36,15 @@ public class ResrvHis {
     @Column
     private String reqPpl;
 
+    @Column
+    private int restPpl; // 비교를 위해선 int 형으로
+
+    @Column
+    private Date acptdDate;
+
+    public void update(String acceptYn) {
+        this.accptYn = acceptYn;
+    }
 
 
 }

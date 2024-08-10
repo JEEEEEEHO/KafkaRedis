@@ -1,6 +1,7 @@
 package com.example.springboot.controller;
 
 import com.example.springboot.controller.dto.reserv.ResrvDscnResponseDto;
+import com.example.springboot.controller.dto.reserv.ResrvHistRequestDto;
 import com.example.springboot.service.resrv.ResrvService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,10 +22,24 @@ public class ResrvApiController {
      *
      * @return
      */
-    @PostMapping("/api/resrv/{hunm}")
-    public void requestResrv(Principal principal,  @PathVariable String hnum) {
-        return resrvService.
+    @PostMapping("/api/resrv/save")
+    public void requestResrv(Principal principal, ResrvHistRequestDto histRequestDto) throws Exception {
+        resrvService.saveRequest(principal, histRequestDto);
     }
+
+
+    /**
+     * Request 예약 승낙
+     * */
+    @PostMapping("/api/resrv/accept")
+    public void acceptResrv(String resrvNum) throws Exception {
+        resrvService.acceptRequest(resrvNum);
+
+    }
+
+    /**
+     * Response 예약 거절
+     * */
 
 
     /**
