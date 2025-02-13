@@ -60,7 +60,7 @@ public class HostServiceImpl implements HostService  {
 
     /**
      * Response 호스트 검색 searchHost +
-     * @param HostsearchReqeustDto
+     * @param
      * @return List<HostListResponseDto>
      * */
     @Override
