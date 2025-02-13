@@ -3,7 +3,6 @@ package com.example.springboot.service.host;
 import com.example.springboot.controller.dto.host.*;
 import com.example.springboot.domain.host.*;
 import com.example.springboot.domain.resrv.ResrvDscn;
-import com.example.springboot.domain.resrv.ResrvDscnRepository;
 import com.example.springboot.domain.resrv.ResrvHis;
 import com.example.springboot.domain.resrv.ResrvHisRepository;
 import com.example.springboot.domain.user.User;
