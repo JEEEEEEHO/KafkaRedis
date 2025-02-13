@@ -1,5 +1,6 @@
 package com.example.springboot.domain.host;
 
+import com.example.springboot.domain.resrv.ResrvDscn;
 import com.example.springboot.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
