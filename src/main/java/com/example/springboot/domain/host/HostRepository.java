@@ -1,6 +1,5 @@
 package com.example.springboot.domain.host;
 
-import com.example.springboot.domain.resrv.ResrvDscn;
 import com.example.springboot.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -45,4 +44,8 @@ public interface HostRepository extends JpaRepository<Host, Long> {
     List<Host> srchdHostList (@Param("host") List<Long> hostList,
                               @Param("resrvd") List<Long> unavailHostList);
 
+
+    // 호스트 재고 확인
+    @Query("SELECT h.ivtPpl FROM Host h WHERE h.hnum = ?1")
+    int countIvtPpl (Long hostNum);
 }

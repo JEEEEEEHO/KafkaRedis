@@ -39,6 +39,8 @@ public class HostSaveRequestDto {
 
     private Date apprv_date;
 
+    private int ivtPpl;
+
 
     public Host toEntity(){
         return Host.builder()

@@ -52,10 +52,14 @@ public class Host extends BaseTimeEntity {
     private int maxPpl; // 수용가능 인원
 
     @Column
+    private int ivtPpl; // 남은인원
+
+    @Column
     private String apprvYn; // 디폴트는 N
 
     @Column
     private Date apprv_date;
+
 
     // 수정용 -> 이 메소드를 이용해서 Entity의 값을 바꾸고 Transactional 처리함 (영속)
     public void updateHost(String region, String gender, String age, String farmsts, String shortintro, String intro, String address, String lat, String lng){
@@ -69,4 +73,11 @@ public class Host extends BaseTimeEntity {
         this.lat = lat;
         this.lng = lng;
     }
+
+    // 재고 조정 - 직접 접근 막기 위해 메서드 생성
+    public void updateIvtPpl(int reqPpl) {
+        this.ivtPpl = ivtPpl - reqPpl;
+    }
+
+
 }
