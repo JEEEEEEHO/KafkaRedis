@@ -38,29 +38,9 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
-        //OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) authentication;
         log.info("onAuthenticationSuccess auth succeeded");
         TokenProviderSns tokenProviderSns = new TokenProviderSns();
         String token = tokenProviderSns.create(authentication);
-
-//        String email = null;
-//        String oauthType = token.getAuthorizedClientRegistrationId();
-//
-//        if("kakao".equals(oauthType.toLowerCase())){
-//            email = ((Map<String,Object>)token
-//                    .getPrincipal().getAttributes().get("kakao_account")).get("email").toString();
-//        } else if ("google".equals(oauthType.toLowerCase())) {
-//            email = token.getPrincipal().getAttributes().get("email").toString();
-//        }
-//
-//        log.info("Login Success : {}",email);
-//
-//        User user = userRepository.findByEmail(email);
-//        // email로 user를 찾음
-//
-//        log.info("User Saved in Session");
-//        HttpSession session = request.getSession();
-//        session.setAttribute("user", user);
 
         Optional<Cookie> oCookie = Arrays.stream(request.getCookies()).filter(cookie -> cookie.getName().equals(REDIRECT_URI_PARAM)).findFirst();
         Optional<String> redirectUri = oCookie.map(Cookie::getValue);

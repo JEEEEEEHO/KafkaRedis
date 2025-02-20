@@ -27,10 +27,6 @@ public class HostUpdateRequestDto {
 
     private String address;
 
-    private String lat;
-
-    private String lng;
-
     private String maxPpl;
 
     private Date apprv_date;

@@ -97,7 +97,6 @@ public class HostApiController {
         if(user.isPresent()){
             // user 정보 Dto 에 담기
             saveRequestDto.setUser(user.get());
-            saveRequestDto.setIvtPpl(Integer.parseInt(saveRequestDto.getMaxPpl())); // 재고 최초 값은 최대값과 같음
         }
         return hostsService.save(saveRequestDto, file);
     }

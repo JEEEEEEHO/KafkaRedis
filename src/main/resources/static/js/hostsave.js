@@ -14,8 +14,7 @@ var hostsave ={
             farmsts: $('input:radio[name="farmsts"]:checked').val(),
             shortintro: $('#shortintro').val(),
             intro: $('#intro').val(),
-            lat: $('#lat').val(),
-            lng: $('#lng').val()
+
         };
         console.log($('input:radio[name="region"]:checked').val());
 

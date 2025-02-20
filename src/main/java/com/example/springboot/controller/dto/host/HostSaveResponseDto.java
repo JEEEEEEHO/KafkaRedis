@@ -34,9 +34,6 @@ public class HostSaveResponseDto {
 
     private String address;
 
-    private String lat;
-
-    private String lng;
 
     private String maxPpl;
 
@@ -52,8 +49,6 @@ public class HostSaveResponseDto {
         this.farmsts = host.getFarmsts();
         this.shortintro = host.getShortintro();
         this.intro = host.getIntro();
-        this.lat = host.getLat();
-        this.lng = host.getLng();
         this.address = host.getAddress();
         this.maxPpl = String.valueOf(host.getMaxPpl());
         this.apprvYn = host.getApprvYn();

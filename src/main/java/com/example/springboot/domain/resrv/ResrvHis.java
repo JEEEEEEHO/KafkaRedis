@@ -34,10 +34,7 @@ public class ResrvHis {
 
     // 예약에 따른 요청 인원
     @Column
-    private String reqPpl;
-
-    @Column
-    private int restPpl; // 비교를 위해선 int 형으로
+    private int reqPpl;
 
     @Column
     private Date acptdDate;

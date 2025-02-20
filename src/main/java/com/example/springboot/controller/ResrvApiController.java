@@ -4,10 +4,7 @@ import com.example.springboot.controller.dto.reserv.ResrvDscnResponseDto;
 import com.example.springboot.controller.dto.reserv.ResrvHistRequestDto;
 import com.example.springboot.service.resrv.ResrvService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -23,7 +20,7 @@ public class ResrvApiController {
      * @return
      */
     @PostMapping("/api/resrv/save")
-    public void requestResrv(Principal principal, ResrvHistRequestDto histRequestDto) throws Exception {
+    public void requestResrv(Principal principal, @RequestBody ResrvHistRequestDto histRequestDto) throws Exception {
         resrvService.saveRequest(principal, histRequestDto);
     }
 

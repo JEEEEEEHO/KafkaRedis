@@ -34,7 +34,7 @@ public class ResrvServiceImpl implements ResrvService {
     CpnIssuRepository cpnIssuRepository;
 
 
-    // 예약 요청 저장 TODO 임계영역
+    // 예약 요청 저장 TODO 임계영역 Redisson Lock
     @Override
     public void saveRequest(Principal principal, ResrvHistRequestDto histRequestDto) throws Exception {
         String userId = principal.getName();
@@ -44,7 +44,7 @@ public class ResrvServiceImpl implements ResrvService {
 
         if(user.isPresent() && host.isPresent()){
             // 요청 인원
-            int curReqPpl = Integer.parseInt(histRequestDto.getReqPpl());
+            int curReqPpl = histRequestDto.getReqPpl();
 
             // 호스트 재고 확인
             int curIvtPplByHost = hostRepository.countIvtPpl(host.get().getHnum());
@@ -54,15 +54,15 @@ public class ResrvServiceImpl implements ResrvService {
                 throw new Exception("재고인원 부족");
 
             } else{
-                // 호스트에서 재고 - reqPpl
-                host.get().updateIvtPpl(Integer.parseInt(histRequestDto.getReqPpl()));
+                // 호스트에서 재고 - reqPpl TODO MSA 고민
+                host.get().updateIvtPpl(histRequestDto.getReqPpl());
                 hostRepository.save(host.get());
 
                 // 예약 완료
                 histRequestDto.setUserid(userId);
                 resrvHisRepository.save(histRequestDto.toEntity()); // JPA 는 트랜잭션 완료되었을 때, 변경된 데이터 모아 데이터 반영함
 
-                // 쿠폰 발급 로직 - 같은 트랜잭션 TODO 카프카 생산
+                // 쿠폰 발급 로직 - 같은 트랜잭션 TODO 카프카 생산 MSA
                 // 선착순 20명 CPN00001
                 Optional<Cpn> cpn = cpnRepository.findById("CPN00001");
                 if (cpn.isPresent() && 0 >= cpn.get().getIvtCnt()) {

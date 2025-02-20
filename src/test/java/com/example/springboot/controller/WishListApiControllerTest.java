@@ -86,8 +86,6 @@ public class WishListApiControllerTest extends TestCase {
                 .shortintro("1")
                 .intro("1")
                 .address("1")
-                .lat("1")
-                .lng("1")
                 .maxPpl("1")
                 .apprv_date(date)
                 .build();

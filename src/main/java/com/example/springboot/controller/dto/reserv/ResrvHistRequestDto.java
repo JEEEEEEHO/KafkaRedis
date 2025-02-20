@@ -2,19 +2,21 @@ package com.example.springboot.controller.dto.reserv;
 
 import com.example.springboot.domain.resrv.AcceptStatus;
 import com.example.springboot.domain.resrv.ResrvHis;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class ResrvHistRequestDto {
     private String hnum;
     private String userid;
+    private int reqPpl;
     private Date startDate;
     private Date endDate;
-    private String reqPpl;
 
     public ResrvHis toEntity() {
         return ResrvHis.builder()

@@ -10,7 +10,7 @@ import org.hibernate.annotations.DynamicInsert;
 import javax.persistence.*;
 import java.util.Date;
 
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 @Entity
 @DynamicInsert
@@ -19,7 +19,6 @@ public class Cpn extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String cpnNum;
-
 
     @Column
     private Date regDt;

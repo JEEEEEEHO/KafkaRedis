@@ -122,8 +122,6 @@ public class HostApiControllerTest {
         String farmsts = "1";
         String shortintro = "shortintro";
         String intro = "intro";
-        String lat = "lat";
-        String lng ="lng";
         String maxPpl = "1";
 
         HostSaveRequestDto requestDto = HostSaveRequestDto.builder()
@@ -134,8 +132,6 @@ public class HostApiControllerTest {
                 .farmsts(farmsts)
                 .shortintro(shortintro)
                 .intro(intro)
-                .lat(lat)
-                .lng(lng)
                 .maxPpl(maxPpl)
                 .build();
 
@@ -177,8 +173,6 @@ public class HostApiControllerTest {
                .shortintro("1")
                .intro("1")
                .address("1")
-               .lat("1")
-               .lng("1")
                .maxPpl("1")
                .apprv_date(date)
                .build();
@@ -203,8 +197,6 @@ public class HostApiControllerTest {
                .shortintro(host.getShortintro())
                .intro(host.getIntro())
                .address(host.getAddress())
-               .lat(host.getLat())
-               .lng(host.getLng())
                .deleteMainImg(deleteMainImg)
                .build();
        // 새로운 파일 내용
@@ -254,8 +246,6 @@ public class HostApiControllerTest {
                 .shortintro("1")
                 .intro("1")
                 .address("1")
-                .lat("1")
-                .lng("1")
                 .maxPpl("1")
                 .apprv_date(date)
                 .build();
@@ -306,8 +296,6 @@ public class HostApiControllerTest {
                 .shortintro("test")
                 .intro("1")
                 .address("1")
-                .lat("1")
-                .lng("1")
                 .maxPpl("3")
                 .apprvYn("Y")
                 .apprv_date(date)
@@ -412,8 +400,6 @@ public class HostApiControllerTest {
                 .shortintro("1")
                 .intro("1")
                 .address("1")
-                .lat("1")
-                .lng("1")
                 .maxPpl("1")
                 .apprv_date(date)
                 .build();

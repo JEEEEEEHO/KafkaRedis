@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
-public class UserController {
+public class UserApiController {
     @Autowired
     private UserService userService;
     @Autowired
@@ -41,7 +41,7 @@ public class UserController {
                     .password(passwordEncoder.encode(userDto.getPassword()))
                     .build();
             // 서비스를 이용해 리파지토리에 유저 저장
-             User registeredUser = userService.create(user);
+            User registeredUser = userService.create(user);
             UserDto responseUserDTO = UserDto.builder()
                     .email(registeredUser.getEmail())
                     .id(registeredUser.getId())

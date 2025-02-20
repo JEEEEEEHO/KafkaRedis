@@ -52,7 +52,7 @@ public class HostServiceImpl implements HostService  {
         List<Host> hostList = hostRepository.findAll();
         for (Host host : hostList){
             HostMainImg hostMainImg = hostMainImgRepository.findMainImg(host.getHnum());
-            list.add(new HostListResponseDto(host.getHnum(), host.getShortintro(), hostMainImg, host.getLat(), host.getLng()));
+            list.add(new HostListResponseDto(host.getHnum(), host.getShortintro(), hostMainImg));
         }
 
         return list;
@@ -88,7 +88,7 @@ public class HostServiceImpl implements HostService  {
 
             if(0 == hostListByOptions.size()){
                 // 검색 조건에 만족하지 않은 경우
-                responseDtoList.add(new HostListResponseDto(-1L, "", null, "", ""));
+                responseDtoList.add(new HostListResponseDto(-1L, "", null));
                 return responseDtoList;
             }
 
@@ -103,7 +103,7 @@ public class HostServiceImpl implements HostService  {
             if( 0 == resrvDscnHostList.size()){
                 // 예약이 존재하지 않음 = 해당 호스트 모두 만족함
                 for (Host host : hostListByOptions){
-                    responseDtoList.add(new HostListResponseDto(host.getHnum(), host.getShortintro(), hostMainImgRepository.findMainImg(host.getHnum()), host.getLat(), host.getLng()));
+                    responseDtoList.add(new HostListResponseDto(host.getHnum(), host.getShortintro(), hostMainImgRepository.findMainImg(host.getHnum())));
                 }
                 return responseDtoList;
             }
@@ -123,11 +123,11 @@ public class HostServiceImpl implements HostService  {
 
             for (Host host : srchdHostList){
                 HostMainImg hostMainImg = hostMainImgRepository.findMainImg(host.getHnum());
-                responseDtoList.add(new HostListResponseDto(host.getHnum(), host.getShortintro(), hostMainImg, host.getLat(), host.getLng()));
+                responseDtoList.add(new HostListResponseDto(host.getHnum(), host.getShortintro(), hostMainImg));
             }
         } catch (NullPointerException e) {
             // 검색 조건이 없을 떄
-            responseDtoList.add(new HostListResponseDto(-1L, "", null, "", ""));
+            responseDtoList.add(new HostListResponseDto(-1L, "", null));
         }
         return responseDtoList;
     }
@@ -275,14 +275,13 @@ public class HostServiceImpl implements HostService  {
         Host host = hostRepository.findByHnum(Long.valueOf(dto.getHostNum()));
         host.updateHost(
                 dto.getRegion()
-                ,dto.getGender()
-                ,dto.getAge()
-                ,dto.getFarmsts()
-                ,dto.getShortintro()
-                ,dto.getIntro()
-                ,dto.getAddress()
-                ,dto.getLat()
-                ,dto.getLng());
+                , dto.getGender()
+                , dto.getAge()
+                , dto.getFarmsts()
+                , dto.getShortintro()
+                , dto.getIntro()
+                , dto.getAddress()
+        );
         hostRepository.save(host); // 수정
 
         // 2) 기존에 존재하는 파일 삭제 (수정이 불가능한 이유 : 파일명 등이 같을 수도 있음 -> 같은 경로에 파일이 생김)

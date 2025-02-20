@@ -43,12 +43,6 @@ public class Host extends BaseTimeEntity {
     private String address;
 
     @Column(nullable = false)
-    private String lat;
-
-    @Column(nullable = false)
-    private String lng;
-
-    @Column(nullable = false)
     private int maxPpl; // 수용가능 인원
 
     @Column
@@ -62,7 +56,7 @@ public class Host extends BaseTimeEntity {
 
 
     // 수정용 -> 이 메소드를 이용해서 Entity의 값을 바꾸고 Transactional 처리함 (영속)
-    public void updateHost(String region, String gender, String age, String farmsts, String shortintro, String intro, String address, String lat, String lng){
+    public void updateHost(String region, String gender, String age, String farmsts, String shortintro, String intro, String address){
         this.region = region;
         this.gender = gender;
         this.age = age;
@@ -70,8 +64,7 @@ public class Host extends BaseTimeEntity {
         this.shortintro = shortintro;
         this.intro = intro;
         this.address = address;
-        this.lat = lat;
-        this.lng = lng;
+
     }
 
     // 재고 조정 - 직접 접근 막기 위해 메서드 생성
