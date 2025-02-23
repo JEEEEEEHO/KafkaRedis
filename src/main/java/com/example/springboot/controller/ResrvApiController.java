@@ -20,7 +20,7 @@ public class ResrvApiController {
      * @return
      */
     @PostMapping("/api/resrv/save")
-    public void requestResrv(Principal principal, @RequestBody ResrvHistRequestDto histRequestDto) throws Exception {
+    public void requestResrv(@RequestBody ResrvHistRequestDto histRequestDto, Principal principal) throws Exception {
         resrvService.saveRequest(principal, histRequestDto);
     }
 

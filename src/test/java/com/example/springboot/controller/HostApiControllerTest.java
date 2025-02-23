@@ -122,7 +122,7 @@ public class HostApiControllerTest {
         String farmsts = "1";
         String shortintro = "shortintro";
         String intro = "intro";
-        String maxPpl = "1";
+        int maxPpl = 1;
 
         HostSaveRequestDto requestDto = HostSaveRequestDto.builder()
                 .user(user)
@@ -173,7 +173,7 @@ public class HostApiControllerTest {
                .shortintro("1")
                .intro("1")
                .address("1")
-               .maxPpl("1")
+               .maxPpl(1)
                .apprv_date(date)
                .build();
         // 3) File 정보 - originFileName getInputStream fileUri
@@ -246,7 +246,7 @@ public class HostApiControllerTest {
                 .shortintro("1")
                 .intro("1")
                 .address("1")
-                .maxPpl("1")
+                .maxPpl(1)
                 .apprv_date(date)
                 .build();
         // 3) File 정보 - originFileName getInputStream fileUri
@@ -296,7 +296,7 @@ public class HostApiControllerTest {
                 .shortintro("test")
                 .intro("1")
                 .address("1")
-                .maxPpl("3")
+                .maxPpl(3)
                 .apprvYn("Y")
                 .apprv_date(date)
                 .build();
@@ -317,7 +317,7 @@ public class HostApiControllerTest {
         ResrvHis resrvHis = ResrvHis.builder()
                 .resrvNum(1L)
                 .hnum(Long.valueOf(hostnum))
-                .reqPpl("2")
+                .reqPpl(2)
                 .userid("email")
                 .startDate(simpleDateFormat.parse("20230702"))
                 .endDate(simpleDateFormat.parse("20230709"))
@@ -400,7 +400,7 @@ public class HostApiControllerTest {
                 .shortintro("1")
                 .intro("1")
                 .address("1")
-                .maxPpl("1")
+                .maxPpl(3)
                 .apprv_date(date)
                 .build();
         // 3) File 정보 - originFileName getInputStream fileUri

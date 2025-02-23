@@ -15,6 +15,7 @@ import com.example.springboot.domain.user.UserRepository;
 import com.example.springboot.service.host.HostService;
 import com.example.springboot.service.resrv.ResrvService;
 import com.example.springboot.service.user.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import junit.framework.TestCase;
 import org.apache.catalina.security.SecurityConfig;
@@ -27,31 +28,46 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.security.Principal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ResrvApiControllerTest extends TestCase {
+
+    @Autowired
+    ResrvService resrvService;
+
+
     @Autowired
     private HostRepository hostRepository;
 
@@ -68,9 +84,6 @@ public class ResrvApiControllerTest extends TestCase {
     HostService hostService;
 
     @Autowired
-    ResrvService resrvService;
-
-    @Autowired
     ResrvDscnRepository resrvDscnRepository;
 
     @Autowired
@@ -81,7 +94,7 @@ public class ResrvApiControllerTest extends TestCase {
     private WebApplicationContext context;
 
     @Autowired
-    private MockMvc mvc;
+    private MockMvc mockMvc; // mvc를 mocking으로 테스트
 
     @Autowired
     ObjectMapper objectMapper;
@@ -100,6 +113,125 @@ public class ResrvApiControllerTest extends TestCase {
         hostRepository.deleteAll();
         userRepository.deleteAll();
     }
+    
+    // 
+    @DisplayName("재고 확인 동시성 테스트 - 서로 다른 유저 ")
+    @Test
+    public void ivtChck_Concurrent() throws ParseException, IOException {
+
+        // given
+        // 스레드 생성
+        final int count = 10;
+        ExecutorService executorService = Executors.newFixedThreadPool(32);
+
+        // 사용자 저장
+        User user = userRepository.save(User.builder()
+                .id("testUser")
+                .name("Jeeho Kim")
+                .email("email")
+                .build());
+
+        // 호스트 저장
+        String dateStr = "2021년 06월 19일 21시 05분 07초";
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분 ss초");
+        Date date = formatter.parse(dateStr);
+        String originalFilename = "originalFilename";
+        String contentType = "jpg";
+        String filepath = "src/test/resources/testImage/"+originalFilename;
+        MockMultipartFile file = new MockMultipartFile("fileName", originalFilename, contentType, filepath.getBytes());
+
+
+        HostSaveRequestDto saveRequestDto = HostSaveRequestDto.builder()
+                .user(user)
+                .region("1")
+                .gender("1")
+                .age("1")
+                .farmsts("1")
+                .shortintro("1")
+                .intro("1")
+                .address("1")
+                .maxPpl(10)
+                .ivtPpl(10)
+                .apprv_date(date)
+                .build();
+        String hostnum = hostService.save(saveRequestDto, file);
+
+
+        // 요청 DTO
+        ResrvHistRequestDto histRequestDto = ResrvHistRequestDto.builder()
+                .hnum(hostnum)
+                .userid(user.getId())
+                .reqPpl(2)
+                .build();
+
+        // Principal mock 객체
+        Principal mockPrincipal = mock(Principal.class);
+        when(mockPrincipal.getName()).thenReturn("testUser");
+
+
+        // when
+        for (int i = 0; i < count; i++) {
+            executorService.execute(() -> {
+                try {
+                    resrvService.saveRequest(mockPrincipal, histRequestDto);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+
+
+        // then
+
+    }
+    @DisplayName("재고 확인/쿠폰발급 동시성 테스트 - 같은 유저 ")
+    @Test
+    public void 재고확인_쿠폰사용_동시성테스트() {
+
+    }
+
+    // 외부 연동 api test code
+    @DisplayName("apiUserCreateTest")
+    @Test
+    public void createUserTest() throws Exception {
+        // given
+        //요청 생성
+        User user = userRepository.save(User.builder()
+                        .id("id")
+                .name("Jeeho Kim")
+                .email("email")
+                .build());
+        // Resrv_hist 저장
+        ResrvHistRequestDto histRequestDto = ResrvHistRequestDto.builder()
+                .hnum("1")
+                .userid(user.getId())
+                .reqPpl(2)
+                .build();
+
+        // 1️⃣ Mock Principal 객체 생성
+
+        Authentication authentication = mock(Authentication.class);
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+
+        SecurityContextHolder.setContext(securityContext); // SecurityContext에 인증 정보 설정
+        String json = new ObjectMapper().writeValueAsString(histRequestDto);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("http://localhost:8080/api/resrv/save")
+                        .content(json) // JSON 데이터 전송
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andExpect(
+                        MockMvcResultMatchers.status().isOk()
+                ).andExpect(
+                        MockMvcResultMatchers.jsonPath("$.hnum").value("1")
+                ).andExpect(
+                        MockMvcResultMatchers.jsonPath("$.response.resultCode").value("OK")
+                )
+                .andDo(MockMvcResultHandlers.print());
+    }
+
 
     @DisplayName("GET/호스트별 예약 요청 저장")
     @Test
@@ -125,9 +257,7 @@ public class ResrvApiControllerTest extends TestCase {
                 .shortintro("1")
                 .intro("1")
                 .address("1")
-                .lat("1")
-                .lng("1")
-                .maxPpl("4")
+                .maxPpl(4)
                 .apprv_date(date)
                 .build();
 
@@ -150,7 +280,7 @@ public class ResrvApiControllerTest extends TestCase {
                 .userid(user.getId())
                 .startDate(simpleDateFormat.parse("20230702"))
                 .endDate(simpleDateFormat.parse("20230709"))
-                .reqPpl("2")
+                .reqPpl(2)
                 .build();
 
         ResrvHis resrvHis = resrvHisRepository.save(histRequestDto.toEntity());
@@ -183,9 +313,7 @@ public class ResrvApiControllerTest extends TestCase {
                 .shortintro("1")
                 .intro("1")
                 .address("1")
-                .lat("1")
-                .lng("1")
-                .maxPpl("4")
+                .maxPpl(4)
                 .apprv_date(date)
                 .build();
 
@@ -208,7 +336,7 @@ public class ResrvApiControllerTest extends TestCase {
                 .userid(user.getId())
                 .startDate(simpleDateFormat.parse("20230702"))
                 .endDate(simpleDateFormat.parse("20230709"))
-                .reqPpl("2")
+                .reqPpl(2)
                 .build();
 
         ResrvHis resrvHis = resrvHisRepository.save(histRequestDto.toEntity());

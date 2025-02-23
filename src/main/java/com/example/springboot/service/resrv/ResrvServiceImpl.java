@@ -42,15 +42,17 @@ public class ResrvServiceImpl implements ResrvService {
         Optional<User> user = userRepository.findById(userId);
         Optional<Host> host = hostRepository.findById(Long.valueOf(histRequestDto.getHnum()));
 
-        if(user.isPresent() && host.isPresent()){
+        if(user.isPresent()){
             // 요청 인원
             int curReqPpl = histRequestDto.getReqPpl();
 
-            // 호스트 재고 확인
+            // ** 호스트 재고 확인
             int curIvtPplByHost = hostRepository.countIvtPpl(host.get().getHnum());
+            log.info("현재 호스트 예약 재고 : {}", curIvtPplByHost);
 
             if (curReqPpl > curIvtPplByHost) {
                 // 인원이 많으면 실패해야함
+                log.info("재고 부족으로 예약 실패");
                 throw new Exception("재고인원 부족");
 
             } else{
@@ -61,29 +63,38 @@ public class ResrvServiceImpl implements ResrvService {
                 // 예약 완료
                 histRequestDto.setUserid(userId);
                 resrvHisRepository.save(histRequestDto.toEntity()); // JPA 는 트랜잭션 완료되었을 때, 변경된 데이터 모아 데이터 반영함
+                log.info("사용자 예약 완료 / 현재 재고: {}",  host.get().getIvtPpl());
+
 
                 // 쿠폰 발급 로직 - 같은 트랜잭션 TODO 카프카 생산 MSA
                 // 선착순 20명 CPN00001
                 Optional<Cpn> cpn = cpnRepository.findById("CPN00001");
-                if (cpn.isPresent() && 0 >= cpn.get().getIvtCnt()) {
-                    // 재고 존재
+                // ** 회원이 쿠폰 가지고 있는지
+                int couponCntByUser = cpnRepository.searchCpnByUserId("CPN00001", userId);
+                log.info("사용자 쿠폰 확인 조회 : {}", couponCntByUser);
+
+                if (cpn.isPresent() && cpn.get().getIvtCnt() > 0 && couponCntByUser <= 0) {
+                    // 재고 존재 + 사용자 발급받은 적 없음
+
                     // 쿠폰 재고 차감
                     cpn.get().updateIvtCnt();
                     cpnRepository.save(cpn.get());
+                    log.info("쿠폰 재고 차감 후 현재 재고: {}", cpn.get().getIvtCnt());
 
-                    // 쿠폰 발급 테이블 저장
+                    // 회원에 따른 쿠폰 발급
                     cpnIssuRepository.save(CpnIssu.builder()
-                                                .cpnNum(cpn.get().getCpnNum())
-                                                .userid(user.get().getId())
-                                                .build()
+                            .cpnNum(cpn.get().getCpnNum())
+                            .userid(user.get().getId())
+                            .build()
                     );
-                } else{
+                    log.info("사용자 쿠폰 발급 성공 : {}", cpn.get().getCpnNum());
+                } else {
                     log.info("쿠폰 발급 실패 재고 부족");
                 }
             }
 
         } else{
-            throw new Exception("HOST OR USER is not found");
+            throw new Exception("USER is not found"); // TODO Exception 메세지 커스텀 필요
         }
     }
 

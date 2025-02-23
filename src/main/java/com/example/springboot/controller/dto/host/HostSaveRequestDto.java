@@ -29,11 +29,11 @@ public class HostSaveRequestDto {
 
     private String address;
 
-    private String maxPpl;
-
     private String apprvYn;
 
     private Date apprv_date;
+
+    private int maxPpl;
 
     private int ivtPpl;
 
@@ -48,8 +48,8 @@ public class HostSaveRequestDto {
                 .shortintro(shortintro)
                 .intro(intro)
                 .address(address)
-                .maxPpl(Integer.parseInt(maxPpl))
-                .ivtPpl(Integer.parseInt(maxPpl))
+                .maxPpl(maxPpl)
+                .ivtPpl(maxPpl)
                 .apprvYn(apprvYn)
                 .apprv_date(apprv_date)
                 .build();
