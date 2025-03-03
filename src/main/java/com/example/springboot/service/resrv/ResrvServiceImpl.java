@@ -42,9 +42,10 @@ public class ResrvServiceImpl implements ResrvService {
     // 예약 요청 저장 TODO 임계영역 Redisson Lock
     @Override
     public void saveRequest(Principal principal, ResrvHistRequestDto histRequestDto) throws Exception {
-        String userId = "test";//principal.getName();
+        //String userId = principal.getName();
 
         // ngrinder 용
+        String userId = "test";
         histRequestDto.setUserid("test");
         histRequestDto.setHnum("1");
         histRequestDto.setReqPpl(2);
