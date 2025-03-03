@@ -1,5 +1,7 @@
 # Redis/Kafka 이용한 대용량 트래픽 예약 및 쿠폰 발급 서비스
 
+[서울 우언 잇츠 3기] 스터디 그룹 '발칙한 Tech Speakers' 연구 주제 결과물   
+https://github.com/SeoulWomenIts-TechSpeakers/TechSpeakers
 ### ⚒️ 현재 동기식 서버 아키텍처
 
 #### 1. 시퀀스 다이어그램
