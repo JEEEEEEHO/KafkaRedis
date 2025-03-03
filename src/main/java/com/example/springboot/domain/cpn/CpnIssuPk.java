@@ -15,7 +15,7 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public class CpnIssuPk implements Serializable {
 
-    private String cpnNum;
+    private Long cpnNum;
 
     private String userid;
 }

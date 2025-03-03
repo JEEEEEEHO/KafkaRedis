@@ -37,11 +37,6 @@ public class PostApiControllerTest {
     @Autowired
     private MockMvc mvc;
 
-//    @LocalServerPort
-//    private int port;
-
-//    @Autowired
-//    private TestRestTemplate restTemplate;
     @MockBean
     private PostService postService;
 
@@ -65,9 +60,6 @@ public class PostApiControllerTest {
         postRepository.deleteAll();
     }
 
-
-
-
     @Test
     @WithMockUser(roles = "USER")
     public void register() throws Exception {
@@ -88,11 +80,7 @@ public class PostApiControllerTest {
         assertThat(post.getTitle()).isEqualTo(title);
         assertThat(post.getTitle()).isEqualTo(content);
 
-//        List<Post> all = postRepository.findAll();
-//        assertThat(all.get(0).getTitle()).isEqualTo(title);
-//        assertThat(all.get(0).getContent()).isEqualTo(content);
     }
-//
     @Test
     @WithMockUser(roles = "USER")
     public void update() throws Exception {

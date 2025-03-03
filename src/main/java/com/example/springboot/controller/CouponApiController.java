@@ -34,7 +34,7 @@ public class CouponApiController {
      * @return
      */
     @GetMapping("/api/coupon/list")
-    public CouponInfoResponseDto selectCouponByUser(@RequestBody CouponInfoRequestDto couponInfoRequestDto, Principal principal) throws Exception {
+    public int selectCouponByUser(@RequestBody CouponInfoRequestDto couponInfoRequestDto, Principal principal) throws Exception {
         return couponService.selectCouponByUser(couponInfoRequestDto, principal);
     }
 }

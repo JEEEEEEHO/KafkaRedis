@@ -9,6 +9,7 @@ import com.example.springboot.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -76,7 +77,10 @@ public class UserApiController {
                     .email(user.getEmail())
                     .token(token)
                     .build();
-            return ResponseEntity.ok().body(responseUserDTO);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Authorization", token);
+
+            return ResponseEntity.ok().headers(headers).body(responseUserDTO);
         } else {
             ResponseDTO responseDTO = ResponseDTO.builder()
                     .error("Login failed.")

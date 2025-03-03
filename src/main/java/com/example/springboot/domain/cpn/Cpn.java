@@ -1,24 +1,26 @@
 package com.example.springboot.domain.cpn;
 
 import com.example.springboot.domain.BaseTimeEntity;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Getter
-@NoArgsConstructor
 @Entity
+@NoArgsConstructor
+// Builder와 함께?
+@AllArgsConstructor
+@Builder
+
 @DynamicInsert
 public class Cpn extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String cpnNum;
+    private Long cpnNum;
 
     @Column
     private Date regDt;

@@ -11,8 +11,8 @@ import com.example.springboot.domain.host.HostRepository;
 import com.example.springboot.domain.resrv.*;
 import com.example.springboot.domain.user.User;
 import com.example.springboot.domain.user.UserRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -23,21 +23,32 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class ResrvServiceImpl implements ResrvService {
-    ResrvDscnRepository resrvDscnRepository;
-    ResrvHisRepository resrvHisRepository;
-    UserRepository userRepository;
-    HostRepository hostRepository;
-    CpnRepository cpnRepository;
-    CpnIssuRepository cpnIssuRepository;
+    @Autowired
+    private ResrvDscnRepository resrvDscnRepository;
+    @Autowired
+    private ResrvHisRepository resrvHisRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private HostRepository hostRepository;
+    @Autowired
+    private CpnRepository cpnRepository;
+    @Autowired
+    private CpnIssuRepository cpnIssuRepository;
 
 
     // 예약 요청 저장 TODO 임계영역 Redisson Lock
     @Override
     public void saveRequest(Principal principal, ResrvHistRequestDto histRequestDto) throws Exception {
-        String userId = principal.getName();
+        String userId = "test";//principal.getName();
+
+        // ngrinder 용
+        histRequestDto.setUserid("test");
+        histRequestDto.setHnum("1");
+        histRequestDto.setReqPpl(2);
+
 
         Optional<User> user = userRepository.findById(userId);
         Optional<Host> host = hostRepository.findById(Long.valueOf(histRequestDto.getHnum()));
@@ -68,9 +79,9 @@ public class ResrvServiceImpl implements ResrvService {
 
                 // 쿠폰 발급 로직 - 같은 트랜잭션 TODO 카프카 생산 MSA
                 // 선착순 20명 CPN00001
-                Optional<Cpn> cpn = cpnRepository.findById("CPN00001");
+                Optional<Cpn> cpn = cpnRepository.findById(1L);
                 // ** 회원이 쿠폰 가지고 있는지
-                int couponCntByUser = cpnRepository.searchCpnByUserId("CPN00001", userId);
+                int couponCntByUser = cpnRepository.searchCpnByUserId(1L, userId);
                 log.info("사용자 쿠폰 확인 조회 : {}", couponCntByUser);
 
                 if (cpn.isPresent() && cpn.get().getIvtCnt() > 0 && couponCntByUser <= 0) {
@@ -83,10 +94,10 @@ public class ResrvServiceImpl implements ResrvService {
 
                     // 회원에 따른 쿠폰 발급
                     cpnIssuRepository.save(CpnIssu.builder()
-                            .cpnNum(cpn.get().getCpnNum())
-                            .userid(user.get().getId())
-                            .build()
-                    );
+                                            .cpnNum(cpn.get().getCpnNum())
+                                            .userid(user.get().getId())
+                                            .build()
+                                           );
                     log.info("사용자 쿠폰 발급 성공 : {}", cpn.get().getCpnNum());
                 } else {
                     log.info("쿠폰 발급 실패 재고 부족");

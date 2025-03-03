@@ -18,7 +18,7 @@ public class CpnIssu implements Serializable {
     // 복합키
     @Id
     @Column
-    private String cpnNum;
+    private Long cpnNum;
 
     @Id
     @Column(nullable = false)

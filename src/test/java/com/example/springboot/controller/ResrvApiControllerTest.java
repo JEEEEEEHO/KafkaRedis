@@ -3,10 +3,10 @@ package com.example.springboot.controller;
 import com.example.springboot.controller.dto.host.HostSaveRequestDto;
 import com.example.springboot.controller.dto.reserv.ResrvDscnResponseDto;
 import com.example.springboot.controller.dto.reserv.ResrvHistRequestDto;
+import com.example.springboot.domain.cpn.Cpn;
+import com.example.springboot.domain.cpn.CpnRepository;
 import com.example.springboot.domain.host.HostImgRepository;
-import com.example.springboot.domain.host.HostMainImgRepository;
 import com.example.springboot.domain.host.HostRepository;
-import com.example.springboot.domain.resrv.AcceptStatus;
 import com.example.springboot.domain.resrv.ResrvDscnRepository;
 import com.example.springboot.domain.resrv.ResrvHis;
 import com.example.springboot.domain.resrv.ResrvHisRepository;
@@ -14,11 +14,8 @@ import com.example.springboot.domain.user.User;
 import com.example.springboot.domain.user.UserRepository;
 import com.example.springboot.service.host.HostService;
 import com.example.springboot.service.resrv.ResrvService;
-import com.example.springboot.service.user.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import junit.framework.TestCase;
-import org.apache.catalina.security.SecurityConfig;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +31,6 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -51,6 +47,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -61,12 +58,18 @@ import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 public class ResrvApiControllerTest extends TestCase {
 
     @Autowired
-    ResrvService resrvService;
+    ResrvService resrvService; // 서비스 로직 테스트용
 
+    @Autowired
+    HostService hostService; // 굳이 없어도 되긴함
+
+
+    @Autowired
+    CpnRepository cpnRepository;
 
     @Autowired
     private HostRepository hostRepository;
@@ -78,17 +81,10 @@ public class ResrvApiControllerTest extends TestCase {
     private HostImgRepository hostImgRepository;
 
     @Autowired
-    UserService userService;
-
-    @Autowired
-    HostService hostService;
-
-    @Autowired
     ResrvDscnRepository resrvDscnRepository;
 
     @Autowired
     ResrvHisRepository resrvHisRepository;
-
 
     @Autowired
     private WebApplicationContext context;
@@ -117,12 +113,9 @@ public class ResrvApiControllerTest extends TestCase {
     // 
     @DisplayName("재고 확인 동시성 테스트 - 서로 다른 유저 ")
     @Test
-    public void ivtChck_Concurrent() throws ParseException, IOException {
+    public void IVTCNT_CONCURRENT_TEST() throws ParseException, IOException, InterruptedException {
 
         // given
-        // 스레드 생성
-        final int count = 10;
-        ExecutorService executorService = Executors.newFixedThreadPool(32);
 
         // 사용자 저장
         User user = userRepository.save(User.builder()
@@ -155,7 +148,15 @@ public class ResrvApiControllerTest extends TestCase {
                 .apprv_date(date)
                 .build();
         String hostnum = hostService.save(saveRequestDto, file);
-
+        // 쿠폰 저장
+        cpnRepository.save(Cpn.builder()
+                                .cpnNum(1L)
+                                .maxCnt(10)
+                                .regDt(date)
+                                .regId("jeeho")
+                                .ivtCnt(10) // 최초 재고
+                                .build()
+                            );
 
         // 요청 DTO
         ResrvHistRequestDto histRequestDto = ResrvHistRequestDto.builder()
@@ -166,22 +167,33 @@ public class ResrvApiControllerTest extends TestCase {
 
         // Principal mock 객체
         Principal mockPrincipal = mock(Principal.class);
-        when(mockPrincipal.getName()).thenReturn("testUser");
-
+        when(mockPrincipal.getName()).thenReturn(user.getId());
 
         // when
-        for (int i = 0; i < count; i++) {
-            executorService.execute(() -> {
+        // 스레드 생성
+        final int numberOfOrders = 7; // 스레드 7개 요청됨
+        ExecutorService es = Executors.newFixedThreadPool(5);
+        CountDownLatch latch = new CountDownLatch(numberOfOrders); // 모든 스레드가 완료될 때까지 대기
+
+        for (int i = 0; i < numberOfOrders; i++) {
+            String taskName = "thread" + i;
+            es.execute(() -> {
                 try {
+                    System.out.println("현재 스레드정보 :[" + taskName+"]");
                     resrvService.saveRequest(mockPrincipal, histRequestDto);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
+                } finally {
+                    latch.countDown(); // 주문 처리 후 countDown
                 }
             });
         }
-
+        latch.await(); // 모든 스레드가 끝날 때까지 대기
+        es.shutdown(); // 스레드 풀 종료
 
         // then
+        // 2명 인원 요청 7개가 동시에 들어왔다면, 재고는 0이
+        assertThat(hostRepository.countIvtPpl(Long.valueOf(hostnum))).isEqualTo(0);
 
     }
     @DisplayName("재고 확인/쿠폰발급 동시성 테스트 - 같은 유저 ")
