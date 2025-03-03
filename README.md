@@ -18,3 +18,4 @@ https://github.com/SeoulWomenIts-TechSpeakers/TechSpeakers
 
 ### ⚒️ 대량 트래픽 개선 서버 아키텍처 
 #### 1. 아키텍처 구조 계획
+![img_1.png](img_1.png)
