@@ -60,5 +60,13 @@ dependencies {
     implementation('com.h2database:h2')
     implementation('org.springframework.boot:spring-boot-starter-mustache')
 
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.redisson:redisson-spring-boot-starter:3.43.0'
+    implementation 'org.springframework.kafka:spring-kafka'
+
+
+
+
+
 }
 targetCompatibility = JavaVersion.VERSION_15

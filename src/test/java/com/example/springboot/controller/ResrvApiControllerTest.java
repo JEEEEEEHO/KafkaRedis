@@ -110,10 +110,9 @@ public class ResrvApiControllerTest extends TestCase {
         userRepository.deleteAll();
     }
     
-    // 
-    @DisplayName("재고 확인 동시성 테스트 - 서로 다른 유저 ")
+    @DisplayName("동시성 통합테스트")
     @Test
-    public void IVTCNT_CONCURRENT_TEST() throws ParseException, IOException, InterruptedException {
+    public void IVTCNT_CONCURRENT_ASIS_TEST() throws ParseException, IOException, InterruptedException {
 
         // given
 
@@ -196,11 +195,7 @@ public class ResrvApiControllerTest extends TestCase {
         assertThat(hostRepository.countIvtPpl(Long.valueOf(hostnum))).isEqualTo(0);
 
     }
-    @DisplayName("재고 확인/쿠폰발급 동시성 테스트 - 같은 유저 ")
-    @Test
-    public void 재고확인_쿠폰사용_동시성테스트() {
 
-    }
 
     // 외부 연동 api test code
     @DisplayName("apiUserCreateTest")
