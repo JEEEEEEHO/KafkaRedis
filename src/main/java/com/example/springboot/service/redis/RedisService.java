@@ -12,6 +12,11 @@ public class RedisService {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
+    // 0. key 가 존재하는지 확인
+    public boolean findRedisKey(Long hnum) {
+       return redisTemplate.hasKey("HostNum:" + hnum);
+    }
+
     // 1. 최초 호스트당 예약 가능 인원 적재
     public void setInitialPpl(Long hnum, int ivtQty) {
         redisTemplate.opsForValue().set("HostNum:" + hnum, String.valueOf(ivtQty));

@@ -24,8 +24,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.Authentication;
@@ -56,6 +58,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
+//@DataJpaTest(showSql = false)
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -95,6 +98,9 @@ public class ResrvApiControllerTest extends TestCase {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+
     @Mock
     HttpServletRequest request;
 
@@ -108,14 +114,14 @@ public class ResrvApiControllerTest extends TestCase {
         hostImgRepository.deleteAll();
         hostRepository.deleteAll();
         userRepository.deleteAll();
+        redisTemplate.getConnectionFactory().getConnection().flushAll();
     }
+
     
     @DisplayName("동시성 통합테스트")
     @Test
     public void IVTCNT_CONCURRENT_ASIS_TEST() throws ParseException, IOException, InterruptedException {
-
         // given
-
         // 사용자 저장
         User user = userRepository.save(User.builder()
                 .id("testUser")

@@ -68,8 +68,8 @@ public class Host extends BaseTimeEntity {
     }
 
     // 재고 조정 - 직접 접근 막기 위해 메서드 생성
-    public void updateIvtPpl(int reqPpl) {
-        this.ivtPpl = ivtPpl - reqPpl;
+    public void updateIvtPpl(int curIvtPplByHost, int reqPpl) {
+        this.ivtPpl = curIvtPplByHost - reqPpl;
     }
 
 

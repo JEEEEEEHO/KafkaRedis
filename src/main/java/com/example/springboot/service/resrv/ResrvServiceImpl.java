@@ -12,8 +12,10 @@ import com.example.springboot.domain.resrv.*;
 import com.example.springboot.domain.user.User;
 import com.example.springboot.domain.user.UserRepository;
 import com.example.springboot.exception.NoAvailableExeption;
+import com.example.springboot.exception.NoLockException;
 import com.example.springboot.exception.NoUserException;
 import com.example.springboot.service.redis.RedisService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -26,6 +28,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,17 +42,15 @@ public class ResrvServiceImpl implements ResrvService {
     private UserRepository userRepository;
     @Autowired
     private HostRepository hostRepository;
-    @Autowired
-    private CpnRepository cpnRepository;
-    @Autowired
-    private CpnIssuRepository cpnIssuRepository;
+
     @Autowired
     private RedisService redisService;
     @Autowired
     private RedissonClient redissonClient;
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
-
+    @Autowired
+    private ObjectMapper objectMapper;
 
     // 예약 요청 저장 TODO 임계영역 Redisson Lock
     @Override
@@ -71,77 +72,66 @@ public class ResrvServiceImpl implements ResrvService {
             String lockKey = "LockKey:" + userId;
             RLock lock = redissonClient.getLock(lockKey);
             try {
+                boolean isLocked = lock.tryLock(3, 3, TimeUnit.SECONDS);
+                if (!isLocked) {
+                    throw new NoLockException();
+                }
+
                 int curReqPpl = histRequestDto.getReqPpl();
                 long hnum = host.get().getHnum();
-
-                // 호스트 재고 확인
-                // Look aside
-                // 1) 캐시 먼저 확인
-                int curIvtPplByHost = redisService.getAvailPpl(hnum);
-                if (curIvtPplByHost == 0) {
-                    // 2) 없다면 DB 조회
-                    curIvtPplByHost = hostRepository.countIvtPpl(hnum);// DB 조회
-                    redisService.setInitialPpl(hnum, curIvtPplByHost); // 최초 redis update
-                }
-                log.info("현재 호스트 예약 재고 : {}", curIvtPplByHost);
+                int curIvtPplByHost = cahceCheck(hnum);;
 
                 if (curReqPpl > curIvtPplByHost) {
-                    // 인원이 많으면 실패해야함
+                    // 3) 인원이 많으면 실패해야함
                     log.info("재고 부족으로 예약 실패");
                     throw new NoAvailableExeption(String.valueOf(hnum));
 
                 } else{
-                    // redis 재고 차감
+                    // 4) redis 재고 차감 write through
                     redisService.deductAvailPpl(hnum, curReqPpl);
-                    // 1) kafka 호스트 재고 차감
-                    // 2) kafka 예약 히스토리 적재
-                    // 3) kafka 쿠폰 발급
-
-                    host.get().updateIvtPpl(histRequestDto.getReqPpl());
+                    // 호스트 재고 차감
+                    host.get().updateIvtPpl(curIvtPplByHost, histRequestDto.getReqPpl());
                     hostRepository.save(host.get());
+                    log.info("host 예약 가능인원 차감 : {}", host.get().getIvtPpl());
 
+                    // b) kafka 예약 히스토리 적재
                     // 예약 완료
                     histRequestDto.setUserid(userId);
-                    resrvHisRepository.save(histRequestDto.toEntity()); // JPA 는 트랜잭션 완료되었을 때, 변경된 데이터 모아 데이터 반영함
-                    log.info("사용자 예약 완료 / 현재 재고: {}",  host.get().getIvtPpl());
+                    String resrvObject = objectMapper.writeValueAsString(histRequestDto.toEntity());
+                    kafkaTemplate.send("save_resrv_his", resrvObject);
 
-
-                    // 쿠폰 발급 로직 - 같은 트랜잭션 TODO 카프카 생산 MSA
-                    // 선착순 20명 CPN00001
-                    Optional<Cpn> cpn = cpnRepository.findById(1L);
-                    // ** 회원이 쿠폰 가지고 있는지
-                    int couponCntByUser = cpnRepository.searchCpnByUserId(1L, userId);
-                    log.info("사용자 쿠폰 확인 조회 : {}", couponCntByUser);
-
-                    if (cpn.isPresent() && cpn.get().getIvtCnt() > 0 && couponCntByUser <= 0) {
-                        // 재고 존재 + 사용자 발급받은 적 없음
-
-                        // 쿠폰 재고 차감
-                        cpn.get().updateIvtCnt();
-                        cpnRepository.save(cpn.get());
-                        log.info("쿠폰 재고 차감 후 현재 재고: {}", cpn.get().getIvtCnt());
-
-                        // 회원에 따른 쿠폰 발급
-                        cpnIssuRepository.save(CpnIssu.builder()
-                                .cpnNum(cpn.get().getCpnNum())
-                                .userid(user.get().getId())
-                                .build()
-                        );
-                        log.info("사용자 쿠폰 발급 성공 : {}", cpn.get().getCpnNum());
-                    } else {
-                        log.info("쿠폰 발급 실패 재고 부족");
-                    }
+                    // c) kafka 쿠폰 발급
+                    kafkaTemplate.send("issue_coupon", userId);
                 }
             } catch (Exception e) {
+                log.info("예약 과정에서의 오류 : {}", e.getMessage());
 
             }finally {
+                // 5) 락 반납
                 lock.unlock();
             }
-
 
         } else{
             throw new NoUserException();
         }
+    }
+
+    private int cahceCheck(long hnum) {
+        // 호스트 재고 확인
+        // Look aside
+        // 1) 캐시 먼저 확인
+        int curIvtPplByHost = -1;
+        if (redisService.findRedisKey(hnum)) {
+            curIvtPplByHost = redisService.getAvailPpl(hnum);
+            log.info("현재 호스트 redis 예약 재고 : {}", curIvtPplByHost);
+
+        } else{
+            // 2) 없다면 DB 조회
+            curIvtPplByHost = hostRepository.countIvtPpl(hnum);// DB 조회
+            redisService.setInitialPpl(hnum, curIvtPplByHost); // 최초 redis update
+            log.info("현재 호스트 db 예약 재고 : {}", curIvtPplByHost);
+        }
+        return curIvtPplByHost;
     }
 
     // 호스트별 확정 예약 조회
