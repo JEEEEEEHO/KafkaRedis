@@ -49,16 +49,18 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-//@DataJpaTest(showSql = false)
+
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -69,7 +71,6 @@ public class ResrvApiControllerTest extends TestCase {
 
     @Autowired
     HostService hostService; // 굳이 없어도 되긴함
-
 
     @Autowired
     CpnRepository cpnRepository;
@@ -88,9 +89,6 @@ public class ResrvApiControllerTest extends TestCase {
 
     @Autowired
     ResrvHisRepository resrvHisRepository;
-
-    @Autowired
-    private WebApplicationContext context;
 
     @Autowired
     private MockMvc mockMvc; // mvc를 mocking으로 테스트
@@ -117,7 +115,7 @@ public class ResrvApiControllerTest extends TestCase {
         redisTemplate.getConnectionFactory().getConnection().flushAll();
     }
 
-    
+
     @DisplayName("동시성 통합테스트")
     @Test
     public void IVTCNT_CONCURRENT_ASIS_TEST() throws ParseException, IOException, InterruptedException {
@@ -153,6 +151,7 @@ public class ResrvApiControllerTest extends TestCase {
                 .apprv_date(date)
                 .build();
         String hostnum = hostService.save(saveRequestDto, file);
+
         // 쿠폰 저장
         cpnRepository.save(Cpn.builder()
                                 .cpnNum(1L)

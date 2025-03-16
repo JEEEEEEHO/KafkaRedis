@@ -16,6 +16,7 @@ import com.example.springboot.exception.NoLockException;
 import com.example.springboot.exception.NoUserException;
 import com.example.springboot.service.redis.RedisService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -33,24 +34,16 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ResrvServiceImpl implements ResrvService {
-    @Autowired
-    private ResrvDscnRepository resrvDscnRepository;
-    @Autowired
-    private ResrvHisRepository resrvHisRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private HostRepository hostRepository;
-
-    @Autowired
-    private RedisService redisService;
-    @Autowired
-    private RedissonClient redissonClient;
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ResrvDscnRepository resrvDscnRepository;
+    private final ResrvHisRepository resrvHisRepository;
+    private final UserRepository userRepository;
+    private final HostRepository hostRepository;
+    private final RedisService redisService;
+    private final RedissonClient redissonClient;
+    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final ObjectMapper objectMapper;
 
     // 예약 요청 저장 TODO 임계영역 Redisson Lock
     @Override
@@ -79,7 +72,7 @@ public class ResrvServiceImpl implements ResrvService {
 
                 int curReqPpl = histRequestDto.getReqPpl();
                 long hnum = host.get().getHnum();
-                int curIvtPplByHost = cahceCheck(hnum);;
+                int curIvtPplByHost = cahceCheck(hnum);
 
                 if (curReqPpl > curIvtPplByHost) {
                     // 3) 인원이 많으면 실패해야함
@@ -94,13 +87,13 @@ public class ResrvServiceImpl implements ResrvService {
                     hostRepository.save(host.get());
                     log.info("host 예약 가능인원 차감 : {}", host.get().getIvtPpl());
 
-                    // b) kafka 예약 히스토리 적재
+                    // a) kafka 예약 히스토리 적재
                     // 예약 완료
                     histRequestDto.setUserid(userId);
                     String resrvObject = objectMapper.writeValueAsString(histRequestDto.toEntity());
                     kafkaTemplate.send("save_resrv_his", resrvObject);
 
-                    // c) kafka 쿠폰 발급
+                    // b) kafka 쿠폰 발급
                     kafkaTemplate.send("issue_coupon", userId);
                 }
             } catch (Exception e) {
