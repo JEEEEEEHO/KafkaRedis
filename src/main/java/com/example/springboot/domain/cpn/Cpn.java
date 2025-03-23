@@ -16,7 +16,7 @@ import java.util.Date;
 @Builder
 
 @DynamicInsert
-public class Cpn extends BaseTimeEntity {
+public class Cpn {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

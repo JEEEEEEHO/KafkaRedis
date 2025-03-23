@@ -47,9 +47,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -120,6 +118,7 @@ public class ResrvApiControllerTest extends TestCase {
     @Test
     public void IVTCNT_CONCURRENT_ASIS_TEST() throws ParseException, IOException, InterruptedException {
         // given
+        Set<String> set = new HashSet<>();
         // 사용자 저장
         User user = userRepository.save(User.builder()
                 .id("testUser")

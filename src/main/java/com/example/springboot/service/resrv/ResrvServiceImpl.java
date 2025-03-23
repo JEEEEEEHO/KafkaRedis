@@ -15,6 +15,7 @@ import com.example.springboot.exception.NoAvailableExeption;
 import com.example.springboot.exception.NoLockException;
 import com.example.springboot.exception.NoUserException;
 import com.example.springboot.service.redis.RedisService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,16 +46,16 @@ public class ResrvServiceImpl implements ResrvService {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
 
-    // 예약 요청 저장 TODO 임계영역 Redisson Lock
+    // 예약 요청 저장
     @Override
-    public void saveRequest(Principal principal, ResrvHistRequestDto histRequestDto) throws Exception {
-        String userId = principal.getName();
+    public void saveRequest(Principal principal, ResrvHistRequestDto histRequestDto)  {
+        //String userId = principal.getName();
 
 //         //ngrinder 용
-//        String userId = "test";
-//        histRequestDto.setUserid("test");
-//        histRequestDto.setHnum("1");
-//        histRequestDto.setReqPpl(2);
+        String userId = "test";
+        histRequestDto.setUserid("test");
+        histRequestDto.setHnum("1");
+        histRequestDto.setReqPpl(2);
 
         Optional<User> user = userRepository.findById(userId);
         Optional<Host> host = hostRepository.findById(Long.valueOf(histRequestDto.getHnum()));
@@ -103,7 +104,6 @@ public class ResrvServiceImpl implements ResrvService {
                 // 5) 락 반납
                 lock.unlock();
             }
-
         } else{
             throw new NoUserException();
         }
@@ -139,8 +139,6 @@ public class ResrvServiceImpl implements ResrvService {
         }
         return responseDtoList;
     }
-
-
 
     /**
      * 쓰지 않는 기능
