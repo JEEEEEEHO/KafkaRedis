@@ -23,7 +23,7 @@ _현재 동기식 서버 아키텍처_
 ### ⚒️ 어떻게 해결할까
 _대량 트래픽 개선 서버 아키텍처_ 
 #### 1. 아키텍처 구조 계획
-![비동기.drawio.png](..%2F..%2FOneDrive%2F%EB%B0%94%ED%83%95%20%ED%99%94%EB%A9%B4%2Fstudying%2FKafkaRedis%2F%EB%B9%84%EB%8F%99%EA%B8%B0.drawio.png)
+![비동기.drawio.png](%EB%B9%84%EB%8F%99%EA%B8%B0.drawio.png)
 #### 2. 사용한 기술 스텍
 - REDIS 
   - 재고 적재 Look Aside + Write through  캐시 히트 적용
